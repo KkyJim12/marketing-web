@@ -5,7 +5,6 @@ import {
   Col,
   Card,
   CardBody,
-  CardTitle,
   CardSubtitle,
   Container,
 } from "reactstrap"
@@ -30,7 +29,7 @@ const CustomizeButton = () => {
 
 const ViewStatsButton = () => {
   return (
-    <Link to="/my-product">
+    <Link to="/my-product/1/stats">
       <button
         className="btn btn-info waves-effect waves-light btn-sm"
         type="button"
