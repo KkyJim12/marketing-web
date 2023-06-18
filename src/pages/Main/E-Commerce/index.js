@@ -1,4 +1,4 @@
-import React from "react"
+import React from "react";
 import {
   Col,
   Row,
@@ -8,24 +8,26 @@ import {
   CardImg,
   CardText,
   Container,
-} from "reactstrap"
-import { Link } from "react-router-dom"
-
-//Import Breadcrumb
-import Breadcrumbs from "../../../components/Common/Breadcrumb"
-
-import img1 from "../../../assets/images/small/img-1.jpg"
+} from "reactstrap";
+import { Link } from "react-router-dom";
+import Breadcrumbs from "../../../components/Common/Breadcrumb";
+import product1 from "../../../assets/images/product/product-1.jpg";
+import product2 from "../../../assets/images/product/product-2.jpg";
+import product3 from "../../../assets/images/product/product-3.jpg";
+import product4 from "../../../assets/images/product/product-4.jpg";
 
 const products = [
   {
     id: 1,
+    image: product1,
     title: "Floating action button #1",
-    price: 3000,
+    price: 2000,
     domains: 3,
     duration: 30,
   },
   {
     id: 2,
+    image: product2,
     title: "Floating action button #2",
     price: 4000,
     domains: 4,
@@ -33,73 +35,24 @@ const products = [
   },
   {
     id: 3,
+    image: product3,
     title: "Floating action button #1",
     price: 3000,
     domains: 3,
     duration: 30,
   },
   {
-    id: 3,
-    title: "Floating action button #2",
-    price: 4000,
+    id: 4,
+    image: product4,
+    title: "Floating action button #4",
+    price: 5000,
     domains: 4,
     duration: 50,
   },
-  {
-    id: 5,
-    title: "Floating action button #1",
-    price: 3000,
-    domains: 3,
-    duration: 30,
-  },
-  {
-    id: 6,
-    title: "Floating action button #2",
-    price: 4000,
-    domains: 4,
-    duration: 50,
-  },
-  {
-    id: 7,
-    title: "Floating action button #1",
-    price: 3000,
-    domains: 3,
-    duration: 30,
-  },
-  {
-    id: 8,
-    title: "Floating action button #2",
-    price: 4000,
-    domains: 4,
-    duration: 50,
-  },
-]
-
-const ProductCard = props => {
-  return (
-    <Card>
-      <CardImg top className="img-fluid" src={img1} alt="Card image cap" />
-      <CardBody>
-        <CardTitle className="h4 mt-0">{props.title}</CardTitle>
-        <CardText>
-          <span>Price: {props.price} thb/month</span>
-          <br />
-          <span>Domains: {props.domains} sites</span>
-          <br />
-          <span>Duration: {props.duration} days</span>
-        </CardText>
-        <div className="d-grid gap-2">
-          <Link to="#" className="btn btn-primary waves-effect waves-light">
-            Purchase
-          </Link>
-        </div>
-      </CardBody>
-    </Card>
-  )
-}
+];
 
 const ECommerce = () => {
-  document.title = " E-Commerce | Marketing tool platform"
+  document.title = " E-Commerce | Marketing tool platform";
 
   return (
     <React.Fragment>
@@ -110,20 +63,41 @@ const ECommerce = () => {
             {products.map(product => {
               return (
                 <Col md={3}>
-                  <ProductCard
-                    title={product.title}
-                    price={product.price}
-                    domains={product.domains}
-                    duration={product.duration}
-                  />
+                  <Card>
+                    <CardImg
+                      top
+                      className="img-fluid"
+                      src={product.image}
+                      alt="Card image cap"
+                      style={{ height: 200, objectFit: "cover" }}
+                    />
+                    <CardBody>
+                      <CardTitle className="h4 mt-0">{product.title}</CardTitle>
+                      <CardText>
+                        <span>Price: {product.price} thb/month</span>
+                        <br />
+                        <span>Domains: {product.domains} sites</span>
+                        <br />
+                        <span>Duration: {product.duration} days</span>
+                      </CardText>
+                      <div className="d-grid gap-2">
+                        <Link
+                          to="#"
+                          className="btn btn-primary waves-effect waves-light"
+                        >
+                          Purchase
+                        </Link>
+                      </div>
+                    </CardBody>
+                  </Card>
                 </Col>
-              )
+              );
             })}
           </Row>
         </Container>
       </div>
     </React.Fragment>
-  )
-}
+  );
+};
 
-export default ECommerce
+export default ECommerce;

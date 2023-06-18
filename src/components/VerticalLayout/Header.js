@@ -1,72 +1,43 @@
-import PropTypes from "prop-types"
-import React, { useState } from "react"
+import PropTypes from "prop-types";
+import React, { useState } from "react";
 
-import { connect } from "react-redux"
-import { Form, Input, Button, Row, Col } from "reactstrap"
+import { connect } from "react-redux";
+import { Form, Input, Button } from "reactstrap";
 
-import { Link } from "react-router-dom"
+import { Link } from "react-router-dom";
 
 // Reactstrap
-import { Dropdown, DropdownToggle, DropdownMenu } from "reactstrap"
+import { Dropdown, DropdownToggle, DropdownMenu } from "reactstrap";
 
 // Import menuDropdown
-import LanguageDropdown from "../CommonForBoth/TopbarDropdown/LanguageDropdown"
-import ProfileMenu from "../CommonForBoth/TopbarDropdown/ProfileMenu"
+import LanguageDropdown from "../CommonForBoth/TopbarDropdown/LanguageDropdown";
+import ProfileMenu from "../CommonForBoth/TopbarDropdown/ProfileMenu";
 
-import logoSm from "../../assets/images/logo-sm.png"
-import logoDark from "../../assets/images/logo-dark.png"
-import logoLight from "../../assets/images/logo-light.png"
+import logoSm from "../../assets/images/logo-mini.png";
+import logoLight from "../../assets/images/logo-full.png";
 //i18n
-import { withTranslation } from "react-i18next"
+import { withTranslation } from "react-i18next";
 
 // Redux Store
 import {
   showRightSidebarAction,
   toggleLeftmenu,
   // changeSidebarType,
-} from "../../store/actions"
+} from "../../store/actions";
 
 const Header = props => {
-  const [search, setsearch] = useState(false)
-  const [socialDrp, setsocialDrp] = useState(false)
-
-  function toggleFullscreen() {
-    if (
-      !document.fullscreenElement &&
-      /* alternative standard method */ !document.mozFullScreenElement &&
-      !document.webkitFullscreenElement
-    ) {
-      // current working methods
-      if (document.documentElement.requestFullscreen) {
-        document.documentElement.requestFullscreen()
-      } else if (document.documentElement.mozRequestFullScreen) {
-        document.documentElement.mozRequestFullScreen()
-      } else if (document.documentElement.webkitRequestFullscreen) {
-        document.documentElement.webkitRequestFullscreen(
-          Element.ALLOW_KEYBOARD_INPUT
-        )
-      }
-    } else {
-      if (document.cancelFullScreen) {
-        document.cancelFullScreen()
-      } else if (document.mozCancelFullScreen) {
-        document.mozCancelFullScreen()
-      } else if (document.webkitCancelFullScreen) {
-        document.webkitCancelFullScreen()
-      }
-    }
-  }
+  const [search, setsearch] = useState(false);
 
   function tToggle() {
-    var body = document.body
-    var windowSize = document.documentElement.clientWidth
+    var body = document.body;
+    var windowSize = document.documentElement.clientWidth;
 
-    body.classList.toggle("vertical-collpsed")
-    body.classList.toggle("sidebar-enable")
+    body.classList.toggle("vertical-collpsed");
+    body.classList.toggle("sidebar-enable");
     if (windowSize > 991) {
       body.getAttribute("data-sidebar-size") === "sm" && windowSize > 991
         ? body.setAttribute("data-sidebar-size", "lg")
-        : body.setAttribute("data-sidebar-size", "sm")
+        : body.setAttribute("data-sidebar-size", "sm");
     }
   }
   return (
@@ -75,15 +46,6 @@ const Header = props => {
         <div className="navbar-header">
           <div className="d-flex">
             <div className="navbar-brand-box">
-              <Link to="/" className="logo logo-dark">
-                <span className="logo-sm">
-                  <img src={logoSm} alt="" height="22" />
-                </span>
-                <span className="logo-lg">
-                  <img src={logoDark} alt="" height="20" />
-                </span>
-              </Link>
-
               <Link to="/" className="logo logo-light">
                 <span className="logo-sm">
                   <img src={logoSm} alt="" height="22" />
@@ -97,21 +59,20 @@ const Header = props => {
             <button
               type="button"
               onClick={() => {
-                tToggle()
+                tToggle();
               }}
               className="btn btn-sm px-3 font-size-16 header-item waves-effect vertical-menu-btn"
               id="vertical-menu-btn"
             >
               <i className="fa fa-fw fa-bars" />
             </button>
-
           </div>
 
           <div className="d-flex">
             <Dropdown
               className="d-inline-block d-lg-none ms-2"
               onClick={() => {
-                setsearch(!search)
+                setsearch(!search);
               }}
               type="button"
             >
@@ -151,8 +112,8 @@ const Header = props => {
         </div>
       </header>
     </React.Fragment>
-  )
-}
+  );
+};
 
 Header.propTypes = {
   // changeSidebarType: PropTypes.func,
@@ -162,16 +123,16 @@ Header.propTypes = {
   showRightSidebarAction: PropTypes.func,
   t: PropTypes.any,
   toggleLeftmenu: PropTypes.func,
-}
+};
 
 const mapStatetoProps = state => {
   const { layoutType, showRightSidebar, leftMenu, leftSideBarType } =
-    state.Layout
-  return { layoutType, showRightSidebar, leftMenu, leftSideBarType }
-}
+    state.Layout;
+  return { layoutType, showRightSidebar, leftMenu, leftSideBarType };
+};
 
 export default connect(mapStatetoProps, {
   showRightSidebarAction,
   toggleLeftmenu,
   // changeSidebarType,
-})(withTranslation()(Header))
+})(withTranslation()(Header));

@@ -1,18 +1,7 @@
-import React from "react"
-import { MDBDataTable } from "mdbreact"
-import {
-  Row,
-  Col,
-  Card,
-  CardBody,
-  CardTitle,
-  CardSubtitle,
-  Container,
-} from "reactstrap"
-import { Link } from "react-router-dom"
-
-//Import Breadcrumb
-import Breadcrumbs from "../../../components/Common/Breadcrumb"
+import React from "react";
+import { MDBDataTable } from "mdbreact";
+import { Row, Col, Card, CardBody, CardSubtitle, Container } from "reactstrap";
+import Breadcrumbs from "../../../components/Common/Breadcrumb";
 
 const PayButton = () => {
   return (
@@ -22,8 +11,8 @@ const PayButton = () => {
     >
       Pay
     </button>
-  )
-}
+  );
+};
 
 const CancelButton = () => {
   return (
@@ -33,8 +22,8 @@ const CancelButton = () => {
     >
       Cancel
     </button>
-  )
-}
+  );
+};
 
 const data = {
   columns: [
@@ -131,26 +120,10 @@ const data = {
       cancel: "-",
     },
   ],
-}
-
-const DataTable = () => {
-  return (
-    <React.Fragment>
-      <Card>
-        <CardBody>
-          <CardSubtitle className="mb-3">
-            List of ordered products.
-          </CardSubtitle>
-
-          <MDBDataTable responsive bordered data={data} />
-        </CardBody>
-      </Card>
-    </React.Fragment>
-  )
-}
+};
 
 const OrderHistory = () => {
-  document.title = " My Product | Marketing tool platform"
+  document.title = " My Product | Marketing tool platform";
 
   return (
     <React.Fragment>
@@ -159,13 +132,21 @@ const OrderHistory = () => {
           <Breadcrumbs title="Marketing tool" breadcrumbItem="Order History" />
           <Row>
             <Col md={12}>
-              <DataTable />
+              <Card>
+                <CardBody>
+                  <CardSubtitle className="mb-3">
+                    List of ordered products.
+                  </CardSubtitle>
+
+                  <MDBDataTable responsive bordered data={data} />
+                </CardBody>
+              </Card>
             </Col>
           </Row>
         </Container>
       </div>
     </React.Fragment>
-  )
-}
+  );
+};
 
-export default OrderHistory
+export default OrderHistory;

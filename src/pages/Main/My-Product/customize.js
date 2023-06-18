@@ -9,7 +9,6 @@ import {
   Container,
   Input,
 } from "reactstrap";
-//Import Breadcrumb
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
 import ColorPicker from "@vtaits/react-color-picker";
 
@@ -376,7 +375,9 @@ const Customize = () => {
                 <Col className="pb-4" md={4}>
                   <Card className="h-100">
                     <CardBody>
-                      <CardTitle className="h4 mb-4">Visibility Editor</CardTitle>
+                      <CardTitle className="h4 mb-4">
+                        Visibility Editor
+                      </CardTitle>
                       <Row>
                         <span>Visibility</span>
                       </Row>

@@ -10,12 +10,10 @@ import {
   DropdownToggle,
   DropdownMenu,
   DropdownItem,
-  Label,
   Dropdown,
 } from "reactstrap";
 import "./datatables.scss";
 
-import Flatpickr from "react-flatpickr";
 import ReactEcharts from "echarts-for-react";
 
 import CountUp from "react-countup";

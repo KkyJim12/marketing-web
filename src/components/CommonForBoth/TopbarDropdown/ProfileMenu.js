@@ -1,46 +1,20 @@
-import React, { useState, useEffect } from "react"
-import PropTypes from "prop-types"
-import {
-  Dropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
-} from "reactstrap"
+import React, { useState } from "react";
+import PropTypes from "prop-types";
+import { Dropdown, DropdownToggle, DropdownMenu } from "reactstrap";
 
 //i18n
-import { withTranslation } from "react-i18next"
+import { withTranslation } from "react-i18next";
 // Redux
-import { connect } from "react-redux"
-import { Link } from "react-router-dom"
-import withRouter from "../../Common/withRouter"
+import { connect } from "react-redux";
+import { Link } from "react-router-dom";
+import withRouter from "../../Common/withRouter";
 
 // users
-import user4 from "../../../assets/images/users/avatar-4.jpg"
+import user4 from "../../../assets/images/users/avatar-9.jpg";
 
 const ProfileMenu = props => {
   // Declare a new state variable, which we'll call "menu"
-  const [menu, setMenu] = useState(false)
-
-  const [username, setusername] = useState("Admin")
-
-  useEffect(() => {
-    if (localStorage.getItem("authUser")) {
-      if (process.env.REACT_APP_DEFAULTAUTH === "firebase") {
-        const obj = JSON.parse(localStorage.getItem("authUser"))
-        setusername(obj.displayName)
-      } else if (
-        process.env.REACT_APP_DEFAULTAUTH === "fake" ||
-        process.env.REACT_APP_DEFAULTAUTH === "jwt"
-      ) {
-        const obj = JSON.parse(localStorage.getItem("authUser"))
-        if (obj.username) {
-          setusername(obj.username)
-        } else {
-          setusername(obj.name)
-        }
-      }
-    }
-  }, [props.success])
+  const [menu, setMenu] = useState(false);
 
   return (
     <React.Fragment>
@@ -60,31 +34,31 @@ const ProfileMenu = props => {
             alt="Header Avatar"
           />
           <span className="d-none d-xl-inline-block ms-1 fw-medium font-size-15">
-            {username}
+            Piyakarn Nimmakulvirut
           </span>{" "}
           <i className="uil-angle-down d-none d-xl-inline-block font-size-15"></i>
         </DropdownToggle>
         <DropdownMenu className="dropdown-menu-end">
-          <Link to="/logout" className="dropdown-item">
+          <Link to="/login" className="dropdown-item">
             <i className="uil uil-sign-out-alt font-size-18 align-middle me-1 text-muted"></i>
             <span>{props.t("Logout")}</span>
           </Link>
         </DropdownMenu>
       </Dropdown>
     </React.Fragment>
-  )
-}
+  );
+};
 
 ProfileMenu.propTypes = {
   success: PropTypes.any,
   t: PropTypes.any,
-}
+};
 
 const mapStatetoProps = state => {
-  const { error, success } = state.Profile
-  return { error, success }
-}
+  const { error, success } = state.Profile;
+  return { error, success };
+};
 
 export default withRouter(
   connect(mapStatetoProps, {})(withTranslation()(ProfileMenu))
-)
+);
