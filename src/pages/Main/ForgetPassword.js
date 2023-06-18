@@ -1,5 +1,5 @@
-import PropTypes from "prop-types"
-import React, { useEffect } from "react"
+import PropTypes from "prop-types";
+import React, { useEffect } from "react";
 
 import {
   Row,
@@ -12,29 +12,24 @@ import {
   Input,
   FormFeedback,
   Label,
-} from "reactstrap"
+} from "reactstrap";
 
 // Redux
-import { Link } from "react-router-dom"
-import withRouter from "../../components/Common/withRouter"
+import { Link } from "react-router-dom";
+import withRouter from "../../components/Common/withRouter";
 
-import { useSelector, useDispatch } from "react-redux"
+import { useSelector } from "react-redux";
 
 // Formik validation
-import * as Yup from "yup"
-import { useFormik } from "formik"
-
-// actions
-import { loginUser, socialLogin } from "../../store/actions"
+import * as Yup from "yup";
+import { useFormik } from "formik";
 
 // import images
-import logo from "../../assets/images/logo-dark.png"
-import logolight from "../../assets/images/logo-light.png"
+import logo from "../../assets/images/logo-dark.png";
+import logolight from "../../assets/images/logo-light.png";
 
 const Login = props => {
-  document.title = " Login | Minible - Responsive Bootstrap 5 Admin Dashboard"
-
-  const dispatch = useDispatch()
+  document.title = " Login | Minible - Responsive Bootstrap 5 Admin Dashboard";
 
   const validation = useFormik({
     // enableReinitialize : use this flag when initial values needs to be changed
@@ -48,52 +43,19 @@ const Login = props => {
       email: Yup.string().required("Please Enter Your Email"),
       password: Yup.string().required("Please Enter Your Password"),
     }),
-    onSubmit: values => {
-      dispatch(loginUser(values, props.router.navigate))
-    },
-  })
+  });
 
   const { error } = useSelector(state => ({
     error: state.Login.error,
-  }))
-
-  const signIn = (res, type) => {
-    if (type === "google" && res) {
-      const postData = {
-        name: res.profileObj.name,
-        email: res.profileObj.email,
-        token: res.tokenObj.access_token,
-        idToken: res.tokenId,
-      }
-      dispatch(socialLogin(postData, props.router.navigate, type))
-    } else if (type === "facebook" && res) {
-      const postData = {
-        name: res.name,
-        email: res.email,
-        token: res.accessToken,
-        idToken: res.tokenId,
-      }
-      dispatch(socialLogin(postData, props.router.navigate, type))
-    }
-  }
-
-  //handleGoogleLoginResponse
-  const googleResponse = response => {
-    signIn(response, "google")
-  }
-
-  //handleFacebookLoginResponse
-  const facebookResponse = response => {
-    signIn(response, "facebook")
-  }
+  }));
 
   useEffect(() => {
-    document.body.className = "authentication-bg"
+    document.body.className = "authentication-bg";
     // remove classname when component will unmount
     return function cleanup() {
-      document.body.className = ""
-    }
-  })
+      document.body.className = "";
+    };
+  });
 
   return (
     <React.Fragment>
@@ -133,9 +95,9 @@ const Login = props => {
                     <Form
                       className="form-horizontal"
                       onSubmit={e => {
-                        e.preventDefault()
-                        validation.handleSubmit()
-                        return false
+                        e.preventDefault();
+                        validation.handleSubmit();
+                        return false;
                       }}
                     >
                       {error ? <Alert color="danger">{error}</Alert> : null}
@@ -222,14 +184,14 @@ const Login = props => {
         </Container>
       </div>
     </React.Fragment>
-  )
-}
+  );
+};
 
-export default withRouter(Login)
+export default withRouter(Login);
 
 Login.propTypes = {
   error: PropTypes.any,
   history: PropTypes.object,
   loginUser: PropTypes.func,
   socialLogin: PropTypes.func,
-}
+};
