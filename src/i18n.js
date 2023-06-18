@@ -2,7 +2,7 @@ import i18n from "i18next"
 import detector from "i18next-browser-languagedetector"
 import { initReactI18next } from "react-i18next"
 
-import translationENG from "./locales/eng/translation.json"
+import translationEN from "./locales/eng/translation.json"
 import translationTH from "./locales/th/translation.json"
 
 // the translations
@@ -10,8 +10,8 @@ const resources = {
   th: {
     translation: translationTH,
   },
-  eng: {
-    translation: translationENG,
+  en: {
+    translation: translationEN,
   },
 }
 

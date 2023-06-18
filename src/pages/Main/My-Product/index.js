@@ -1,44 +1,40 @@
-import React from "react"
-import { MDBDataTable } from "mdbreact"
-import {
-  Row,
-  Col,
-  Card,
-  CardBody,
-  CardSubtitle,
-  Container,
-} from "reactstrap"
-import { Link } from "react-router-dom"
-import "./datatables.scss"
+import React from "react";
+import { MDBDataTable } from "mdbreact";
+import { Row, Col, Card, CardBody, CardSubtitle, Container } from "reactstrap";
+import { Link } from "react-router-dom";
+import "./datatables.scss";
+import { useTranslation } from "react-i18next";
 
 //Import Breadcrumb
-import Breadcrumbs from "../../../components/Common/Breadcrumb"
+import Breadcrumbs from "../../../components/Common/Breadcrumb";
 
 const CustomizeButton = () => {
+  const { t } = useTranslation();
   return (
     <Link to="/my-product/1/customize">
       <button
         className="btn btn-warning waves-effect waves-light btn-sm"
         type="button"
       >
-        Customize
+        {t("Customize")}
       </button>
     </Link>
-  )
-}
+  );
+};
 
 const ViewStatsButton = () => {
+  const { t } = useTranslation();
   return (
     <Link to="/my-product/1/stats">
       <button
         className="btn btn-info waves-effect waves-light btn-sm"
         type="button"
       >
-        View Stats
+        {t("View Stats")}
       </button>
     </Link>
-  )
-}
+  );
+};
 
 const data = {
   columns: [
@@ -118,7 +114,7 @@ const data = {
       viewStats: <ViewStatsButton />,
     },
   ],
-}
+};
 
 const DataTable = () => {
   return (
@@ -133,17 +129,21 @@ const DataTable = () => {
         </CardBody>
       </Card>
     </React.Fragment>
-  )
-}
+  );
+};
 
 const MyProduct = () => {
-  document.title = " My Product | Marketing tool platform"
+  const { t } = useTranslation();
+  document.title = " My Product | Marketing tool platform";
 
   return (
     <React.Fragment>
       <div className="page-content">
         <Container fluid>
-          <Breadcrumbs title="Marketing tool" breadcrumbItem="My Product" />
+          <Breadcrumbs
+            title={t("Platform Name")}
+            breadcrumbItem={t("My Products")}
+          />
           <Row>
             <Col md={12}>
               <DataTable />
@@ -152,7 +152,7 @@ const MyProduct = () => {
         </Container>
       </div>
     </React.Fragment>
-  )
-}
+  );
+};
 
-export default MyProduct
+export default MyProduct;

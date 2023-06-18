@@ -2,25 +2,28 @@ import React from "react";
 import { MDBDataTable } from "mdbreact";
 import { Row, Col, Card, CardBody, CardSubtitle, Container } from "reactstrap";
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
+import { useTranslation } from "react-i18next";
 
 const PayButton = () => {
+  const { t } = useTranslation();
   return (
     <button
       className="btn btn-success waves-effect waves-light btn-sm "
       type="button"
     >
-      Pay
+      {t("Pay")}
     </button>
   );
 };
 
 const CancelButton = () => {
+  const { t } = useTranslation();
   return (
     <button
       className="btn btn-danger waves-effect waves-light btn-sm"
       type="button"
     >
-      Cancel
+      {t("Cancel")}
     </button>
   );
 };
@@ -123,13 +126,16 @@ const data = {
 };
 
 const OrderHistory = () => {
-  document.title = " My Product | Marketing tool platform";
-
+  document.title = " Order History | Marketing tool platform";
+  const { t } = useTranslation();
   return (
     <React.Fragment>
       <div className="page-content">
         <Container fluid>
-          <Breadcrumbs title="Marketing tool" breadcrumbItem="Order History" />
+          <Breadcrumbs
+            title={t("Platform Name")}
+            breadcrumbItem={t("Order History")}
+          />
           <Row>
             <Col md={12}>
               <Card>

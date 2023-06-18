@@ -10,6 +10,7 @@ import {
   Container,
 } from "reactstrap";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
 import product1 from "../../../assets/images/product/product-1.jpg";
 import product2 from "../../../assets/images/product/product-2.jpg";
@@ -52,13 +53,17 @@ const products = [
 ];
 
 const ECommerce = () => {
+  const { t } = useTranslation();
   document.title = " E-Commerce | Marketing tool platform";
 
   return (
     <React.Fragment>
       <div className="page-content">
         <Container fluid>
-          <Breadcrumbs title="Marketing tool" breadcrumbItem="E-Commerce" />
+          <Breadcrumbs
+            title={t("Platform Name")}
+            breadcrumbItem={t("E-Commerce")}
+          />
           <Row>
             {products.map(product => {
               return (
@@ -85,7 +90,7 @@ const ECommerce = () => {
                           to="#"
                           className="btn btn-primary waves-effect waves-light"
                         >
-                          Purchase
+                          {t("Purchase")}
                         </Link>
                       </div>
                     </CardBody>

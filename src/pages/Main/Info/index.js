@@ -1,15 +1,16 @@
 import React from "react";
 import { Row, Col, Container } from "reactstrap";
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
+import { useTranslation } from "react-i18next";
 
 const Info = () => {
-  document.title = " My Product | Marketing tool platform";
-
+  document.title = " Info | Marketing tool platform";
+  const { t } = useTranslation();
   return (
     <React.Fragment>
       <div className="page-content">
         <Container fluid>
-          <Breadcrumbs title="Marketing tool" breadcrumbItem="Info" />
+          <Breadcrumbs title={t("Platform Name")} breadcrumbItem={t("Info")} />
           <Row>
             <Col md={12}></Col>
           </Row>

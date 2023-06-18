@@ -27,6 +27,12 @@ const Customize = () => {
   const [buttonPositionBottom, setButtonPositionBottom] = useState(20);
   const [buttonPositionLeft, setButtonPositionLeft] = useState("");
 
+  const [preBuiltInput, setPreuiltInput] = useState("styled1");
+  const [iconInput, setIconInput] = useState("font-awesome");
+  const [isPCChecked, setIsPCChecked] = useState(true);
+  const [isTabletChecked, setIsTabletChecked] = useState(true);
+  const [isMobileChecked, setIsMobileChecked] = useState(true);
+
   const onDragBackgroundColor = color => {
     setBackgroundColor(color);
   };
@@ -80,6 +86,8 @@ const Customize = () => {
                               name="styled"
                               id="styled1"
                               value="styled1"
+                              onChange={e => setPreuiltInput("styled1")}
+                              checked={preBuiltInput === "styled1"}
                             />
                             <label
                               className="form-check-label"
@@ -109,6 +117,8 @@ const Customize = () => {
                               name="styled"
                               id="styled2"
                               value="styled2"
+                              onChange={e => setPreuiltInput("styled2")}
+                              checked={preBuiltInput === "styled2"}
                             />
                             <label
                               className="form-check-label"
@@ -138,6 +148,8 @@ const Customize = () => {
                               name="styled"
                               id="styled3"
                               value="styled3"
+                              onChange={e => setPreuiltInput("styled3")}
+                              checked={preBuiltInput === "styled3"}
                             />
                             <label
                               className="form-check-label"
@@ -383,33 +395,13 @@ const Customize = () => {
                       </Row>
                       <Row>
                         <Col md={3}>
-                          <div>
-                            <div className="vstack gap-2">
-                              <div className="form-check">
-                                <Input
-                                  className="form-check-input"
-                                  type="checkbox"
-                                  id="defaultCheck1"
-                                  value=""
-                                />
-                                <label
-                                  className="form-check-label"
-                                  htmlFor="defaultCheck1"
-                                >
-                                  All
-                                </label>
-                              </div>
-                            </div>
-                          </div>
-                        </Col>
-
-                        <Col md={3}>
                           <div className="form-check">
                             <Input
                               className="form-check-input"
                               type="checkbox"
                               id="defaultCheck1"
-                              value=""
+                              checked={isPCChecked}
+                              onChange={e => setIsPCChecked(!isPCChecked)}
                             />
                             <label
                               className="form-check-label"
@@ -426,6 +418,10 @@ const Customize = () => {
                               type="checkbox"
                               id="defaultCheck2"
                               value=""
+                              checked={isTabletChecked}
+                              onChange={e =>
+                                setIsTabletChecked(!isTabletChecked)
+                              }
                             />
                             <label
                               className="form-check-label"
@@ -442,6 +438,10 @@ const Customize = () => {
                               type="checkbox"
                               id="defaultCheck2"
                               value=""
+                              checked={isMobileChecked}
+                              onChange={e =>
+                                setIsMobileChecked(!isMobileChecked)
+                              }
                             />
                             <label
                               className="form-check-label"
@@ -474,6 +474,8 @@ const Customize = () => {
                                 name="icon"
                                 id="manual"
                                 value="manual"
+                                onChange={e => setIconInput("font-awesome")}
+                                checked={iconInput === "font-awesome"}
                               />
                               <label
                                 className="form-check-label"
@@ -491,6 +493,8 @@ const Customize = () => {
                                 name="icon"
                                 id="upload"
                                 value="upload"
+                                onChange={e => setIconInput("upload")}
+                                checked={iconInput === "upload"}
                               />
                               <label
                                 className="form-check-label"

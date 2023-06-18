@@ -1,4 +1,5 @@
 {
+  "Platform Name": "Jimmytechnology",
   "Menu": "Menu",
   "E-Commerce": "E-Commerce",
   "My Products": "My Products",
@@ -6,5 +7,10 @@
   "Info": "Info",
   "Info1": "Page 1",
   "Info2": "Page 2",
-  "Logout": "Logout"
+  "Logout": "Logout",
+  "Purchase": "Purchase",
+  "Customize": "Customize",
+  "View Stats": "View Stats",
+  "Pay": "Pay",
+  "Cancel": "Cancel"
 }
