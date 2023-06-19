@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Row,
   Col,
@@ -22,16 +22,22 @@ const Customize = () => {
   const [textColor, setTextColor] = useState("#f5f5f5");
   const [buttonSize, setButtonSize] = useState(75);
 
-  const [buttonPositionTop, setButtonPositionTop] = useState("");
+  const [buttonPositionTop, setButtonPositionTop] = useState(null);
   const [buttonPositionRight, setButtonPositionRight] = useState(20);
   const [buttonPositionBottom, setButtonPositionBottom] = useState(20);
-  const [buttonPositionLeft, setButtonPositionLeft] = useState("");
+  const [buttonPositionLeft, setButtonPositionLeft] = useState(null);
+
+  const [marginTop, setMarginTop] = useState(0);
+  const [marginRight, setMarginRight] = useState(0);
+  const [marginBottom, setMarginBottom] = useState(0);
+  const [marginLeft, setMarginLeft] = useState(0);
 
   const [preBuiltInput, setPreuiltInput] = useState("styled1");
   const [iconInput, setIconInput] = useState("font-awesome");
   const [isPCChecked, setIsPCChecked] = useState(true);
   const [isTabletChecked, setIsTabletChecked] = useState(true);
   const [isMobileChecked, setIsMobileChecked] = useState(true);
+  const [floatingActionButton, setFloatingActionButton] = useState(false);
 
   const onDragBackgroundColor = color => {
     setBackgroundColor(color);
@@ -54,6 +60,13 @@ const Customize = () => {
     setButtonPositionBottom(b);
     setButtonPositionLeft(l);
   };
+
+  const subMenues = [
+    { id: 1, title: "Facebook" },
+    { id: 2, title: "Line" },
+    { id: 3, title: "Email" },
+    { id: 4, title: "Youtube" },
+  ];
 
   return (
     <React.Fragment>
@@ -165,6 +178,35 @@ const Customize = () => {
                 </CardBody>
               </Card>
               {/* End Pre-Built Editor */}
+
+              {/* Sub-menu Editor */}
+              <Card>
+                <CardBody>
+                  <CardTitle className="h4 mb-4">Sub-menu Editor</CardTitle>
+                  <Row>
+                    {subMenues.map(subMenu => {
+                      return (
+                        <Col md={1}>
+                          <div className="form-check">
+                            <Input
+                              className="form-check-input"
+                              type="checkbox"
+                              id={subMenu.title}
+                            />
+                            <label
+                              className="form-check-label"
+                              htmlFor={subMenu.title}
+                            >
+                              {subMenu.title}
+                            </label>
+                          </div>
+                        </Col>
+                      );
+                    })}
+                  </Row>
+                </CardBody>
+              </Card>
+              {/* End Sub-menu Editor */}
 
               {/* Button Editor */}
               <Card>
@@ -316,7 +358,7 @@ const Customize = () => {
                             >
                               <button
                                 onClick={() =>
-                                  handleButtonPosition(20, "", "", 20)
+                                  handleButtonPosition(20, null, null, 20)
                                 }
                                 className="btn btn-light"
                               >
@@ -324,7 +366,7 @@ const Customize = () => {
                               </button>
                               <button
                                 onClick={() =>
-                                  handleButtonPosition(20, 20, "", "")
+                                  handleButtonPosition(20, 20, null, null)
                                 }
                                 className="btn btn-light"
                               >
@@ -332,7 +374,7 @@ const Customize = () => {
                               </button>
                               <button
                                 onClick={() =>
-                                  handleButtonPosition("", "", 20, 20)
+                                  handleButtonPosition(null, null, 20, 20)
                                 }
                                 className="btn btn-light"
                               >
@@ -340,7 +382,7 @@ const Customize = () => {
                               </button>
                               <button
                                 onClick={() =>
-                                  handleButtonPosition("", 20, 20, "")
+                                  handleButtonPosition(null, 20, 20, null)
                                 }
                                 className="btn btn-light"
                               >
@@ -357,21 +399,29 @@ const Customize = () => {
                                 type="number"
                                 className="form-control"
                                 placeholder="Top"
+                                onChange={e => setMarginTop(e.target.value)}
+                                value={marginTop}
                               />
                               <Input
                                 type="number"
                                 className="form-control"
                                 placeholder="Right"
+                                onChange={e => setMarginRight(e.target.value)}
+                                value={marginRight}
                               />
                               <Input
                                 type="number"
                                 className="form-control"
                                 placeholder="Bottom"
+                                onChange={e => setMarginBottom(e.target.value)}
+                                value={marginBottom}
                               />
                               <Input
                                 type="number"
                                 className="form-control"
                                 placeholder="Left"
+                                onChange={e => setMarginLeft(e.target.value)}
+                                value={marginLeft}
                               />
                             </div>
                           </div>
@@ -529,27 +579,94 @@ const Customize = () => {
                 </Col>
               </Row>
             </Col>
-
-            <button
-              type="button"
+            <div
               style={{
-                top: buttonPositionTop,
-                right: buttonPositionRight,
-                bottom: buttonPositionBottom,
-                left: buttonPositionLeft,
+                top: buttonPositionTop ? buttonPositionTop + marginTop : null,
+                right: buttonPositionRight
+                  ? buttonPositionRight + marginRight
+                  : null,
+                bottom:
+                  buttonPositionBottom > 0
+                    ? buttonPositionBottom + marginBottom
+                    : null,
+                left:
+                  buttonPositionLeft > 0
+                    ? buttonPositionLeft + marginLeft
+                    : null,
                 position: "fixed",
                 width: buttonSize,
                 height: buttonSize,
-                borderRadius: "50%",
-                border: 0,
-                boxShadow:
-                  "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)",
-                backgroundColor: backgroundColor,
-                color: textColor,
+                zIndex: 99999,
               }}
             >
-              {buttonText}
-            </button>
+              <button
+                onClick={e => setFloatingActionButton(!floatingActionButton)}
+                type="button"
+                style={{
+                  width: buttonSize,
+                  height: buttonSize,
+                  borderRadius: "50%",
+                  border: 0,
+                  boxShadow:
+                    "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)",
+                  backgroundColor: backgroundColor,
+                  color: textColor,
+                }}
+              >
+                {buttonText}
+              </button>
+              {floatingActionButton && (
+                <div
+                  style={{
+                    position: "relative",
+                    bottom: 30,
+                  }}
+                >
+                  <a
+                    style={{
+                      position: "absolute",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      width: 60,
+                      height: 60,
+                      borderRadius: "50%",
+                      color: "#fff",
+                      boxShadow: "0 0 5px 1px rgba(51, 51, 51, .3)",
+                      transition:
+                        "opacity .2s ease-in-out .3s, transform .15s ease-in-out",
+                      fontSize: 12,
+                      background: "blue",
+                      bottom: 60,
+                    }}
+                    href="https://facebook.com"
+                  >
+                    FB
+                  </a>
+                  <a
+                    style={{
+                      position: "absolute",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      width: 60,
+                      height: 60,
+                      borderRadius: "50%",
+                      color: "#fff",
+                      boxShadow: "0 0 5px 1px rgba(51, 51, 51, .3)",
+                      transition:
+                        "opacity .2s ease-in-out .3s, transform .15s ease-in-out",
+                      fontSize: 12,
+                      background: "red",
+                      bottom: 130,
+                    }}
+                    href="https://google.com"
+                  >
+                    GG
+                  </a>
+                </div>
+              )}
+            </div>
           </Row>
         </Container>
       </div>
