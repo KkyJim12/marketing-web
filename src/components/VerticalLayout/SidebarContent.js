@@ -161,16 +161,16 @@ const SidebarContent = props => {
                 <span>{props.t("Order History")}</span>
               </Link>
             </li>
-            <li class="">
+            <li className="">
               <a
-                class="has-arrow waves-effect mm-collapsed"
+                className="has-arrow waves-effect mm-collapsed"
                 href="/"
                 aria-expanded="false"
               >
-                <i class="uil-comment-info-alt"></i>
+                <i className="uil-comment-info-alt"></i>
                 <span>{props.t("Info")}</span>
               </a>
-              <ul class="sub-menu mm-collapse">
+              <ul className="sub-menu mm-collapse">
                 <li>
                   <Link to="/info/1">{props.t("Info1")}</Link>
                 </li>

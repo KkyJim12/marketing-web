@@ -11,6 +11,9 @@ import {
 } from "reactstrap";
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
 import ColorPicker from "@vtaits/react-color-picker";
+import "@vtaits/react-color-picker/dist/index.css";
+
+import ClickAwayListener from "react-click-away-listener";
 
 const Customize = () => {
   document.title = " My Product | Marketing tool platform";
@@ -59,6 +62,17 @@ const Customize = () => {
     setButtonPositionRight(r);
     setButtonPositionBottom(b);
     setButtonPositionLeft(l);
+  };
+
+  const closeBackgroundColorPicker = () => {
+    setBackgroundColorEnable(false);
+  };
+  const closeTextColorPicker = () => {
+    setTextColorEnable(false);
+  };
+
+  const openIconUploadInput = () => {
+    document.getElementById("iconUploadInput").click();
   };
 
   const subMenues = [
@@ -184,9 +198,9 @@ const Customize = () => {
                 <CardBody>
                   <CardTitle className="h4 mb-4">Sub-menu Editor</CardTitle>
                   <Row>
-                    {subMenues.map(subMenu => {
+                    {subMenues.map((subMenu, index) => {
                       return (
-                        <Col md={1}>
+                        <Col key={index} md={1}>
                           <div className="form-check">
                             <Input
                               className="form-check-input"
@@ -237,18 +251,24 @@ const Customize = () => {
                             }}
                           ></div>
                           {backgroundColorEnable ? (
-                            <ColorPicker
-                              style={{
-                                position: "absolute",
-                                right: 10,
-                                marginTop: "2.8rem",
-                                zIndex: 500,
-                              }}
-                              saturationHeight={100}
-                              saturationWidth={100}
-                              value={backgroundColor}
-                              onDrag={onDragBackgroundColor}
-                            />
+                            <ClickAwayListener
+                              onClickAway={closeBackgroundColorPicker}
+                            >
+                              <>
+                                <ColorPicker
+                                  style={{
+                                    position: "absolute",
+                                    right: 10,
+                                    marginTop: "2.8rem",
+                                    zIndex: 500,
+                                  }}
+                                  saturationHeight={100}
+                                  saturationWidth={100}
+                                  value={backgroundColor}
+                                  onDrag={onDragBackgroundColor}
+                                />
+                              </>
+                            </ClickAwayListener>
                           ) : null}
                         </div>
                       </div>
@@ -275,18 +295,24 @@ const Customize = () => {
                             }}
                           ></div>
                           {textColorEnable ? (
-                            <ColorPicker
-                              style={{
-                                position: "absolute",
-                                right: 10,
-                                marginTop: "2.8rem",
-                                zIndex: 500,
-                              }}
-                              saturationHeight={100}
-                              saturationWidth={100}
-                              value={textColor}
-                              onDrag={onDragTextColor}
-                            />
+                            <ClickAwayListener
+                              onClickAway={closeTextColorPicker}
+                            >
+                              <>
+                                <ColorPicker
+                                  style={{
+                                    position: "absolute",
+                                    right: 10,
+                                    marginTop: "2.8rem",
+                                    zIndex: 500,
+                                  }}
+                                  saturationHeight={100}
+                                  saturationWidth={100}
+                                  value={textColor}
+                                  onDrag={onDragTextColor}
+                                />
+                              </>
+                            </ClickAwayListener>
                           ) : null}
                         </div>
                       </div>
@@ -509,7 +535,7 @@ const Customize = () => {
                 {/* End Visibility Editor */}
               </Row>
               <Row>
-                <Col md={12}>
+                <Col md={4}>
                   {/* Icon Editor */}
                   <Card>
                     <CardBody>
@@ -557,20 +583,37 @@ const Customize = () => {
                         </div>
                       </div>
                       <Row>
-                        <Col md={6}>
-                          <div className="form-floating mb-3">
-                            <select
-                              className="form-select"
-                              id="floatingSelectGrid"
-                              aria-label="Floating label select example"
-                            >
-                              <option>Open this select menu</option>
-                              <option value="1">Chat</option>
-                            </select>
-                            <label htmlFor="floatingSelectGrid">
-                              Select Icon
-                            </label>
-                          </div>
+                        <Col md={12}>
+                          {iconInput === "font-awesome" ? (
+                            <div className="form-floating mb-3">
+                              <select
+                                className="form-select"
+                                id="floatingSelectGrid"
+                                aria-label="Floating label select example"
+                              >
+                                <option>Open this select menu</option>
+                                <option value="1">Chat</option>
+                              </select>
+                              <label htmlFor="floatingSelectGrid">
+                                Select Icon
+                              </label>
+                            </div>
+                          ) : (
+                            <div className="form-floating mb-3">
+                              <button
+                                className="btn-rounded waves-effect waves-light btn btn-primary  w-100"
+                                type="button"
+                                onClick={openIconUploadInput}
+                              >
+                                Upload
+                              </button>
+                              <input
+                                id="iconUploadInput"
+                                className="d-none"
+                                type="file"
+                              />
+                            </div>
+                          )}
                         </Col>
                       </Row>
                     </CardBody>
@@ -611,59 +654,39 @@ const Customize = () => {
                     "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)",
                   backgroundColor: backgroundColor,
                   color: textColor,
+                  fontSize: 32,
                 }}
               >
-                {buttonText}
+                <i className="uil-comment-info-alt"></i>
               </button>
               {floatingActionButton && (
                 <div
                   style={{
                     position: "relative",
-                    bottom: 30,
+                    bottom: 125,
                   }}
                 >
-                  <a
+                  <div
                     style={{
                       position: "absolute",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      width: 60,
-                      height: 60,
-                      borderRadius: "50%",
-                      color: "#fff",
-                      boxShadow: "0 0 5px 1px rgba(51, 51, 51, .3)",
-                      transition:
-                        "opacity .2s ease-in-out .3s, transform .15s ease-in-out",
-                      fontSize: 12,
-                      background: "blue",
-                      bottom: 60,
                     }}
-                    href="https://facebook.com"
                   >
-                    FB
-                  </a>
-                  <a
-                    style={{
-                      position: "absolute",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      width: 60,
-                      height: 60,
-                      borderRadius: "50%",
-                      color: "#fff",
-                      boxShadow: "0 0 5px 1px rgba(51, 51, 51, .3)",
-                      transition:
-                        "opacity .2s ease-in-out .3s, transform .15s ease-in-out",
-                      fontSize: 12,
-                      background: "red",
-                      bottom: 130,
-                    }}
-                    href="https://google.com"
-                  >
-                    GG
-                  </a>
+                    <div
+                      style={{
+                        backgroundColor: "#3b82f6",
+                        paddingTop: 10,
+                        paddingBottom: 10,
+                        paddingRight: 20,
+                        paddingLeft: 20,
+                        color: "white",
+                        borderTopLeftRadius: 15,
+                        borderTopRightRadius: 15,
+                      }}
+                    >
+                      {buttonText}
+                    </div>
+                    <div>Email</div>
+                  </div>
                 </div>
               )}
             </div>

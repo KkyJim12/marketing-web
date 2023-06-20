@@ -45,6 +45,7 @@
     "react-bootstrap-table2-paginator": "^2.1.2",
     "react-chartist": "^0.14.4",
     "react-chartjs-2": "^2.11.1",
+    "react-click-away-listener": "^2.2.3",
     "react-color": "^2.19.3",
     "react-countdown": "^2.3.5",
     "react-countup": "^6.4.2",
