@@ -8,29 +8,27 @@ import { useTranslation } from "react-i18next";
 //Import Breadcrumb
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
 
-const CustomizeButton = () => {
+const ReNewButton = () => {
   const { t } = useTranslation();
   return (
-    <Link to="/my-product/1/customize">
-      <button
-        className="btn btn-warning waves-effect waves-light btn-sm"
-        type="button"
-      >
-        {t("Customize")}
-      </button>
-    </Link>
+    <button
+      className="btn btn-success waves-effect waves-light btn-sm"
+      type="button"
+    >
+      {t("Re new")}
+    </button>
   );
 };
 
-const ViewStatsButton = () => {
+const ManageButton = () => {
   const { t } = useTranslation();
   return (
-    <Link to="/my-product/1/stats">
+    <Link to="/my-product/1/manage">
       <button
         className="btn btn-info waves-effect waves-light btn-sm"
         type="button"
       >
-        {t("View Stats")}
+        {t("Manage")}
       </button>
     </Link>
   );
@@ -87,14 +85,14 @@ const data = {
       width: 270,
     },
     {
-      label: "Customize",
-      field: "customize",
+      label: "Re New",
+      field: "reNew",
       sort: "asc",
       width: 270,
     },
     {
-      label: "View Stats",
-      field: "viewStats",
+      label: "Manage",
+      field: "manage",
       sort: "asc",
       width: 270,
     },
@@ -110,8 +108,21 @@ const data = {
       expireDate: "15/07/2023",
       expireIn: "30 days",
       status: "On going",
-      customize: <CustomizeButton />,
-      viewStats: <ViewStatsButton />,
+      reNew: "",
+      manage: <ManageButton />,
+    },
+    {
+      id: 2,
+      packageName: "Floating action button #1",
+      type: "Floating action button",
+      domains: 3,
+      duration: 30,
+      startDate: "15/06/2023",
+      expireDate: "15/07/2023",
+      expireIn: "",
+      status: "Expired",
+      reNew: <ReNewButton />,
+      manage: <ManageButton />,
     },
   ],
 };
@@ -125,7 +136,7 @@ const DataTable = () => {
             List of purchased products.
           </CardSubtitle>
 
-          <MDBDataTable responsive bordered data={data} />
+          <MDBDataTable responsive bordered data={data} noBottomColumns />
         </CardBody>
       </Card>
     </React.Fragment>

@@ -4,8 +4,7 @@ import { Navigate } from "react-router-dom";
 // Main
 import ECommerce from "../pages/Main/E-Commerce/index";
 import MyProduct from "../pages/Main/My-Product/index";
-import Customize from "../pages/Main/My-Product/customize";
-import Stats from "../pages/Main/My-Product/stats";
+import Manage from "../pages/Main/My-Product/manage";
 import OrderHistory from "../pages/Main/Order-History/index";
 import Info from "../pages/Main/Info/index";
 
@@ -16,8 +15,7 @@ import ForgetPwd from "../pages/Main/ForgetPassword";
 const userRoutes = [
   { path: "/e-commerce", component: <ECommerce /> },
   { path: "/my-product", component: <MyProduct /> },
-  { path: "/my-product/:id/customize", component: <Customize /> },
-  { path: "/my-product/:id/stats", component: <Stats /> },
+  { path: "/my-product/:id/manage", component: <Manage /> },
   { path: "/order-history", component: <OrderHistory /> },
   { path: "/info/:id", component: <Info /> },
   {
