@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Card, CardBody, CardTitle, Row, Col, Label, Input } from "reactstrap";
 
 const Domain = () => {
-  const [domains, setDomains] = useState([1, 2, 3]);
+  const domains = [1, 2, 3];
   return (
     <>
       <Card>
