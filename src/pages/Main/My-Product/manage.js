@@ -18,6 +18,8 @@ import classnames from "classnames";
 import Stats from "./stats";
 import Customize from "./customize";
 import SubMenu from "./sub-menu";
+import Domain from "./domain";
+import License from "./license";
 
 const Manage = () => {
   const [activeTab, setActiveTab] = useState("Statistic");
@@ -197,8 +199,12 @@ const Manage = () => {
             <Stats />
           ) : activeTab === "Button Style" ? (
             <Customize />
-          ) : (
+          ) : activeTab === "Button Setting" ? (
             <SubMenu />
+          ) : activeTab === "Website setup" ? (
+            <Domain />
+          ) : (
+            <License />
           )}
         </Container>
       </div>
