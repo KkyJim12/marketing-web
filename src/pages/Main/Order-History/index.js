@@ -144,7 +144,7 @@ const OrderHistory = () => {
                     List of ordered products.
                   </CardSubtitle>
 
-                  <MDBDataTable responsive bordered data={data} />
+                  <MDBDataTable responsive bordered data={data} noBottomColumns />
                 </CardBody>
               </Card>
             </Col>

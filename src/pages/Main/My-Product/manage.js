@@ -16,14 +16,16 @@ import "./datatables.scss";
 
 import classnames from "classnames";
 import Stats from "./stats";
+import Customize from "./customize";
+import SubMenu from "./sub-menu";
 
 const Manage = () => {
-  const [activeTabJustify, setactiveTabJustify] = useState("5");
-  document.title = " Stats | Marketing tool platform";
+  const [activeTab, setActiveTab] = useState("Statistic");
+  document.title = " Manage | Marketing tool platform";
 
   function toggleCustomJustified(tab) {
-    if (activeTabJustify !== tab) {
-      setactiveTabJustify(tab);
+    if (activeTab !== tab) {
+      setActiveTab(tab);
     }
   }
   const [singlebtn, setSinglebtn] = useState(false);
@@ -40,10 +42,10 @@ const Manage = () => {
                     <NavLink
                       style={{ cursor: "pointer" }}
                       className={classnames({
-                        active: activeTabJustify === "5",
+                        active: activeTab === "Statistic",
                       })}
                       onClick={() => {
-                        toggleCustomJustified("5");
+                        toggleCustomJustified("Statistic");
                       }}
                     >
                       <span className="d-block d-sm-none">
@@ -56,10 +58,10 @@ const Manage = () => {
                     <NavLink
                       style={{ cursor: "pointer" }}
                       className={classnames({
-                        active: activeTabJustify === "6",
+                        active: activeTab === "Button Style",
                       })}
                       onClick={() => {
-                        toggleCustomJustified("6");
+                        toggleCustomJustified("Button Style");
                       }}
                     >
                       <span className="d-block d-sm-none">
@@ -72,10 +74,10 @@ const Manage = () => {
                     <NavLink
                       style={{ cursor: "pointer" }}
                       className={classnames({
-                        active: activeTabJustify === "7",
+                        active: activeTab === "Button Setting",
                       })}
                       onClick={() => {
-                        toggleCustomJustified("7");
+                        toggleCustomJustified("Button Setting");
                       }}
                     >
                       <span className="d-block d-sm-none">
@@ -88,10 +90,10 @@ const Manage = () => {
                     <NavLink
                       style={{ cursor: "pointer" }}
                       className={classnames({
-                        active: activeTabJustify === "8",
+                        active: activeTab === "Website setup",
                       })}
                       onClick={() => {
-                        toggleCustomJustified("8");
+                        toggleCustomJustified("Website setup");
                       }}
                     >
                       <span className="d-block d-sm-none">
@@ -104,10 +106,10 @@ const Manage = () => {
                     <NavLink
                       style={{ cursor: "pointer" }}
                       className={classnames({
-                        active: activeTabJustify === "9",
+                        active: activeTab === "License",
                       })}
                       onClick={() => {
-                        toggleCustomJustified("9");
+                        toggleCustomJustified("License");
                       }}
                     >
                       <span className="d-block d-sm-none">
@@ -121,75 +123,83 @@ const Manage = () => {
             </Col>
             <Col className="col-12">
               <div className="page-title-box d-flex align-items-center justify-content-between">
-                <h4 className="mb-0">Stats</h4>
+                <h4 className="mb-0">{activeTab}</h4>
 
-                <div className="page-title-right d-flex align-items-center gap-4">
-                  <div>
-                    <label
-                      htmlFor="example-date-input"
-                      className="col-form-label"
-                    >
-                      Start Date
-                    </label>
-                    <input
-                      className="form-control"
-                      type="date"
-                      defaultValue="2019-08-19"
-                      id="example-date-input"
-                    />
-                  </div>
-                  <div>
-                    <label
-                      htmlFor="example-date-input"
-                      className="col-form-label"
-                    >
-                      End Date
-                    </label>
-                    <input
-                      className="form-control"
-                      type="date"
-                      defaultValue="2019-08-19"
-                      id="example-date-input"
-                    />
-                  </div>
-                  <div>
-                    <label className="col-form-label">Duration</label>
-                    <Dropdown
-                      isOpen={singlebtn}
-                      toggle={() => setSinglebtn(!singlebtn)}
-                    >
-                      <DropdownToggle
-                        tag="button"
-                        className="btn btn-info"
-                        caret
+                {activeTab === "5" && (
+                  <div className="page-title-right d-flex align-items-center gap-4">
+                    <div>
+                      <label
+                        htmlFor="example-date-input"
+                        className="col-form-label"
                       >
-                        Duration <i className="mdi mdi-chevron-down" />
-                      </DropdownToggle>
-                      <DropdownMenu>
-                        <DropdownItem>Today</DropdownItem>
-                        <DropdownItem>This Week</DropdownItem>
-                        <DropdownItem>This Month</DropdownItem>
-                        <DropdownItem>This Year</DropdownItem>
-                        <DropdownItem>All Time</DropdownItem>
-                      </DropdownMenu>
-                    </Dropdown>
-                  </div>
-                  <div className="d-flex flex-column">
-                    <label className="col-form-label">Export</label>
-                    <div className="d-flex gap-2">
-                      <button className="btn btn-danger" type="button">
-                        PDF
-                      </button>
-                      <button className="btn btn-success" type="button">
-                        Excel
-                      </button>
+                        Start Date
+                      </label>
+                      <input
+                        className="form-control"
+                        type="date"
+                        defaultValue="2019-08-19"
+                        id="example-date-input"
+                      />
+                    </div>
+                    <div>
+                      <label
+                        htmlFor="example-date-input"
+                        className="col-form-label"
+                      >
+                        End Date
+                      </label>
+                      <input
+                        className="form-control"
+                        type="date"
+                        defaultValue="2019-08-19"
+                        id="example-date-input"
+                      />
+                    </div>
+                    <div>
+                      <label className="col-form-label">Duration</label>
+                      <Dropdown
+                        isOpen={singlebtn}
+                        toggle={() => setSinglebtn(!singlebtn)}
+                      >
+                        <DropdownToggle
+                          tag="button"
+                          className="btn btn-info"
+                          caret
+                        >
+                          Duration <i className="mdi mdi-chevron-down" />
+                        </DropdownToggle>
+                        <DropdownMenu>
+                          <DropdownItem>Today</DropdownItem>
+                          <DropdownItem>This Week</DropdownItem>
+                          <DropdownItem>This Month</DropdownItem>
+                          <DropdownItem>This Year</DropdownItem>
+                          <DropdownItem>All Time</DropdownItem>
+                        </DropdownMenu>
+                      </Dropdown>
+                    </div>
+                    <div className="d-flex flex-column">
+                      <label className="col-form-label">Export</label>
+                      <div className="d-flex gap-2">
+                        <button className="btn btn-danger" type="button">
+                          PDF
+                        </button>
+                        <button className="btn btn-success" type="button">
+                          Excel
+                        </button>
+                      </div>
                     </div>
                   </div>
-                </div>
+                )}
               </div>
             </Col>
           </Row>
-          <Stats />
+          {activeTab === "Statistic" ? (
+            <Stats />
+          ) : activeTab === "Button Style" ? (
+            <Customize />
+          ) : (
+            <SubMenu />
+          )}
         </Container>
       </div>
     </React.Fragment>

@@ -1,15 +1,5 @@
 import React, { useState } from "react";
-import {
-  Row,
-  Col,
-  Card,
-  CardBody,
-  CardTitle,
-  Label,
-  Container,
-  Input,
-} from "reactstrap";
-import Breadcrumbs from "../../../components/Common/Breadcrumb";
+import { Row, Col, Card, CardBody, CardTitle, Label, Input } from "reactstrap";
 import ColorPicker from "@vtaits/react-color-picker";
 import "@vtaits/react-color-picker/dist/index.css";
 
@@ -75,624 +65,558 @@ const Customize = () => {
     document.getElementById("iconUploadInput").click();
   };
 
-  const subMenues = [
-    { id: 1, title: "Facebook" },
-    { id: 2, title: "Line" },
-    { id: 3, title: "Email" },
-    { id: 4, title: "Youtube" },
-  ];
-
   return (
     <React.Fragment>
-      <div className="page-content">
-        <Container fluid>
-          <Breadcrumbs title="Marketing tool" breadcrumbItem="Customize" />
+      <Row>
+        <Col md={12}>
+          {/* Pre-Built Editor */}
+          <Card>
+            <CardBody>
+              <CardTitle className="h4 mb-4">Pre-Built</CardTitle>
+
+              <Row>
+                <Col md={1}>
+                  <div>
+                    <h5 className="font-size-14 mb-3">
+                      <button
+                        className="btn-rounded waves-effect waves-light btn btn-primary"
+                        type="button"
+                      >
+                        Contact
+                      </button>
+                    </h5>
+                    <div className="vstack gap-2">
+                      <div className="form-check">
+                        <input
+                          className="form-check-input"
+                          type="radio"
+                          name="styled"
+                          id="styled1"
+                          value="styled1"
+                          onChange={e => setPreuiltInput("styled1")}
+                          checked={preBuiltInput === "styled1"}
+                        />
+                        <label className="form-check-label" htmlFor="styled1">
+                          Styled#1
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </Col>
+                <Col md={1}>
+                  <div>
+                    <h5 className="font-size-14 mb-3">
+                      <button
+                        className="btn-rounded waves-effect waves-light btn btn-success"
+                        type="button"
+                      >
+                        Contact
+                      </button>
+                    </h5>
+                    <div className="vstack gap-2">
+                      <div className="form-check">
+                        <input
+                          className="form-check-input"
+                          type="radio"
+                          name="styled"
+                          id="styled2"
+                          value="styled2"
+                          onChange={e => setPreuiltInput("styled2")}
+                          checked={preBuiltInput === "styled2"}
+                        />
+                        <label className="form-check-label" htmlFor="styled2">
+                          Styled#2
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </Col>
+                <Col md={1}>
+                  <div>
+                    <h5 className="font-size-14 mb-3">
+                      <button
+                        className="btn-rounded waves-effect waves-light btn btn-danger"
+                        type="button"
+                      >
+                        Contact
+                      </button>
+                    </h5>
+                    <div className="vstack gap-2">
+                      <div className="form-check">
+                        <input
+                          className="form-check-input"
+                          type="radio"
+                          name="styled"
+                          id="styled3"
+                          value="styled3"
+                          onChange={e => setPreuiltInput("styled3")}
+                          checked={preBuiltInput === "styled3"}
+                        />
+                        <label className="form-check-label" htmlFor="styled3">
+                          Styled#3
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </Col>
+              </Row>
+            </CardBody>
+          </Card>
+          {/* End Pre-Built Editor */}
+
+          {/* Button Editor */}
+          <Card>
+            <CardBody>
+              <CardTitle className="h4 mb-4">
+                <span>Button Editor</span>
+              </CardTitle>
+              <Row>
+                <Col md={2}>
+                  <div>
+                    <Label>Background color</Label>
+                    <div className="d-flex gap-2">
+                      <Input
+                        type="text"
+                        className="colorpicker-default"
+                        value={backgroundColor}
+                        readOnly
+                      />
+                      <div
+                        onClick={() => {
+                          setBackgroundColorEnable(!backgroundColorEnable);
+                        }}
+                        className="btn"
+                        style={{
+                          backgroundColor: backgroundColor,
+                          width: 40,
+                          height: 40,
+                        }}
+                      ></div>
+                      {backgroundColorEnable ? (
+                        <ClickAwayListener
+                          onClickAway={closeBackgroundColorPicker}
+                        >
+                          <>
+                            <ColorPicker
+                              style={{
+                                position: "absolute",
+                                right: 10,
+                                marginTop: "2.8rem",
+                                zIndex: 500,
+                              }}
+                              saturationHeight={100}
+                              saturationWidth={100}
+                              value={backgroundColor}
+                              onDrag={onDragBackgroundColor}
+                            />
+                          </>
+                        </ClickAwayListener>
+                      ) : null}
+                    </div>
+                  </div>
+                </Col>
+                <Col md={2}>
+                  <div>
+                    <Label>Text color</Label>
+                    <div className="d-flex gap-2">
+                      <Input
+                        type="text"
+                        className="colorpicker-default"
+                        value={textColor}
+                        readOnly
+                      />
+                      <div
+                        onClick={() => {
+                          setTextColorEnable(!textColorEnable);
+                        }}
+                        className="btn"
+                        style={{
+                          backgroundColor: textColor,
+                          width: 40,
+                          height: 40,
+                        }}
+                      ></div>
+                      {textColorEnable ? (
+                        <ClickAwayListener onClickAway={closeTextColorPicker}>
+                          <>
+                            <ColorPicker
+                              style={{
+                                position: "absolute",
+                                right: 10,
+                                marginTop: "2.8rem",
+                                zIndex: 500,
+                              }}
+                              saturationHeight={100}
+                              saturationWidth={100}
+                              value={textColor}
+                              onDrag={onDragTextColor}
+                            />
+                          </>
+                        </ClickAwayListener>
+                      ) : null}
+                    </div>
+                  </div>
+                </Col>
+                <Col md={2}>
+                  <div>
+                    <Label>Text (0/100)</Label>
+                    <div className="d-flex gap-2">
+                      <Input
+                        onChange={e => handleButtonText(e)}
+                        value={buttonText}
+                        type="text"
+                        className="form-control"
+                        placeholder="Button Text"
+                      />
+                    </div>
+                  </div>
+                </Col>
+                <Col md={2}>
+                  <div className="d-flex flex-column">
+                    <Label>Size</Label>
+                    <div
+                      className="btn-group"
+                      role="group"
+                      aria-label="Basic example"
+                    >
+                      <button
+                        onClick={() => handleButtonSize(50)}
+                        className="btn btn-light"
+                      >
+                        Small
+                      </button>
+                      <button
+                        onClick={() => handleButtonSize(75)}
+                        className="btn btn-light"
+                      >
+                        Medium
+                      </button>
+                      <button
+                        onClick={() => handleButtonSize(100)}
+                        className="btn btn-light"
+                      >
+                        Large
+                      </button>
+                    </div>
+                  </div>
+                </Col>
+              </Row>
+            </CardBody>
+          </Card>
+          {/* End Button Editor */}
+
           <Row>
-            <Col md={12}>
-              {/* Pre-Built Editor */}
-              <Card>
-                <CardBody>
-                  <CardTitle className="h4 mb-4">Pre-Built</CardTitle>
-
-                  <Row>
-                    <Col md={1}>
-                      <div>
-                        <h5 className="font-size-14 mb-3">
-                          <button
-                            className="btn-rounded waves-effect waves-light btn btn-primary"
-                            type="button"
-                          >
-                            Contact
-                          </button>
-                        </h5>
-                        <div className="vstack gap-2">
-                          <div className="form-check">
-                            <input
-                              className="form-check-input"
-                              type="radio"
-                              name="styled"
-                              id="styled1"
-                              value="styled1"
-                              onChange={e => setPreuiltInput("styled1")}
-                              checked={preBuiltInput === "styled1"}
-                            />
-                            <label
-                              className="form-check-label"
-                              htmlFor="styled1"
-                            >
-                              Styled#1
-                            </label>
-                          </div>
-                        </div>
-                      </div>
-                    </Col>
-                    <Col md={1}>
-                      <div>
-                        <h5 className="font-size-14 mb-3">
-                          <button
-                            className="btn-rounded waves-effect waves-light btn btn-success"
-                            type="button"
-                          >
-                            Contact
-                          </button>
-                        </h5>
-                        <div className="vstack gap-2">
-                          <div className="form-check">
-                            <input
-                              className="form-check-input"
-                              type="radio"
-                              name="styled"
-                              id="styled2"
-                              value="styled2"
-                              onChange={e => setPreuiltInput("styled2")}
-                              checked={preBuiltInput === "styled2"}
-                            />
-                            <label
-                              className="form-check-label"
-                              htmlFor="styled2"
-                            >
-                              Styled#2
-                            </label>
-                          </div>
-                        </div>
-                      </div>
-                    </Col>
-                    <Col md={1}>
-                      <div>
-                        <h5 className="font-size-14 mb-3">
-                          <button
-                            className="btn-rounded waves-effect waves-light btn btn-danger"
-                            type="button"
-                          >
-                            Contact
-                          </button>
-                        </h5>
-                        <div className="vstack gap-2">
-                          <div className="form-check">
-                            <input
-                              className="form-check-input"
-                              type="radio"
-                              name="styled"
-                              id="styled3"
-                              value="styled3"
-                              onChange={e => setPreuiltInput("styled3")}
-                              checked={preBuiltInput === "styled3"}
-                            />
-                            <label
-                              className="form-check-label"
-                              htmlFor="styled3"
-                            >
-                              Styled#3
-                            </label>
-                          </div>
-                        </div>
-                      </div>
-                    </Col>
-                  </Row>
-                </CardBody>
-              </Card>
-              {/* End Pre-Built Editor */}
-
-              {/* Sub-menu Editor */}
-              <Card>
-                <CardBody>
-                  <CardTitle className="h4 mb-4">Sub-menu Editor</CardTitle>
-                  <Row>
-                    {subMenues.map((subMenu, index) => {
-                      return (
-                        <Col key={index} md={1}>
-                          <div className="form-check">
-                            <Input
-                              className="form-check-input"
-                              type="checkbox"
-                              id={subMenu.title}
-                            />
-                            <label
-                              className="form-check-label"
-                              htmlFor={subMenu.title}
-                            >
-                              {subMenu.title}
-                            </label>
-                          </div>
-                        </Col>
-                      );
-                    })}
-                  </Row>
-                </CardBody>
-              </Card>
-              {/* End Sub-menu Editor */}
-
-              {/* Button Editor */}
-              <Card>
+            {/*  Position Editor */}
+            <Col className="pb-4" md={8}>
+              <Card className="h-100">
                 <CardBody>
                   <CardTitle className="h4 mb-4">
-                    <span>Button Editor</span>
+                    <span>Position Editor</span>
                   </CardTitle>
                   <Row>
-                    <Col md={2}>
-                      <div>
-                        <Label>Background color</Label>
-                        <div className="d-flex gap-2">
-                          <Input
-                            type="text"
-                            className="colorpicker-default"
-                            value={backgroundColor}
-                            readOnly
-                          />
-                          <div
-                            onClick={() => {
-                              setBackgroundColorEnable(!backgroundColorEnable);
-                            }}
-                            className="btn"
-                            style={{
-                              backgroundColor: backgroundColor,
-                              width: 40,
-                              height: 40,
-                            }}
-                          ></div>
-                          {backgroundColorEnable ? (
-                            <ClickAwayListener
-                              onClickAway={closeBackgroundColorPicker}
-                            >
-                              <>
-                                <ColorPicker
-                                  style={{
-                                    position: "absolute",
-                                    right: 10,
-                                    marginTop: "2.8rem",
-                                    zIndex: 500,
-                                  }}
-                                  saturationHeight={100}
-                                  saturationWidth={100}
-                                  value={backgroundColor}
-                                  onDrag={onDragBackgroundColor}
-                                />
-                              </>
-                            </ClickAwayListener>
-                          ) : null}
-                        </div>
-                      </div>
-                    </Col>
-                    <Col md={2}>
-                      <div>
-                        <Label>Text color</Label>
-                        <div className="d-flex gap-2">
-                          <Input
-                            type="text"
-                            className="colorpicker-default"
-                            value={textColor}
-                            readOnly
-                          />
-                          <div
-                            onClick={() => {
-                              setTextColorEnable(!textColorEnable);
-                            }}
-                            className="btn"
-                            style={{
-                              backgroundColor: textColor,
-                              width: 40,
-                              height: 40,
-                            }}
-                          ></div>
-                          {textColorEnable ? (
-                            <ClickAwayListener
-                              onClickAway={closeTextColorPicker}
-                            >
-                              <>
-                                <ColorPicker
-                                  style={{
-                                    position: "absolute",
-                                    right: 10,
-                                    marginTop: "2.8rem",
-                                    zIndex: 500,
-                                  }}
-                                  saturationHeight={100}
-                                  saturationWidth={100}
-                                  value={textColor}
-                                  onDrag={onDragTextColor}
-                                />
-                              </>
-                            </ClickAwayListener>
-                          ) : null}
-                        </div>
-                      </div>
-                    </Col>
-                    <Col md={2}>
-                      <div>
-                        <Label>Text (0/100)</Label>
-                        <div className="d-flex gap-2">
-                          <Input
-                            onChange={e => handleButtonText(e)}
-                            value={buttonText}
-                            type="text"
-                            className="form-control"
-                            placeholder="Button Text"
-                          />
-                        </div>
-                      </div>
-                    </Col>
-                    <Col md={2}>
+                    <Col md={6}>
                       <div className="d-flex flex-column">
-                        <Label>Size</Label>
+                        <Label>Position</Label>
                         <div
                           className="btn-group"
                           role="group"
                           aria-label="Basic example"
                         >
                           <button
-                            onClick={() => handleButtonSize(50)}
+                            onClick={() =>
+                              handleButtonPosition(20, null, null, 20)
+                            }
                             className="btn btn-light"
                           >
-                            Small
+                            Top Left
                           </button>
                           <button
-                            onClick={() => handleButtonSize(75)}
+                            onClick={() =>
+                              handleButtonPosition(20, 20, null, null)
+                            }
                             className="btn btn-light"
                           >
-                            Medium
+                            Top Right
                           </button>
                           <button
-                            onClick={() => handleButtonSize(100)}
+                            onClick={() =>
+                              handleButtonPosition(null, null, 20, 20)
+                            }
                             className="btn btn-light"
                           >
-                            Large
+                            Bottom Left
                           </button>
+                          <button
+                            onClick={() =>
+                              handleButtonPosition(null, 20, 20, null)
+                            }
+                            className="btn btn-light"
+                          >
+                            Bottom Right
+                          </button>
+                        </div>
+                      </div>
+                    </Col>
+                    <Col md={6}>
+                      <div>
+                        <Label>Margin</Label>
+                        <div className="d-flex gap-2">
+                          <Input
+                            type="number"
+                            className="form-control"
+                            placeholder="Top"
+                            onChange={e => setMarginTop(e.target.value)}
+                            value={marginTop}
+                          />
+                          <Input
+                            type="number"
+                            className="form-control"
+                            placeholder="Right"
+                            onChange={e => setMarginRight(e.target.value)}
+                            value={marginRight}
+                          />
+                          <Input
+                            type="number"
+                            className="form-control"
+                            placeholder="Bottom"
+                            onChange={e => setMarginBottom(e.target.value)}
+                            value={marginBottom}
+                          />
+                          <Input
+                            type="number"
+                            className="form-control"
+                            placeholder="Left"
+                            onChange={e => setMarginLeft(e.target.value)}
+                            value={marginLeft}
+                          />
                         </div>
                       </div>
                     </Col>
                   </Row>
                 </CardBody>
               </Card>
-              {/* End Button Editor */}
+            </Col>
 
-              <Row>
-                {/*  Position Editor */}
-                <Col className="pb-4" md={8}>
-                  <Card className="h-100">
-                    <CardBody>
-                      <CardTitle className="h4 mb-4">
-                        <span>Position Editor</span>
-                      </CardTitle>
-                      <Row>
-                        <Col md={6}>
-                          <div className="d-flex flex-column">
-                            <Label>Position</Label>
-                            <div
-                              className="btn-group"
-                              role="group"
-                              aria-label="Basic example"
-                            >
-                              <button
-                                onClick={() =>
-                                  handleButtonPosition(20, null, null, 20)
-                                }
-                                className="btn btn-light"
-                              >
-                                Top Left
-                              </button>
-                              <button
-                                onClick={() =>
-                                  handleButtonPosition(20, 20, null, null)
-                                }
-                                className="btn btn-light"
-                              >
-                                Top Right
-                              </button>
-                              <button
-                                onClick={() =>
-                                  handleButtonPosition(null, null, 20, 20)
-                                }
-                                className="btn btn-light"
-                              >
-                                Bottom Left
-                              </button>
-                              <button
-                                onClick={() =>
-                                  handleButtonPosition(null, 20, 20, null)
-                                }
-                                className="btn btn-light"
-                              >
-                                Bottom Right
-                              </button>
-                            </div>
-                          </div>
-                        </Col>
-                        <Col md={6}>
-                          <div>
-                            <Label>Margin</Label>
-                            <div className="d-flex gap-2">
-                              <Input
-                                type="number"
-                                className="form-control"
-                                placeholder="Top"
-                                onChange={e => setMarginTop(e.target.value)}
-                                value={marginTop}
-                              />
-                              <Input
-                                type="number"
-                                className="form-control"
-                                placeholder="Right"
-                                onChange={e => setMarginRight(e.target.value)}
-                                value={marginRight}
-                              />
-                              <Input
-                                type="number"
-                                className="form-control"
-                                placeholder="Bottom"
-                                onChange={e => setMarginBottom(e.target.value)}
-                                value={marginBottom}
-                              />
-                              <Input
-                                type="number"
-                                className="form-control"
-                                placeholder="Left"
-                                onChange={e => setMarginLeft(e.target.value)}
-                                value={marginLeft}
-                              />
-                            </div>
-                          </div>
-                        </Col>
-                      </Row>
-                    </CardBody>
-                  </Card>
-                </Col>
+            {/* End Position Editor */}
 
-                {/* End Position Editor */}
+            {/* Visibility Editor */}
+            <Col className="pb-4" md={4}>
+              <Card className="h-100">
+                <CardBody>
+                  <CardTitle className="h4 mb-4">Visibility Editor</CardTitle>
+                  <Row>
+                    <span>Visibility</span>
+                  </Row>
+                  <Row>
+                    <Col md={3}>
+                      <div className="form-check">
+                        <Input
+                          className="form-check-input"
+                          type="checkbox"
+                          id="defaultCheck1"
+                          checked={isPCChecked}
+                          onChange={e => setIsPCChecked(!isPCChecked)}
+                        />
+                        <label
+                          className="form-check-label"
+                          htmlFor="defaultCheck1"
+                        >
+                          PC
+                        </label>
+                      </div>
+                    </Col>
+                    <Col md={3}>
+                      <div className="form-check">
+                        <Input
+                          className="form-check-input"
+                          type="checkbox"
+                          id="defaultCheck2"
+                          value=""
+                          checked={isTabletChecked}
+                          onChange={e => setIsTabletChecked(!isTabletChecked)}
+                        />
+                        <label
+                          className="form-check-label"
+                          htmlFor="defaultCheck2"
+                        >
+                          Tablet
+                        </label>
+                      </div>
+                    </Col>
+                    <Col md={3}>
+                      <div className="form-check">
+                        <Input
+                          className="form-check-input"
+                          type="checkbox"
+                          id="defaultCheck2"
+                          value=""
+                          checked={isMobileChecked}
+                          onChange={e => setIsMobileChecked(!isMobileChecked)}
+                        />
+                        <label
+                          className="form-check-label"
+                          htmlFor="defaultCheck2"
+                        >
+                          Mobile
+                        </label>
+                      </div>
+                    </Col>
+                  </Row>
+                </CardBody>
+              </Card>
+            </Col>
 
-                {/* Visibility Editor */}
-                <Col className="pb-4" md={4}>
-                  <Card className="h-100">
-                    <CardBody>
-                      <CardTitle className="h4 mb-4">
-                        Visibility Editor
-                      </CardTitle>
-                      <Row>
-                        <span>Visibility</span>
-                      </Row>
-                      <Row>
-                        <Col md={3}>
-                          <div className="form-check">
-                            <Input
-                              className="form-check-input"
-                              type="checkbox"
-                              id="defaultCheck1"
-                              checked={isPCChecked}
-                              onChange={e => setIsPCChecked(!isPCChecked)}
-                            />
-                            <label
-                              className="form-check-label"
-                              htmlFor="defaultCheck1"
-                            >
-                              PC
-                            </label>
-                          </div>
-                        </Col>
-                        <Col md={3}>
-                          <div className="form-check">
-                            <Input
-                              className="form-check-input"
-                              type="checkbox"
-                              id="defaultCheck2"
-                              value=""
-                              checked={isTabletChecked}
-                              onChange={e =>
-                                setIsTabletChecked(!isTabletChecked)
-                              }
-                            />
-                            <label
-                              className="form-check-label"
-                              htmlFor="defaultCheck2"
-                            >
-                              Tablet
-                            </label>
-                          </div>
-                        </Col>
-                        <Col md={3}>
-                          <div className="form-check">
-                            <Input
-                              className="form-check-input"
-                              type="checkbox"
-                              id="defaultCheck2"
-                              value=""
-                              checked={isMobileChecked}
-                              onChange={e =>
-                                setIsMobileChecked(!isMobileChecked)
-                              }
-                            />
-                            <label
-                              className="form-check-label"
-                              htmlFor="defaultCheck2"
-                            >
-                              Mobile
-                            </label>
-                          </div>
-                        </Col>
-                      </Row>
-                    </CardBody>
-                  </Card>
-                </Col>
-
-                {/* End Visibility Editor */}
-              </Row>
-              <Row>
-                <Col md={4}>
-                  {/* Icon Editor */}
-                  <Card>
-                    <CardBody>
-                      <div className="d-flex gap-4">
-                        <CardTitle className="h4 mb-4">Icon</CardTitle>
-                        <div className="d-flex gap-2">
-                          <div className="vstack gap-2">
-                            <div className="form-check">
-                              <input
-                                className="form-check-input"
-                                type="radio"
-                                name="icon"
-                                id="manual"
-                                value="manual"
-                                onChange={e => setIconInput("font-awesome")}
-                                checked={iconInput === "font-awesome"}
-                              />
-                              <label
-                                className="form-check-label"
-                                htmlFor="manual"
-                              >
-                                Fontawesome
-                              </label>
-                            </div>
-                          </div>
-                          <div className="vstack gap-2">
-                            <div className="form-check">
-                              <input
-                                className="form-check-input"
-                                type="radio"
-                                name="icon"
-                                id="upload"
-                                value="upload"
-                                onChange={e => setIconInput("upload")}
-                                checked={iconInput === "upload"}
-                              />
-                              <label
-                                className="form-check-label"
-                                htmlFor="upload"
-                              >
-                                Upload
-                              </label>
-                            </div>
-                          </div>
+            {/* End Visibility Editor */}
+          </Row>
+          <Row>
+            <Col md={4}>
+              {/* Icon Editor */}
+              <Card>
+                <CardBody>
+                  <div className="d-flex gap-4">
+                    <CardTitle className="h4 mb-4">Icon</CardTitle>
+                    <div className="d-flex gap-2">
+                      <div className="vstack gap-2">
+                        <div className="form-check">
+                          <input
+                            className="form-check-input"
+                            type="radio"
+                            name="icon"
+                            id="manual"
+                            value="manual"
+                            onChange={e => setIconInput("font-awesome")}
+                            checked={iconInput === "font-awesome"}
+                          />
+                          <label className="form-check-label" htmlFor="manual">
+                            Fontawesome
+                          </label>
                         </div>
                       </div>
-                      <Row>
-                        <Col md={12}>
-                          {iconInput === "font-awesome" ? (
-                            <div className="form-floating mb-3">
-                              <select
-                                className="form-select"
-                                id="floatingSelectGrid"
-                                aria-label="Floating label select example"
-                              >
-                                <option>Open this select menu</option>
-                                <option value="1">Chat</option>
-                              </select>
-                              <label htmlFor="floatingSelectGrid">
-                                Select Icon
-                              </label>
-                            </div>
-                          ) : (
-                            <div className="form-floating mb-3">
-                              <button
-                                className="btn-rounded waves-effect waves-light btn btn-primary  w-100"
-                                type="button"
-                                onClick={openIconUploadInput}
-                              >
-                                Upload
-                              </button>
-                              <input
-                                id="iconUploadInput"
-                                className="d-none"
-                                type="file"
-                              />
-                            </div>
-                          )}
-                        </Col>
-                      </Row>
-                    </CardBody>
-                  </Card>
-                  {/* End Icon Editor */}
-                </Col>
-              </Row>
+                      <div className="vstack gap-2">
+                        <div className="form-check">
+                          <input
+                            className="form-check-input"
+                            type="radio"
+                            name="icon"
+                            id="upload"
+                            value="upload"
+                            onChange={e => setIconInput("upload")}
+                            checked={iconInput === "upload"}
+                          />
+                          <label className="form-check-label" htmlFor="upload">
+                            Upload
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <Row>
+                    <Col md={12}>
+                      {iconInput === "font-awesome" ? (
+                        <div className="form-floating mb-3">
+                          <select
+                            className="form-select"
+                            id="floatingSelectGrid"
+                            aria-label="Floating label select example"
+                          >
+                            <option>Open this select menu</option>
+                            <option value="1">Chat</option>
+                          </select>
+                          <label htmlFor="floatingSelectGrid">
+                            Select Icon
+                          </label>
+                        </div>
+                      ) : (
+                        <div className="form-floating mb-3">
+                          <button
+                            className="btn-rounded waves-effect waves-light btn btn-primary  w-100"
+                            type="button"
+                            onClick={openIconUploadInput}
+                          >
+                            Upload
+                          </button>
+                          <input
+                            id="iconUploadInput"
+                            className="d-none"
+                            type="file"
+                          />
+                        </div>
+                      )}
+                    </Col>
+                  </Row>
+                </CardBody>
+              </Card>
+              {/* End Icon Editor */}
             </Col>
+          </Row>
+        </Col>
+        <div
+          style={{
+            top: buttonPositionTop ? buttonPositionTop + marginTop : null,
+            right: buttonPositionRight
+              ? buttonPositionRight + marginRight
+              : null,
+            bottom:
+              buttonPositionBottom > 0
+                ? buttonPositionBottom + marginBottom
+                : null,
+            left:
+              buttonPositionLeft > 0 ? buttonPositionLeft + marginLeft : null,
+            position: "fixed",
+            width: buttonSize,
+            height: buttonSize,
+            zIndex: 99999,
+          }}
+        >
+          <button
+            onClick={e => setFloatingActionButton(!floatingActionButton)}
+            type="button"
+            style={{
+              width: buttonSize,
+              height: buttonSize,
+              borderRadius: "50%",
+              border: 0,
+              boxShadow:
+                "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)",
+              backgroundColor: backgroundColor,
+              color: textColor,
+              fontSize: 32,
+            }}
+          >
+            <i className="uil-comment-info-alt"></i>
+          </button>
+          {floatingActionButton && (
             <div
               style={{
-                top: buttonPositionTop ? buttonPositionTop + marginTop : null,
-                right: buttonPositionRight
-                  ? buttonPositionRight + marginRight
-                  : null,
-                bottom:
-                  buttonPositionBottom > 0
-                    ? buttonPositionBottom + marginBottom
-                    : null,
-                left:
-                  buttonPositionLeft > 0
-                    ? buttonPositionLeft + marginLeft
-                    : null,
-                position: "fixed",
-                width: buttonSize,
-                height: buttonSize,
-                zIndex: 99999,
+                position: "relative",
+                bottom: 125,
               }}
             >
-              <button
-                onClick={e => setFloatingActionButton(!floatingActionButton)}
-                type="button"
+              <div
                 style={{
-                  width: buttonSize,
-                  height: buttonSize,
-                  borderRadius: "50%",
-                  border: 0,
-                  boxShadow:
-                    "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)",
-                  backgroundColor: backgroundColor,
-                  color: textColor,
-                  fontSize: 32,
+                  position: "absolute",
                 }}
               >
-                <i className="uil-comment-info-alt"></i>
-              </button>
-              {floatingActionButton && (
                 <div
                   style={{
-                    position: "relative",
-                    bottom: 125,
+                    backgroundColor: "#3b82f6",
+                    paddingTop: 10,
+                    paddingBottom: 10,
+                    paddingRight: 20,
+                    paddingLeft: 20,
+                    color: "white",
+                    borderTopLeftRadius: 15,
+                    borderTopRightRadius: 15,
                   }}
                 >
-                  <div
-                    style={{
-                      position: "absolute",
-                    }}
-                  >
-                    <div
-                      style={{
-                        backgroundColor: "#3b82f6",
-                        paddingTop: 10,
-                        paddingBottom: 10,
-                        paddingRight: 20,
-                        paddingLeft: 20,
-                        color: "white",
-                        borderTopLeftRadius: 15,
-                        borderTopRightRadius: 15,
-                      }}
-                    >
-                      {buttonText}
-                    </div>
-                    <div>Email</div>
-                  </div>
+                  {buttonText}
                 </div>
-              )}
+                <div>Email</div>
+              </div>
             </div>
-          </Row>
-        </Container>
-      </div>
+          )}
+        </div>
+      </Row>
     </React.Fragment>
   );
 };

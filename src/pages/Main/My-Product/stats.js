@@ -471,7 +471,7 @@ const Stats = () => {
                 List of purchased products.
               </CardSubtitle>
 
-              <MDBDataTable responsive bordered data={data} />
+              <MDBDataTable responsive bordered data={data} noBottomColumns />
             </CardBody>
           </Card>
         </Col>
