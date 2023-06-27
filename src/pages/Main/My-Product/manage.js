@@ -127,7 +127,7 @@ const Manage = () => {
               <div className="page-title-box d-flex align-items-center justify-content-between">
                 <h4 className="mb-0">{activeTab}</h4>
 
-                {activeTab === "5" && (
+                {activeTab === "Statistic" && (
                   <div className="page-title-right d-flex align-items-center gap-4">
                     <div>
                       <label
