@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import {
   Col,
   Row,
@@ -8,66 +9,101 @@ import {
   CardImg,
   CardText,
   Container,
+  Modal,
+  Toast,
+  ToastBody,
 } from "reactstrap";
-import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
-import product1 from "../../../assets/images/product/product-1.jpg";
-import product2 from "../../../assets/images/product/product-2.jpg";
-import product3 from "../../../assets/images/product/product-3.jpg";
-import product4 from "../../../assets/images/product/product-4.jpg";
-
-const products = [
-  {
-    id: 1,
-    image: product1,
-    title: "Floating action button #1",
-    price: 2000,
-    domains: 3,
-    duration: 30,
-  },
-  {
-    id: 2,
-    image: product2,
-    title: "Floating action button #2",
-    price: 4000,
-    domains: 4,
-    duration: 50,
-  },
-  {
-    id: 3,
-    image: product3,
-    title: "Floating action button #1",
-    price: 3000,
-    domains: 3,
-    duration: 30,
-  },
-  {
-    id: 4,
-    image: product4,
-    title: "Floating action button #4",
-    price: 5000,
-    domains: 4,
-    duration: 50,
-  },
-];
 
 const ECommerce = () => {
   const { t } = useTranslation();
   document.title = " E-Commerce | Marketing tool platform";
+  const [products, setProducts] = useState([]);
+  const [purchaseSuccessToasts, setPurchaseSuccessToasts] = useState([]);
+
+  const getEcommerce = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}/api/v1/user/e-commerce`
+      );
+      setProducts(response.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const [productPurchaseModal, setProductPurchaseModal] = useState(false);
+  const [toggleProduct, setToggleProduct] = useState("");
+
+  const togglePurchaseModal = (product) => {
+    setProductPurchaseModal(!productPurchaseModal);
+    setToggleProduct(product);
+  };
+
+  const confirmPurchase = () => {
+    setProductPurchaseModal(false);
+    setPurchaseSuccessToasts([...purchaseSuccessToasts, "Purchase Success."]);
+
+    setTimeout(() => {
+      closePurchaseToast(purchaseSuccessToasts.length - 1);
+    }, 2000);
+  };
+
+  const closePurchaseToast = (index) => {
+    const clonedData = [...purchaseSuccessToasts].filter(
+      (i, idx) => idx !== index
+    );
+    setPurchaseSuccessToasts(clonedData);
+  };
+
+  useEffect(() => {
+    getEcommerce();
+  }, []);
 
   return (
     <React.Fragment>
       <div className="page-content">
         <Container fluid>
+          <div
+            aria-live="polite"
+            aria-atomic="true"
+            className="position-relative"
+          >
+            <div className="toast-container position-absolute end-0 top-0 p-2 p-lg-3">
+              {purchaseSuccessToasts.map((i, index) => {
+                return (
+                  <Toast
+                    style={{
+                      background: "rgb(52,195,143,0.8)",
+                      cursor: "pointer",
+                    }}
+                    key={index}
+                    className="toast fade show align-items-center text-white border-0"
+                  >
+                    <div className="d-flex">
+                      <ToastBody>{i}</ToastBody>
+                      <button
+                        type="button"
+                        onClick={() => closePurchaseToast(index)}
+                        className="btn-close btn-close-white me-2 m-auto"
+                        data-bs-dismiss="toast"
+                        aria-label="Close"
+                      ></button>
+                    </div>
+                  </Toast>
+                );
+              })}
+            </div>
+          </div>
           <Breadcrumbs
             title={t("Platform Name")}
             breadcrumbItem={t("E-Commerce")}
           />
           <Row>
-            {products.map(product => {
+            {products.map((product) => {
               return (
-                <Col md={3}>
+                <Col key={product.id} md={3}>
                   <Card>
                     <CardImg
                       top
@@ -86,12 +122,66 @@ const ECommerce = () => {
                         <span>Duration: {product.duration} days</span>
                       </CardText>
                       <div className="d-grid gap-2">
-                        <Link
-                          to="#"
+                        <button
+                          type="button"
+                          onClick={() => {
+                            togglePurchaseModal(product);
+                          }}
                           className="btn btn-primary waves-effect waves-light"
+                          data-toggle="modal"
+                          data-target="#myModal"
                         >
                           {t("Purchase")}
-                        </Link>
+                        </button>
+
+                        <Modal
+                          isOpen={productPurchaseModal}
+                          toggle={() => {
+                            togglePurchaseModal("");
+                          }}
+                        >
+                          <div className="modal-header">
+                            <h5 className="modal-title mt-0" id="myModalLabel">
+                              Confirm Purchase Product
+                            </h5>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setProductPurchaseModal(false);
+                              }}
+                              className="close"
+                              data-dismiss="modal"
+                              aria-label="Close"
+                            >
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div className="modal-body">
+                            <h5>{toggleProduct.name}</h5>
+                            <p>Type: {toggleProduct.type}</p>
+                            <p>Domains: {toggleProduct.domains}</p>
+                            <p>Duration: {toggleProduct.duration}</p>
+                          </div>
+                          <div className="modal-footer">
+                            <button
+                              onClick={confirmPurchase}
+                              type="button"
+                              className="btn btn-success waves-effect waves-light"
+                            >
+                              Confirm
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                togglePurchaseModal("");
+                              }}
+                              className="btn btn-danger waves-effect"
+                              data-dismiss="modal"
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        </Modal>
                       </div>
                     </CardBody>
                   </Card>
