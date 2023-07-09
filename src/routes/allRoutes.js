@@ -23,7 +23,7 @@ const userRoutes = [
     exact: true,
     component: <Navigate to="/dashboard" />,
   },
-  { path: "*", component: <Navigate to="/e-commerce" /> },
+  { path: "*", component: <Navigate to="/login" /> },
 ];
 
 const authRoutes = [

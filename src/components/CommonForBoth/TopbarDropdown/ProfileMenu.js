@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { Dropdown, DropdownToggle, DropdownMenu } from "reactstrap";
 
@@ -6,15 +6,30 @@ import { Dropdown, DropdownToggle, DropdownMenu } from "reactstrap";
 import { withTranslation } from "react-i18next";
 // Redux
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
 import withRouter from "../../Common/withRouter";
-
-// users
-import user4 from "../../../assets/images/users/avatar-9.jpg";
+import { useNavigate } from "react-router-dom";
 
 const ProfileMenu = props => {
   // Declare a new state variable, which we'll call "menu"
+  const navigate = useNavigate();
   const [menu, setMenu] = useState(false);
+  const [username, setUsername] = useState("User");
+
+  const logOut = () => {
+    localStorage.removeItem("authUser");
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("expiresIn");
+    navigate("/login");
+  };
+
+  useEffect(() => {
+    if (localStorage.getItem("authUser")) {
+      const obj = JSON.parse(localStorage.getItem("authUser"));
+      if (obj.fullName) {
+        setUsername(obj.fullName);
+      }
+    }
+  }, [props.success]);
 
   return (
     <React.Fragment>
@@ -28,21 +43,16 @@ const ProfileMenu = props => {
           id="page-header-user-dropdown"
           tag="button"
         >
-          <img
-            className="rounded-circle header-profile-user"
-            src={user4}
-            alt="Header Avatar"
-          />
           <span className="d-none d-xl-inline-block ms-1 fw-medium font-size-15">
-            Piyakarn Nimmakulvirut
+            {username}
           </span>{" "}
           <i className="uil-angle-down d-none d-xl-inline-block font-size-15"></i>
         </DropdownToggle>
         <DropdownMenu className="dropdown-menu-end">
-          <Link to="/login" className="dropdown-item">
+          <button onClick={logOut} type="button" className="dropdown-item">
             <i className="uil uil-sign-out-alt font-size-18 align-middle me-1 text-muted"></i>
             <span>{props.t("Logout")}</span>
-          </Link>
+          </button>
         </DropdownMenu>
       </Dropdown>
     </React.Fragment>

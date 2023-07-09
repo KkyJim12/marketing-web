@@ -1,83 +1,95 @@
 import PropTypes from "prop-types";
-import React, { useEffect } from "react";
+import React, { useState } from "react";
+import axios from "axios";
+import jwt_decode from "jwt-decode";
 
 import {
   Row,
   Col,
   CardBody,
   Card,
-  Alert,
   Container,
   Form,
   Input,
-  FormFeedback,
   Label,
+  Button,
+  Alert,
 } from "reactstrap";
 
+import { useNavigate } from "react-router-dom";
+
 // Redux
-import { Link } from "react-router-dom";
 import withRouter from "../../components/Common/withRouter";
-
-import { useSelector } from "react-redux";
-
-// Formik validation
-import * as Yup from "yup";
-import { useFormik } from "formik";
 
 // import images
 import logo from "../../assets/images/logo-full.png";
 import logolight from "../../assets/images/logo-full.png";
 
-const Login = props => {
-  document.title = " Login | Minible - Responsive Bootstrap 5 Admin Dashboard";
+const Login = () => {
+  const navigate = useNavigate();
 
-  const validation = useFormik({
-    // enableReinitialize : use this flag when initial values needs to be changed
-    enableReinitialize: true,
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-    initialValues: {
-      email: "admin@themesbrand.com" || "",
-      password: "123456" || "",
-    },
-    validationSchema: Yup.object({
-      email: Yup.string().required("Please Enter Your Email"),
-      password: Yup.string().required("Please Enter Your Password"),
-    }),
-  });
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
 
-  const { error } = useSelector(state => ({
-    error: state.Login.error,
-  }));
+  const [restError, setRestError] = useState("");
 
-  useEffect(() => {
-    document.body.className = "authentication-bg";
-    // remove classname when component will unmount
-    return function cleanup() {
-      document.body.className = "";
-    };
-  });
+  const resetLoginFormError = () => {
+    setEmailError("");
+    setPasswordError("");
+    setRestError("");
+  };
+
+  const loginProcess = async e => {
+    e.preventDefault();
+    resetLoginFormError();
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/api/v1/guest/auths/login`,
+        { email: email, password: password }
+      );
+
+      const data = response.data.data;
+      const decodedJWT = jwt_decode(data.accessToken);
+      localStorage.setItem("accessToken", data.accessToken);
+      localStorage.setItem("authUser", JSON.stringify(data.user));
+      localStorage.setItem("expiresIn", JSON.stringify(decodedJWT.exp));
+
+      navigate("/e-commerce");
+    } catch (error) {
+      const errors = error.response.data.errors;
+      if (error.response.status === 422) {
+        errors.map(error => {
+          if (error.key === "email") {
+            return setEmailError(error.message);
+          } else if (error.key === "password") {
+            return setPasswordError(error.message);
+          } else {
+            return false;
+          }
+        });
+      } else {
+        setRestError(error.response.data.message);
+      }
+    }
+  };
 
   return (
-    <React.Fragment>
+    <>
       <div className="account-pages my-5 pt-sm-5">
         <Container>
           <Row>
             <Col lg={12}>
-              <div className="text-center">
-                <Link to="/login" className="mb-5 d-block auth-logo">
-                  <img
-                    src={logo}
-                    alt=""
-                    height="22"
-                    className="logo logo-dark"
-                  />
-                  <img
-                    src={logolight}
-                    alt=""
-                    height="22"
-                    className="logo logo-light"
-                  />
-                </Link>
+              <div className="d-flex justify-content-center mb-4">
+                <img src={logo} alt="" height="22" className="logo logo-dark" />
+                <img
+                  src={logolight}
+                  alt=""
+                  height="22"
+                  className="logo logo-light"
+                />
               </div>
             </Col>
           </Row>
@@ -93,15 +105,10 @@ const Login = props => {
                   </div>
                   <div className="p-2 mt-4">
                     <Form
+                      onSubmit={e => loginProcess(e)}
                       className="form-horizontal"
-                      onSubmit={e => {
-                        e.preventDefault();
-                        validation.handleSubmit();
-                        return false;
-                      }}
                     >
-                      {error ? <Alert color="danger">{error}</Alert> : null}
-
+                      {restError && <Alert color="danger">{restError}</Alert>}
                       <div className="mb-3">
                         <Label className="form-label">Email</Label>
                         <Input
@@ -109,59 +116,35 @@ const Login = props => {
                           className="form-control"
                           placeholder="Enter email"
                           type="email"
-                          onChange={validation.handleChange}
-                          onBlur={validation.handleBlur}
-                          value={validation.values.email || ""}
-                          invalid={
-                            validation.touched.email && validation.errors.email
-                              ? true
-                              : false
-                          }
+                          value={email}
+                          onChange={e => setEmail(e.target.value)}
                         />
-                        {validation.touched.email && validation.errors.email ? (
-                          <FormFeedback type="invalid">
-                            {validation.errors.email}
-                          </FormFeedback>
-                        ) : null}
+                        {emailError && (
+                          <small className="text-danger">{emailError}</small>
+                        )}
                       </div>
 
-                      <div className="mb-3">
-                        <div className="float-end">
-                          <Link to="/forgot-password" className="text-muted">
-                            Forgot password?
-                          </Link>
-                        </div>
+                      <div className="mb-2">
                         <Label className="form-label">Password</Label>
                         <Input
                           name="password"
-                          value={validation.values.password || ""}
                           type="password"
                           placeholder="Enter Password"
-                          onChange={validation.handleChange}
-                          onBlur={validation.handleBlur}
-                          invalid={
-                            validation.touched.password &&
-                            validation.errors.password
-                              ? true
-                              : false
-                          }
+                          value={password}
+                          onChange={e => setPassword(e.target.value)}
                         />
-                        {validation.touched.password &&
-                        validation.errors.password ? (
-                          <FormFeedback type="invalid">
-                            {validation.errors.password}
-                          </FormFeedback>
-                        ) : null}
+                        {passwordError && (
+                          <small className="text-danger">{passwordError}</small>
+                        )}
                       </div>
 
                       <div className="mt-3">
-                        <Link
-                          to="/e-commerce"
-                          className="btn btn-primary w-100 waves-effect waves-light"
+                        <Button
+                          className="btn btn-success w-100 waves-effect waves-light"
                           type="submit"
                         >
                           Log In
-                        </Link>
+                        </Button>
                       </div>
 
                       <div className="mt-4 text-center">
@@ -184,7 +167,7 @@ const Login = props => {
           </Row>
         </Container>
       </div>
-    </React.Fragment>
+    </>
   );
 };
 
