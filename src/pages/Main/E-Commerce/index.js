@@ -43,8 +43,13 @@ const ECommerce = () => {
 
   const confirmPurchase = async () => {
     try {
+      const headers = {
+        Authorization: localStorage.getItem("accessToken"),
+      };
       const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/api/v1/user/e-commerce/${toggleProduct.id}`
+        `${process.env.REACT_APP_API_URL}/api/v1/user/e-commerce/${toggleProduct.id}`,
+        "",
+        { headers }
       );
       console.log(response);
 
