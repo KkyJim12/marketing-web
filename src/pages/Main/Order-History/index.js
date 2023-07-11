@@ -1,6 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { MDBDataTable } from "mdbreact";
-import { Row, Col, Card, CardBody, CardSubtitle, Container } from "reactstrap";
+import {
+  Row,
+  Col,
+  Card,
+  CardBody,
+  CardSubtitle,
+  Container,
+  Modal,
+} from "reactstrap";
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
 import { useTranslation } from "react-i18next";
 import axios from "axios";
@@ -9,29 +17,38 @@ const OrderHistory = () => {
   document.title = " Order History | Marketing tool platform";
   const { t } = useTranslation();
 
-  const PayButton = () => {
-    const { t } = useTranslation();
-    return (
-      <button
-        className="btn btn-success waves-effect waves-light btn-sm "
-        type="button"
-      >
-        {t("Pay")}
-      </button>
-    );
+  const PayButton = (props) => {
+    if (props.status === "Wait for payment") {
+      return (
+        <button
+          onClick={() => {
+            toggleMakePaymentModal(props.id);
+          }}
+          className="btn btn-success waves-effect waves-light btn-sm "
+          type="button"
+        >
+          {t("Pay")}
+        </button>
+      );
+    } else {
+      return <p>-</p>;
+    }
   };
 
   const CancelButton = (props) => {
-    const { t } = useTranslation();
-    return (
-      <button
-        onClick={() => cancelOrder(props.id)}
-        className="btn btn-danger waves-effect waves-light btn-sm"
-        type="button"
-      >
-        {t("Cancel")}
-      </button>
-    );
+    if (props.status === "Wait for payment") {
+      return (
+        <button
+          onClick={() => cancelOrder(props.id)}
+          className="btn btn-danger waves-effect waves-light btn-sm"
+          type="button"
+        >
+          {t("Cancel")}
+        </button>
+      );
+    } else {
+      return <p>-</p>;
+    }
   };
 
   const cancelOrder = async (id) => {
@@ -44,8 +61,6 @@ const OrderHistory = () => {
       "",
       { headers }
     );
-
-    console.log(response);
 
     setIsLoading(true);
   };
@@ -130,8 +145,6 @@ const OrderHistory = () => {
         { headers }
       );
 
-      console.log(response);
-
       const fetchData = response.data.data;
       const clonedData = initData;
 
@@ -145,8 +158,10 @@ const OrderHistory = () => {
           orderDate: fetchData[i].createdAt,
           paymentDate: "-",
           status: fetchData[i].status,
-          pay: <PayButton id={fetchData[i].id} />,
-          cancel: <CancelButton id={fetchData[i].id} />,
+          pay: <PayButton id={fetchData[i].id} status={fetchData[i].status} />,
+          cancel: (
+            <CancelButton id={fetchData[i].id} status={fetchData[i].status} />
+          ),
         };
 
         clonedData.rows.push(newData);
@@ -154,6 +169,68 @@ const OrderHistory = () => {
 
       setData(clonedData);
       setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const [makePaymentModal, setMakePaymentModal] = useState(false);
+  const [toggleOrder, setToggleOrder] = useState("");
+  const [selectedFile, setSelectedFile] = useState();
+  const [preview, setPreview] = useState();
+  const [imageUrl, setImageUrl] = useState("");
+
+  const toggleMakePaymentModal = (order) => {
+    setMakePaymentModal(!makePaymentModal);
+    setToggleOrder(order);
+  };
+
+  useEffect(() => {
+    if (!selectedFile) {
+      setPreview(undefined);
+      return;
+    }
+
+    const objectUrl = URL.createObjectURL(selectedFile);
+    setPreview(objectUrl);
+
+    // free memory when ever this component is unmounted
+    return () => URL.revokeObjectURL(objectUrl);
+  }, [selectedFile]);
+
+  const uploadSlip = async (e) => {
+    if (!e.target.files || e.target.files.length === 0) {
+      setSelectedFile(undefined);
+      return;
+    }
+
+    // I've kept this example simple by using the first image instead of multiple
+    setSelectedFile(e.target.files[0]);
+
+    try {
+      const formData = new FormData();
+      formData.append("image", e.target.files[0]);
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/api/v1/user/images`,
+        formData
+      );
+
+      setImageUrl(response.data.data);
+    } catch (error) {}
+  };
+
+  const openUploadInput = () => {
+    document.getElementById("uploadInput").click();
+  };
+
+  const confirmMakePayment = async () => {
+    try {
+      const response = await axios.put(
+        `${process.env.REACT_APP_API_URL}/api/v1/user/orders/${toggleOrder.id}/make-payment`,
+        { image: imageUrl }
+      );
+
+      console.log(response);
     } catch (error) {
       console.log(error);
     }
@@ -190,6 +267,96 @@ const OrderHistory = () => {
                 </CardBody>
               </Card>
             </Col>
+            <Modal
+              isOpen={makePaymentModal}
+              toggle={() => {
+                toggleMakePaymentModal("");
+              }}
+            >
+              <div className="modal-header">
+                <h5 className="modal-title mt-0" id="myModalLabel">
+                  Make Payment
+                </h5>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMakePaymentModal(false);
+                  }}
+                  className="close"
+                  data-dismiss="modal"
+                  aria-label="Close"
+                >
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div className="modal-body">
+                <p>Bank: Kasikorn Bank</p>
+                <p>Account Number: 0561768552</p>
+                <p>Account Name: Piyakarn Nimmakulvirut</p>
+                <div className="d-grid gap-2">
+                  {preview ? (
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <img
+                        style={{ height: 200, objectFit: "cover" }}
+                        src={preview}
+                        alt="preview"
+                      />
+                    </div>
+                  ) : (
+                    <div
+                      style={{
+                        height: 200,
+                        border: "dashed",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        borderColor: "#f2f2f2",
+                        fontWeight: 500,
+                      }}
+                    >
+                      Image
+                    </div>
+                  )}
+                  <button
+                    onClick={openUploadInput}
+                    className="btn btn-primary"
+                    type="button"
+                  >
+                    Upload Slip
+                  </button>
+                  <input
+                    onChange={uploadSlip}
+                    id="uploadInput"
+                    type="file"
+                    style={{ visibility: "hidden" }}
+                  />
+                </div>
+              </div>
+              <div className="modal-footer">
+                <button
+                  onClick={confirmMakePayment}
+                  type="button"
+                  className="btn btn-success waves-effect waves-light"
+                >
+                  Confirm
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    toggleMakePaymentModal("");
+                  }}
+                  className="btn btn-danger waves-effect"
+                  data-dismiss="modal"
+                >
+                  Cancel
+                </button>
+              </div>
+            </Modal>
           </Row>
         </Container>
       </div>
