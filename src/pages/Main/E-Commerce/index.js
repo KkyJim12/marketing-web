@@ -41,16 +41,25 @@ const ECommerce = () => {
     setToggleProduct(product);
   };
 
-  const confirmPurchase = () => {
-    setProductPurchaseModal(false);
-    setPurchaseSuccessToasts([...purchaseSuccessToasts, "Purchase Success."]);
+  const confirmPurchase = async () => {
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/api/v1/user/e-commerce/${toggleProduct.id}`
+      );
+      console.log(response);
 
-    setTimeout(() => {
-      closePurchaseToast(purchaseSuccessToasts.length - 1);
-    }, 2000); 
+      setProductPurchaseModal(false);
+      setPurchaseSuccessToasts([...purchaseSuccessToasts, "Purchase Success."]);
+
+      setTimeout(() => {
+        closePurchaseToast(purchaseSuccessToasts.length - 1);
+      }, 2000);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const closePurchaseToast = (index) => {
+  const closePurchaseToast = async (index) => {
     const clonedData = [...purchaseSuccessToasts].filter(
       (i, idx) => idx !== index
     );
