@@ -47,7 +47,7 @@ const ECommerce = () => {
 
     setTimeout(() => {
       closePurchaseToast(purchaseSuccessToasts.length - 1);
-    }, 2000);
+    }, 2000); 
   };
 
   const closePurchaseToast = (index) => {

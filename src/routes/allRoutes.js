@@ -17,7 +17,7 @@ const userRoutes = [
   { path: "/my-product", component: <MyProduct /> },
   { path: "/my-product/:id/manage", component: <Manage /> },
   { path: "/order-history", component: <OrderHistory /> },
-  { path: "/info/:id", component: <Info /> },
+  { path: "/info/:name/:id", component: <Info /> },
   {
     path: "/",
     exact: true,

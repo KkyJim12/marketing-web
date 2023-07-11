@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
-import React, { useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect } from "react";
+import axios from "axios";
 
 // //Import Scrollbar
 import SimpleBar from "simplebar-react";
@@ -12,9 +13,39 @@ import { Link, useLocation } from "react-router-dom";
 //i18n
 import { withTranslation } from "react-i18next";
 
-const SidebarContent = props => {
+const SidebarContent = (props) => {
+  const [upperPages, setUpperPages] = useState([]);
+  const [middlePages, setMiddlePages] = useState([]);
+  const [lowerPages, setLowerPages] = useState([]);
+
+  useEffect(() => {
+    const getPages = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_URL}/api/v1/user/pages`
+        );
+        const pages = response.data.data;
+
+        for (let i = 0; i < pages.length; i++) {
+          if (pages[i].sortType === "upper") {
+            setUpperPages([...upperPages, pages[i]]);
+            continue;
+          } else if (pages[i].sortType === "middle") {
+            setMiddlePages([...middlePages, pages[i]]);
+            continue;
+          } else {
+            setLowerPages([...lowerPages, pages[i]]);
+          }
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    getPages(); // eslint-disable-next-line
+  }, []);
   // const ref = useRef();
-  const activateParentDropdown = useCallback(item => {
+  const activateParentDropdown = useCallback((item) => {
     item.classList.add("active");
     const parent = item.parentElement;
     const parent2El = parent.childNodes[1];
@@ -53,7 +84,7 @@ const SidebarContent = props => {
     return false;
   }, []);
 
-  const removeActivation = items => {
+  const removeActivation = (items) => {
     for (var i = 0; i < items.length; ++i) {
       var item = items[i];
       const parent = items[i].parentElement;
@@ -143,42 +174,174 @@ const SidebarContent = props => {
           <ul className="metismenu list-unstyled" id="side-menu">
             <li className="menu-title">{props.t("Menu")} </li>
 
+            {upperPages.map((upperPage) => {
+              if (upperPage.sub_pages.length) {
+                return (
+                  <li className="">
+                    <Link to={`/info/${upperPage.name}/${upperPage.id}`}>
+                      <i className="uil-comment-info-alt"></i>
+                      <span>{upperPage.name}</span>
+                    </Link>
+                    <ul className="sub-menu">
+                      {upperPage.sub_pages.map((sub_page) => {
+                        return (
+                          <li>
+                            <Link to={`/info/${sub_page.name}/${sub_page.id}`}>
+                              <i className="uil-comment-info-alt"></i>
+                              <span>{sub_page.name}</span>
+                            </Link>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </li>
+                );
+              } else {
+                return (
+                  <li>
+                    <Link to={`/info/${upperPage.name}/${upperPage.id}`}>
+                      <i className="uil-invoice"></i>
+                      <span>{upperPage.name}</span>
+                    </Link>
+                  </li>
+                );
+              }
+            })}
+
             <li>
               <Link to="/e-commerce">
                 <i className="uil-shopping-cart"></i>
                 <span>{props.t("E-Commerce")}</span>
               </Link>
             </li>
+
+            {middlePages.map((middlePage) => {
+              if (middlePage.sortValue === 1) {
+                if (middlePage.sub_pages.length) {
+                  return (
+                    <li className="">
+                      <Link to={`/info/${middlePage.name}/${middlePage.id}`}>
+                        <i className="uil-comment-info-alt"></i>
+                        <span>{middlePage.name}</span>
+                      </Link>
+                      <ul className="sub-menu">
+                        {middlePage.sub_pages.map((sub_page) => {
+                          return (
+                            <li>
+                              <Link
+                                to={`/info/${sub_page.name}/${sub_page.id}`}
+                              >
+                                <i className="uil-comment-info-alt"></i>
+                                <span>{sub_page.name}</span>
+                              </Link>
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    </li>
+                  );
+                } else {
+                  return (
+                    <li>
+                      <Link to={`/info/${middlePage.name}/${middlePage.id}`}>
+                        <i className="uil-invoice"></i>
+                        <span>{middlePage.name}</span>
+                      </Link>
+                    </li>
+                  );
+                }
+              } else {
+                return <></>;
+              }
+            })}
+
             <li>
               <Link to="/my-product">
                 <i className="uil-apps"></i>
                 <span>{props.t("My Products")}</span>
               </Link>
             </li>
+
+            {middlePages.map((middlePage) => {
+              if (middlePage.sortValue === 2) {
+                if (middlePage.sub_pages.length) {
+                  return (
+                    <li className="">
+                      <Link to={`/info/${middlePage.name}/${middlePage.id}`}>
+                        <i className="uil-comment-info-alt"></i>
+                        <span>{middlePage.name}</span>
+                      </Link>
+                      <ul className="sub-menu">
+                        {middlePage.sub_pages.map((sub_page) => {
+                          return (
+                            <li>
+                              <Link
+                                to={`/info/${sub_page.name}/${sub_page.id}`}
+                              >
+                                <i className="uil-comment-info-alt"></i>
+                                <span>{sub_page.name}</span>
+                              </Link>
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    </li>
+                  );
+                } else {
+                  return (
+                    <li>
+                      <Link to={`/info/${middlePage.name}/${middlePage.id}`}>
+                        <i className="uil-invoice"></i>
+                        <span>{middlePage.name}</span>
+                      </Link>
+                    </li>
+                  );
+                }
+              } else {
+                return <></>;
+              }
+            })}
+
             <li>
               <Link to="/order-history">
                 <i className="uil-invoice"></i>
                 <span>{props.t("Order History")}</span>
               </Link>
             </li>
-            <li className="">
-              <a
-                className="has-arrow waves-effect mm-collapsed"
-                href="/"
-                aria-expanded="false"
-              >
-                <i className="uil-comment-info-alt"></i>
-                <span>{props.t("Info")}</span>
-              </a>
-              <ul className="sub-menu mm-collapse">
-                <li>
-                  <Link to="/info/1">{props.t("Info1")}</Link>
-                </li>
-                <li>
-                  <Link to="/info/2">{props.t("Info2")}</Link>
-                </li>
-              </ul>
-            </li>
+
+            {lowerPages.map((lowerPage) => {
+              if (lowerPage.sub_pages.length) {
+                return (
+                  <li className="">
+                    <Link to={`/info/${lowerPage.name}/${lowerPage.id}`}>
+                      <i className="uil-comment-info-alt"></i>
+                      <span>{lowerPage.name}</span>
+                    </Link>
+                    <ul className="sub-menu">
+                      {lowerPage.sub_pages.map((sub_page) => {
+                        return (
+                          <li>
+                            <Link to={`/info/${sub_page.name}/${sub_page.id}`}>
+                              <i className="uil-comment-info-alt"></i>
+                              <span>{sub_page.name}</span>
+                            </Link>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </li>
+                );
+              } else {
+                return (
+                  <li>
+                    <Link to={`/info/${lowerPage.name}/${lowerPage.id}`}>
+                      <i className="uil-invoice"></i>
+                      <span>{lowerPage.name}</span>
+                    </Link>
+                  </li>
+                );
+              }
+            })}
           </ul>
         </div>
       </SimpleBar>
