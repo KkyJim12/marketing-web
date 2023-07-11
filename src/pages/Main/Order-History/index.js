@@ -175,14 +175,14 @@ const OrderHistory = () => {
   };
 
   const [makePaymentModal, setMakePaymentModal] = useState(false);
-  const [toggleOrder, setToggleOrder] = useState("");
+  const [toggleOrderId, setToggleOrderId] = useState("");
   const [selectedFile, setSelectedFile] = useState();
   const [preview, setPreview] = useState();
   const [imageUrl, setImageUrl] = useState("");
 
-  const toggleMakePaymentModal = (order) => {
+  const toggleMakePaymentModal = (id) => {
     setMakePaymentModal(!makePaymentModal);
-    setToggleOrder(order);
+    setToggleOrderId(id);
   };
 
   useEffect(() => {
@@ -225,12 +225,18 @@ const OrderHistory = () => {
 
   const confirmMakePayment = async () => {
     try {
+      const headers = {
+        Authorization: localStorage.getItem("accessToken"),
+      };
       const response = await axios.put(
-        `${process.env.REACT_APP_API_URL}/api/v1/user/orders/${toggleOrder.id}/make-payment`,
-        { image: imageUrl }
+        `${process.env.REACT_APP_API_URL}/api/v1/user/orders/${toggleOrderId}/make-payment`,
+        { image: imageUrl },
+        { headers }
       );
 
-      console.log(response);
+      toggleMakePaymentModal("");
+
+      setIsLoading(true);
     } catch (error) {
       console.log(error);
     }

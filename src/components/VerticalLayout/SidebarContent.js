@@ -26,17 +26,25 @@ const SidebarContent = (props) => {
         );
         const pages = response.data.data;
 
+        const newUpperPages = [];
+        const newMiddlePages = [];
+        const newLowerPages = [];
+
         for (let i = 0; i < pages.length; i++) {
           if (pages[i].sortType === "upper") {
-            setUpperPages([...upperPages, pages[i]]);
+            newUpperPages.push(pages[i]);
             continue;
           } else if (pages[i].sortType === "middle") {
-            setMiddlePages([...middlePages, pages[i]]);
+            newMiddlePages.push(pages[i]);
             continue;
           } else {
-            setLowerPages([...lowerPages, pages[i]]);
+            newLowerPages.push(pages[i]);
           }
         }
+
+        setUpperPages(newUpperPages);
+        setMiddlePages(newMiddlePages);
+        setLowerPages(newLowerPages);
       } catch (error) {
         console.log(error);
       }
@@ -177,7 +185,7 @@ const SidebarContent = (props) => {
             {upperPages.map((upperPage) => {
               if (upperPage.sub_pages.length) {
                 return (
-                  <li className="">
+                  <li key={upperPage.id} className="">
                     <Link to={`/info/${upperPage.name}/${upperPage.id}`}>
                       <i className="uil-comment-info-alt"></i>
                       <span>{upperPage.name}</span>
@@ -198,7 +206,7 @@ const SidebarContent = (props) => {
                 );
               } else {
                 return (
-                  <li>
+                  <li key={upperPage.id}>
                     <Link to={`/info/${upperPage.name}/${upperPage.id}`}>
                       <i className="uil-invoice"></i>
                       <span>{upperPage.name}</span>
@@ -219,7 +227,7 @@ const SidebarContent = (props) => {
               if (middlePage.sortValue === 1) {
                 if (middlePage.sub_pages.length) {
                   return (
-                    <li className="">
+                    <li key={middlePage.id} className="">
                       <Link to={`/info/${middlePage.name}/${middlePage.id}`}>
                         <i className="uil-comment-info-alt"></i>
                         <span>{middlePage.name}</span>
@@ -242,7 +250,7 @@ const SidebarContent = (props) => {
                   );
                 } else {
                   return (
-                    <li>
+                    <li key={middlePage.id}>
                       <Link to={`/info/${middlePage.name}/${middlePage.id}`}>
                         <i className="uil-invoice"></i>
                         <span>{middlePage.name}</span>
@@ -266,7 +274,7 @@ const SidebarContent = (props) => {
               if (middlePage.sortValue === 2) {
                 if (middlePage.sub_pages.length) {
                   return (
-                    <li className="">
+                    <li key={middlePage.id} className="">
                       <Link to={`/info/${middlePage.name}/${middlePage.id}`}>
                         <i className="uil-comment-info-alt"></i>
                         <span>{middlePage.name}</span>
@@ -289,7 +297,7 @@ const SidebarContent = (props) => {
                   );
                 } else {
                   return (
-                    <li>
+                    <li key={middlePage.id}>
                       <Link to={`/info/${middlePage.name}/${middlePage.id}`}>
                         <i className="uil-invoice"></i>
                         <span>{middlePage.name}</span>
@@ -312,7 +320,7 @@ const SidebarContent = (props) => {
             {lowerPages.map((lowerPage) => {
               if (lowerPage.sub_pages.length) {
                 return (
-                  <li className="">
+                  <li key={lowerPage.id} className="">
                     <Link to={`/info/${lowerPage.name}/${lowerPage.id}`}>
                       <i className="uil-comment-info-alt"></i>
                       <span>{lowerPage.name}</span>
@@ -333,7 +341,7 @@ const SidebarContent = (props) => {
                 );
               } else {
                 return (
-                  <li>
+                  <li key={lowerPage.id}>
                     <Link to={`/info/${lowerPage.name}/${lowerPage.id}`}>
                       <i className="uil-invoice"></i>
                       <span>{lowerPage.name}</span>
