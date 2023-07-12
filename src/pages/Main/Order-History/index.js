@@ -181,8 +181,15 @@ const OrderHistory = () => {
   const [imageUrl, setImageUrl] = useState("");
 
   const toggleMakePaymentModal = (id) => {
+    resetImageUpload();
     setMakePaymentModal(!makePaymentModal);
     setToggleOrderId(id);
+  };
+
+  const resetImageUpload = () => {
+    setSelectedFile();
+    setPreview();
+    setImageUrl("");
   };
 
   useEffect(() => {
