@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { MDBDataTable } from "mdbreact";
+import moment from "moment";
 import {
   Row,
   Col,
@@ -18,11 +19,14 @@ const OrderHistory = () => {
   const { t } = useTranslation();
 
   const PayButton = (props) => {
-    if (props.status === "Wait for payment") {
+    if (
+      props.status === "Wait for payment" ||
+      props.status === "Wait for checking"
+    ) {
       return (
         <button
           onClick={() => {
-            toggleMakePaymentModal(props.id);
+            toggleMakePaymentModal(props.order);
           }}
           className="btn btn-success waves-effect waves-light btn-sm "
           type="button"
@@ -65,6 +69,22 @@ const OrderHistory = () => {
     setIsLoading(true);
   };
 
+  const ViewButton = (props) => {
+    if (props.status === "Wait for checking" || props.status === "Success") {
+      return (
+        <button
+          onClick={() => toggleViewSlipModal(props.image)}
+          className="btn btn-info waves-effect waves-light btn-sm "
+          type="button"
+        >
+          {t("View")}
+        </button>
+      );
+    } else {
+      return <>-</>;
+    }
+  };
+
   const initData = {
     columns: [
       {
@@ -82,6 +102,12 @@ const OrderHistory = () => {
       {
         label: "Type",
         field: "type",
+        sort: "asc",
+        width: 270,
+      },
+      {
+        label: "Price",
+        field: "price",
         sort: "asc",
         width: 270,
       },
@@ -112,6 +138,12 @@ const OrderHistory = () => {
       {
         label: "Status",
         field: "status",
+        sort: "asc",
+        width: 270,
+      },
+      {
+        label: "View",
+        field: "view",
         sort: "asc",
         width: 270,
       },
@@ -150,15 +182,32 @@ const OrderHistory = () => {
 
       for (let i = 0; i < fetchData.length; i++) {
         const newData = {
-          invoiceId: fetchData[i].id,
+          invoiceId:
+            fetchData[i].id.substring(0, 4) +
+            "..." +
+            fetchData[i].id.substring(
+              fetchData[i].id.length - 5,
+              fetchData[i].id.length - 1
+            ),
           name: fetchData[i].name,
           type: fetchData[i].type,
+          price: fetchData[i].price,
           domains: fetchData[i].domains,
           duration: fetchData[i].duration,
-          orderDate: fetchData[i].createdAt,
-          paymentDate: "-",
+          orderDate: moment(fetchData[i].createdAt).format(
+            "DD/MM/YYYY, h:mm a"
+          ),
+          view: (
+            <ViewButton
+              status={fetchData[i].status}
+              image={fetchData[i].image}
+            />
+          ),
+          paymentDate: fetchData[i].paymentDate
+            ? moment(fetchData[i].paymentDate).format("DD/MM/YYYY, h:mm a")
+            : "-",
           status: fetchData[i].status,
-          pay: <PayButton id={fetchData[i].id} status={fetchData[i].status} />,
+          pay: <PayButton order={fetchData[i]} status={fetchData[i].status} />,
           cancel: (
             <CancelButton id={fetchData[i].id} status={fetchData[i].status} />
           ),
@@ -175,15 +224,15 @@ const OrderHistory = () => {
   };
 
   const [makePaymentModal, setMakePaymentModal] = useState(false);
-  const [toggleOrderId, setToggleOrderId] = useState("");
+  const [toggleOrder, setToggleOrder] = useState("");
   const [selectedFile, setSelectedFile] = useState();
   const [preview, setPreview] = useState();
   const [imageUrl, setImageUrl] = useState("");
 
-  const toggleMakePaymentModal = (id) => {
+  const toggleMakePaymentModal = (order) => {
     resetImageUpload();
     setMakePaymentModal(!makePaymentModal);
-    setToggleOrderId(id);
+    setToggleOrder(order);
   };
 
   const resetImageUpload = () => {
@@ -236,7 +285,7 @@ const OrderHistory = () => {
         Authorization: localStorage.getItem("accessToken"),
       };
       const response = await axios.put(
-        `${process.env.REACT_APP_API_URL}/api/v1/user/orders/${toggleOrderId}/make-payment`,
+        `${process.env.REACT_APP_API_URL}/api/v1/user/orders/${toggleOrder.id}/make-payment`,
         { image: imageUrl },
         { headers }
       );
@@ -247,6 +296,14 @@ const OrderHistory = () => {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const [viewSlipModal, setViewSlipModal] = useState(false);
+  const [slipImage, setSlipImage] = useState("");
+  const toggleViewSlipModal = (imageUrl) => {
+    console.log(imageUrl);
+    setViewSlipModal(!viewSlipModal);
+    setSlipImage(imageUrl);
   };
 
   useEffect(() => {
@@ -306,6 +363,7 @@ const OrderHistory = () => {
                 <p>Bank: Kasikorn Bank</p>
                 <p>Account Number: 0561768552</p>
                 <p>Account Name: Piyakarn Nimmakulvirut</p>
+                <p>Amount: {toggleOrder.price}</p>
                 <div className="d-grid gap-2">
                   {preview ? (
                     <div
@@ -368,6 +426,44 @@ const OrderHistory = () => {
                 >
                   Cancel
                 </button>
+              </div>
+            </Modal>
+            <Modal
+              isOpen={viewSlipModal}
+              toggle={() => {
+                toggleViewSlipModal("");
+              }}
+            >
+              <div className="modal-header">
+                <h5 className="modal-title mt-0" id="myModalLabel">
+                  View Slip
+                </h5>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setViewSlipModal(false);
+                  }}
+                  className="close"
+                  data-dismiss="modal"
+                  aria-label="Close"
+                >
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div className="modal-body">
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <img
+                    style={{ width: 300, objectFit: "cover" }}
+                    src={slipImage}
+                    alt="slip"
+                  />
+                </div>
               </div>
             </Modal>
           </Row>
