@@ -15,11 +15,13 @@ import {
 } from "reactstrap";
 import { useTranslation } from "react-i18next";
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
+import Parser from "html-react-parser";
 
 const ECommerce = () => {
   const { t } = useTranslation();
   document.title = " E-Commerce | Marketing tool platform";
   const [products, setProducts] = useState([]);
+  const [setting, setSetting] = useState([]);
   const [purchaseSuccessToasts, setPurchaseSuccessToasts] = useState([]);
 
   const getEcommerce = async () => {
@@ -72,7 +74,19 @@ const ECommerce = () => {
   };
 
   useEffect(() => {
+    const getSetting = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_URL}/api/v1/user/settings`
+        );
+        setSetting(response.data.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
     getEcommerce();
+    getSetting();
   }, []);
 
   return (
@@ -202,6 +216,11 @@ const ECommerce = () => {
                 </Col>
               );
             })}
+          </Row>
+          <Row>
+            <Col md={12}>
+              {setting.eCommercePage && Parser(setting.eCommercePage)}
+            </Col>
           </Row>
         </Container>
       </div>

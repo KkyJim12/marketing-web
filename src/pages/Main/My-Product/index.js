@@ -6,6 +6,7 @@ import { Row, Col, Card, CardBody, CardSubtitle, Container } from "reactstrap";
 import { Link } from "react-router-dom";
 import "./datatables.scss";
 import { useTranslation } from "react-i18next";
+import Parser from "html-react-parser";
 
 //Import Breadcrumb
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
@@ -13,6 +14,8 @@ import Breadcrumbs from "../../../components/Common/Breadcrumb";
 const MyProduct = () => {
   const { t } = useTranslation();
   document.title = " My Product | Marketing tool platform";
+
+  const [setting, setSetting] = useState([]);
 
   const ReNewButton = (props) => {
     if (props.status === "On going") {
@@ -155,7 +158,22 @@ const MyProduct = () => {
   };
 
   useEffect(() => {
-    getMyProducts();
+    const getSetting = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_URL}/api/v1/user/settings`
+        );
+        setSetting(response.data.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    getSetting();
+  }, []);
+
+  useEffect(() => {
+    getMyProducts(); // eslint-disable-next-line
   }, [isLoading]);
 
   return (
@@ -183,6 +201,11 @@ const MyProduct = () => {
                   )}
                 </CardBody>
               </Card>
+            </Col>
+          </Row>
+          <Row>
+            <Col md={12}>
+              {setting.myProductPage && Parser(setting.myProductPage)}
             </Col>
           </Row>
         </Container>

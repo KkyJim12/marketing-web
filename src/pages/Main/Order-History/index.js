@@ -13,10 +13,12 @@ import {
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
 import { useTranslation } from "react-i18next";
 import axios from "axios";
+import Parser from "html-react-parser";
 
 const OrderHistory = () => {
   document.title = " Order History | Marketing tool platform";
   const { t } = useTranslation();
+  const [setting, setSetting] = useState([]);
 
   const PayButton = (props) => {
     if (
@@ -59,8 +61,7 @@ const OrderHistory = () => {
     const headers = {
       Authorization: localStorage.getItem("accessToken"),
     };
-
-    const response = await axios.put(
+    await axios.put(
       `${process.env.REACT_APP_API_URL}/api/v1/user/orders/${id}/cancel`,
       "",
       { headers }
@@ -84,6 +85,21 @@ const OrderHistory = () => {
       return <>-</>;
     }
   };
+
+  useEffect(() => {
+    const getSetting = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_URL}/api/v1/user/settings`
+        );
+        setSetting(response.data.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    getSetting(); 
+  }, []);
 
   const initData = {
     columns: [
@@ -284,7 +300,7 @@ const OrderHistory = () => {
       const headers = {
         Authorization: localStorage.getItem("accessToken"),
       };
-      const response = await axios.put(
+      await axios.put(
         `${process.env.REACT_APP_API_URL}/api/v1/user/orders/${toggleOrder.id}/make-payment`,
         { image: imageUrl },
         { headers }
@@ -466,6 +482,11 @@ const OrderHistory = () => {
                 </div>
               </div>
             </Modal>
+          </Row>
+          <Row>
+            <Col md={12}>
+              {setting.orderHistoryPage && Parser(setting.orderHistoryPage)}
+            </Col>
           </Row>
         </Container>
       </div>
