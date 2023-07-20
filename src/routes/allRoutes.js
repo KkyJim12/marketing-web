@@ -15,7 +15,7 @@ import ForgetPwd from "../pages/Main/ForgetPassword";
 const userRoutes = [
   { path: "/e-commerce", component: <ECommerce /> },
   { path: "/my-product", component: <MyProduct /> },
-  { path: "/my-product/:id/manage", component: <Manage /> },
+  { path: "/my-product/:id/manage/:productId", component: <Manage /> },
   { path: "/order-history", component: <OrderHistory /> },
   { path: "/info/:name/:id", component: <Info /> },
   {

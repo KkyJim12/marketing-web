@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 import React from "react";
 
 import { Route, Routes } from "react-router-dom";
@@ -15,12 +15,15 @@ import VerticalLayout from "./components/VerticalLayout/";
 import HorizontalLayout from "./components/HorizontalLayout/";
 import NonAuthLayout from "./components/NonAuthLayout";
 
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { fab } from "@fortawesome/free-brands-svg-icons";
+import { fas } from "@fortawesome/free-solid-svg-icons";
+
 // Import scss
 import "./assets/scss/theme.scss";
 
 // Import Firebase Configuration file
 // import { initFirebaseBackend } from "./helpers/firebase_helper"
-
 
 // const firebaseConfig = {
 //   apiKey: process.env.REACT_APP_APIKEY,
@@ -36,7 +39,7 @@ import "./assets/scss/theme.scss";
 // init firebase backend
 // initFirebaseBackend(firebaseConfig)
 
-const App = props => {
+const App = (props) => {
   function getLayout() {
     let layoutCls = VerticalLayout;
 
@@ -55,45 +58,40 @@ const App = props => {
   return (
     <React.Fragment>
       <Routes>
-          {authRoutes.map((route, idx) => (
-            <Route
-              path={route.path}
-              element={
-                <NonAuthLayout>
-                  {route.component}
-                </NonAuthLayout>
-              }
-              key={idx}
-              isAuthProtected={false}
-            />
-          ))}
+        {authRoutes.map((route, idx) => (
+          <Route
+            path={route.path}
+            element={<NonAuthLayout>{route.component}</NonAuthLayout>}
+            key={idx}
+            isAuthProtected={false}
+          />
+        ))}
 
-          {userRoutes.map((route, idx) => (
-            <Route
-              path={route.path}
-              element={
-                <Authmiddleware>
-                  <Layout>
-                    {route.component}
-                    </Layout>
-                </Authmiddleware>
-              }
-              key={idx}
-              isAuthProtected={true}
-              exact
-            />
-          ))}
-        
+        {userRoutes.map((route, idx) => (
+          <Route
+            path={route.path}
+            element={
+              <Authmiddleware>
+                <Layout>{route.component}</Layout>
+              </Authmiddleware>
+            }
+            key={idx}
+            isAuthProtected={true}
+            exact
+          />
+        ))}
       </Routes>
     </React.Fragment>
   );
 };
 
+library.add(fab, fas);
+
 App.propTypes = {
-  layout: PropTypes.any
+  layout: PropTypes.any,
 };
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     layout: state.Layout,
   };

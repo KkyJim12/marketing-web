@@ -35,7 +35,7 @@ const MyProduct = () => {
   const ManageButton = (props) => {
     if (props.status === "On going") {
       return (
-        <Link to="/my-product/1/manage">
+        <Link to={"/my-product/" + props.id + "/manage/" + props.productId}>
           <button
             className="btn btn-info waves-effect waves-light btn-sm"
             type="button"
@@ -144,7 +144,13 @@ const MyProduct = () => {
           expireIn: moment(fetchData[i].endDate).fromNow(),
           status: fetchData[i].status,
           reNew: <ReNewButton status={fetchData[i].status} />,
-          manage: <ManageButton status={fetchData[i].status} />,
+          manage: (
+            <ManageButton
+              productId={fetchData[i].productId}
+              id={fetchData[i].id}
+              status={fetchData[i].status}
+            />
+          ),
         };
 
         clonedData.rows.push(newData);
