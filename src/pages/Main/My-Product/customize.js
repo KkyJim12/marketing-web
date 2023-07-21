@@ -45,6 +45,7 @@ const Customize = () => {
 
   const [selectedIconPrefix, setSelectedIconPrefix] = useState("fas");
   const [selectedIconValue, setSelectedIconValue] = useState("message");
+  const [selectedIcon, setSelectedIcon] = useState("fas message");
 
   const [prebuiltButtons, setPrebuiltButtons] = useState([]);
 
@@ -96,6 +97,24 @@ const Customize = () => {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const selectPrebuiltButton = (style) => {
+    setBackgroundColor(style.backgroundColor);
+    setBodyColor(style.bodyColor);
+    setTextColor(style.textColor);
+    setButtonSize(style.size);
+    setButtonPositionTop(style.top);
+    setButtonPositionRight(style.right);
+    setButtonPositionBottom(style.bottom);
+    setButtonPositionLeft(style.left);
+    setIconInput(style.iconType);
+    setSelectedIcon(style.icon);
+    setSelectedIconPrefix(style.icon.split(" ")[0]);
+    setSelectedIconValue(style.icon.split(" ")[1]);
+    setIsPCChecked(style.visibleOnPC);
+    setIsTabletChecked(style.visibleOnTablet);
+    setIsMobileChecked(style.visibleOnMobile);
   };
 
   const handleSelectedIcon = (e) => {
@@ -212,7 +231,11 @@ const Customize = () => {
                         </Col>
                       </Row>
                       <div className="d-grid gap-2">
-                        <Button type="button" className="btn btn-success">
+                        <Button
+                          onClick={() => selectPrebuiltButton(button)}
+                          type="button"
+                          className="btn btn-success"
+                        >
                           Select
                         </Button>
                       </div>
@@ -597,6 +620,7 @@ const Customize = () => {
                             id="floatingSelectGrid"
                             aria-label="Floating label select example"
                             onChange={handleSelectedIcon}
+                            value={selectedIcon}
                           >
                             {icons &&
                               icons.data.map((icon, index) => {
