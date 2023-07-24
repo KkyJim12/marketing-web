@@ -9,23 +9,61 @@ const Domain = () => {
       <Card>
         <CardBody>
           <CardTitle>Attached Script</CardTitle>
-          <Row className="gap-4">
-            <Col md={12}>
-              <div className="d-flex gap-2">
-                <textarea
+          <Row>
+            <Col md={11}>
+              <div className="d-flex gap-2 align-items-center">
+                1.
+                <input
                   type="text"
                   readOnly
                   placeholder="Attach Script Tag"
                   className="form-control"
                   rows="5"
                   style={{ resize: "none" }}
-                  value={`<script src='http://localhost:8080/js/floating-action-button.js'></script><script>generateButton("${id}")</script>`}
-                ></textarea>
+                  value={`<script data-main="${process.env.REACT_APP_API_URL}/js/scripts/main.js" src="${process.env.REACT_APP_API_URL}/js/scripts/require.js"></script>`}
+                />
               </div>
-              <Col className="mt-2 d-flex gap-2" md={12}>
-                <button className="btn btn-primary">Copy</button>
-                <button className="btn btn-warning">Regenerate</button>
-              </Col>
+            </Col>
+            <Col className="d-flex gap-2" md={1}>
+              <button className="btn btn-primary">Copy</button>
+            </Col>
+          </Row>
+          <Row className="mt-2">
+            <Col md={11}>
+              <div className="d-flex gap-2 align-items-center">
+                2.
+                <input
+                  type="text"
+                  readOnly
+                  placeholder="Attach Script Tag"
+                  className="form-control"
+                  rows="5"
+                  style={{ resize: "none" }}
+                  value={`<script src='${process.env.REACT_APP_API_URL}/js/floating-action-button.js'></script>`}
+                />
+              </div>
+            </Col>
+            <Col className="d-flex gap-2" md={1}>
+              <button className="btn btn-primary">Copy</button>
+            </Col>
+          </Row>
+          <Row className="mt-2">
+            <Col md={11}>
+              <div className="d-flex gap-2 align-items-center">
+                3.
+                <input
+                  type="text"
+                  readOnly
+                  placeholder="Attach Script Tag"
+                  className="form-control"
+                  rows="5"
+                  style={{ resize: "none" }}
+                  value={`<script>generateButton("${id}")</script>`}
+                />
+              </div>
+            </Col>
+            <Col className="d-flex gap-2" md={1}>
+              <button className="btn btn-primary">Copy</button>
             </Col>
           </Row>
         </CardBody>
