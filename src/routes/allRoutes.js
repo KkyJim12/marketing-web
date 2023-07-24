@@ -11,6 +11,7 @@ import Info from "../pages/Main/Info/index";
 // Authentication related pages
 import Login from "../pages/Main/Login";
 import ForgetPwd from "../pages/Main/ForgetPassword";
+import FloatingActionButton from "../pages/Main/FloatingActionButton";
 
 const userRoutes = [
   { path: "/e-commerce", component: <ECommerce /> },
@@ -29,6 +30,7 @@ const userRoutes = [
 const authRoutes = [
   { path: "/login", component: <Login /> },
   { path: "/forgot-password", component: <ForgetPwd /> },
+  { path: "/floating-action-button/:id/:productId", component: <FloatingActionButton /> },
 ];
 
 export { userRoutes, authRoutes };

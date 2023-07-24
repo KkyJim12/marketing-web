@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useParams } from "react-router-dom";
 import { Card, CardBody, CardTitle, Row, Col, Label, Input } from "reactstrap";
 
 const Domain = () => {
+  const { id, productId } = useParams();
   const domains = [1, 2, 3];
   return (
     <>
@@ -11,15 +12,20 @@ const Domain = () => {
           <Row className="gap-4">
             <Col md={12}>
               <div className="d-flex gap-2">
-                <Input
+                <textarea
                   type="text"
                   readOnly
                   placeholder="Attach Script Tag"
-                  value="https://marketing-cta.netlify.app/abcdef-random-123456"
-                />
+                  className="form-control"
+                  rows="5"
+                  style={{ resize: "none" }}
+                  value={`<script src='http://localhost:8080/js/floating-action-button.js'></script><script>generateButton("${id}")</script>`}
+                ></textarea>
+              </div>
+              <Col className="mt-2 d-flex gap-2" md={12}>
                 <button className="btn btn-primary">Copy</button>
                 <button className="btn btn-warning">Regenerate</button>
-              </div>
+              </Col>
             </Col>
           </Row>
         </CardBody>

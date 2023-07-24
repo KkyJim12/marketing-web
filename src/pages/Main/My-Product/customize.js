@@ -68,13 +68,38 @@ const Customize = () => {
       setPrebuiltButtons(response.data.data);
     };
 
+    const getButton = async () => {
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}/api/v1/user/my-products/${id}/button/${productId}`
+      );
+
+      const style = response.data.data;
+
+      setBackgroundColor(style.backgroundColor);
+      setBodyColor(style.bodyColor);
+      setTextColor(style.textColor);
+      setButtonText(style.textContent);
+      setButtonSize(style.size);
+      setButtonPositionTop(style.top);
+      setButtonPositionRight(style.right);
+      setButtonPositionBottom(style.bottom);
+      setButtonPositionLeft(style.left);
+      setSelectedIcon(style.icon);
+      setSelectedIconPrefix(style.icon.split(" ")[0]);
+      setSelectedIconValue(style.icon.split(" ")[1]);
+      setIsPCChecked(style.visibleOnPC);
+      setIsTabletChecked(style.visibleOnTablet);
+      setIsMobileChecked(style.visibleOnMobile);
+    };
+
     getPrebuiltButtons();
+    getButton();
   }, []);
 
-  const createPrebuiltButton = async () => {
+  const saveButtonStyle = async () => {
     try {
-      const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/api/v1/admin/products/${id}/prebuilt-buttons`,
+      const response = await axios.put(
+        `${process.env.REACT_APP_API_URL}/api/v1/user/my-products/${id}/save-button/${productId}`,
         {
           backgroundColor: backgroundColor,
           bodyColor: bodyColor,
@@ -93,7 +118,7 @@ const Customize = () => {
         }
       );
 
-      navigate("/product/" + id + "/pre-built");
+      console.log(response);
     } catch (error) {
       console.log(error);
     }
@@ -729,7 +754,7 @@ const Customize = () => {
             <Col md={12}>
               <div className="d-grid gap-2">
                 <Button
-                  onClick={createPrebuiltButton}
+                  onClick={saveButtonStyle}
                   type="button"
                   className="btn btn-success"
                 >
