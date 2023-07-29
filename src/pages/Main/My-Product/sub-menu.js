@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Container,
   Row,
@@ -12,40 +12,42 @@ import {
 } from "reactstrap";
 import ColorPicker from "@vtaits/react-color-picker";
 import ClickAwayListener from "react-click-away-listener";
+import { useParams } from "react-router-dom";
+import axios from "axios";
 
 const SubMenu = () => {
+  const { id, productId } = useParams();
   const [backgroundColorEnable, setBackgroundColorEnable] = useState([]);
   const [backgroundColor, setBackgroundColor] = useState([]);
+  const [textContents, setTextContents] = useState([]);
+  const [descriptions, setDescriptions] = useState([]);
+  const [destinations, setDesnations] = useState([]);
+
   const onDragBackgroundColor = (color, index) => {
     let newBackgroundColor = [...backgroundColor];
     newBackgroundColor[index] = color;
     setBackgroundColor(newBackgroundColor);
   };
-  const closeBackgroundColorPicker = index => {
+  const closeBackgroundColorPicker = (index) => {
     let newBackgroundColorEnable = [...backgroundColorEnable];
     newBackgroundColorEnable[index] = false;
     setBackgroundColorEnable(newBackgroundColorEnable);
   };
 
-  const openBackgroundColorPicker = index => {
+  const openBackgroundColorPicker = (index) => {
     let newBackgroundColorEnable = [...backgroundColorEnable];
     newBackgroundColorEnable[index] = true;
     setBackgroundColorEnable(newBackgroundColorEnable);
   };
 
-  const subMenues = [
-    { id: 1, title: "Facebook" },
-    { id: 2, title: "Line" },
-    { id: 3, title: "Email" },
-    { id: 4, title: "Youtube" },
-  ];
-
+  const [subMenues, setSubMenues] = useState([]);
   const [selectedMenues, setSelectedMenues] = useState([]);
 
-  const selectMenu = (e, index) => {
-    const thisId = parseInt(e.target.value);
+  const selectMenu = (id, index) => {
+    console.log(id);
+    const thisId = id;
     if (selectedMenues.includes(thisId)) {
-      const newSelectedMenues = [...selectedMenues].filter(i => i !== thisId);
+      const newSelectedMenues = [...selectedMenues].filter((i) => i !== thisId);
       setSelectedMenues(newSelectedMenues);
       setBackgroundColor(
         backgroundColor.filter((i, idx) => {
@@ -68,25 +70,25 @@ const SubMenu = () => {
     newCustomBackgroundColor[index] = color;
     setCustomBackgroundColor(newCustomBackgroundColor);
   };
-  const closeCustomBackgroundColorPicker = index => {
+  const closeCustomBackgroundColorPicker = (index) => {
     let newCustomBackgroundColorEnable = [...customBackgroundColorEnable];
     newCustomBackgroundColorEnable[index] = false;
     setCustomBackgroundColorEnable(newCustomBackgroundColorEnable);
   };
 
-  const openCustomBackgroundColorPicker = index => {
+  const openCustomBackgroundColorPicker = (index) => {
     let newCustomBackgroundColorEnable = [...customBackgroundColorEnable];
     newCustomBackgroundColorEnable[index] = true;
     setCustomBackgroundColorEnable(newCustomBackgroundColorEnable);
   };
 
   const addCustomMenu = () => {
-    setCustomMenues([...customMenues, { title: "Custom" }]);
+    setCustomMenues([...customMenues, { textContent: "Custom" }]);
     setCustomBackgroundColor([...customBackgroundColor, "#3b82f6"]);
     setCustomBackgroundColorEnable([...customBackgroundColorEnable, false]);
   };
 
-  const removeCustomMenu = index => {
+  const removeCustomMenu = (index) => {
     let newCustomMenues = [...customMenues];
     newCustomMenues.splice(index, 1);
     setCustomMenues(newCustomMenues);
@@ -94,6 +96,38 @@ const SubMenu = () => {
     newCustomBackgroundColor.splice(index, 1);
     setCustomBackgroundColor(newCustomBackgroundColor);
   };
+
+  const handleTextContents = (e, index) => {
+    const clonedTextContents = [...textContents];
+    clonedTextContents[index] = e.target.value;
+    setTextContents(clonedTextContents);
+  };
+
+  useEffect(() => {
+    const getPrebuiltContents = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_URL}/api/v1/user/my-products/${id}/prebuilt-contents/${productId}`
+        );
+
+        setSubMenues(response.data.data);
+
+        for (let i = 0; i < response.data.data.length; i++) {
+          setBackgroundColor([
+            ...backgroundColor,
+            response.data.data[i].backgroundColor,
+          ]);
+          setTextContents([...textContents, response.data.data[i].textContent]);
+          setDescriptions([...descriptions, response.data.data[i].description]);
+          setDesnations([...destinations, response.data.data[i].destination]);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    getPrebuiltContents();
+  }, []);
 
   return (
     <Container fluid>
@@ -110,16 +144,16 @@ const SubMenu = () => {
                         <Input
                           className="form-check-input"
                           type="checkbox"
-                          id={subMenu.title}
+                          id={subMenu.id}
                           value={subMenu.id}
-                          onChange={e => selectMenu(e, index)}
+                          onChange={() => selectMenu(subMenu.id, index)}
                           checked={selectedMenues.includes(subMenu.id)}
                         />
                         <label
                           className="form-check-label"
-                          htmlFor={subMenu.title}
+                          htmlFor={subMenu.id}
                         >
-                          {subMenu.title}
+                          {subMenu.textContent}
                         </label>
                       </div>
                     </Col>
@@ -131,11 +165,14 @@ const SubMenu = () => {
         </Col>
         {selectedMenues.map((selectedMenu, index) => {
           return (
-            <Col md={12}>
+            <Col key={index} md={12}>
               <Card>
                 <CardBody>
                   <CardTitle>
-                    {subMenues.filter(i => i.id === selectedMenu)[0].title}
+                    {
+                      subMenues.filter((i) => i.id === selectedMenu)[0]
+                        .textContent
+                    }
                   </CardTitle>
                   <Row>
                     <Col md={2}>
@@ -173,7 +210,7 @@ const SubMenu = () => {
                                 saturationHeight={100}
                                 saturationWidth={100}
                                 value={backgroundColor[index]}
-                                onDrag={color =>
+                                onDrag={(color) =>
                                   onDragBackgroundColor(color, index)
                                 }
                               />
@@ -194,6 +231,8 @@ const SubMenu = () => {
                       <Input
                         className="form-control"
                         placeholder="Text"
+                        value={textContents[index]}
+                        onChange={(e) => handleTextContents(e, index)}
                       ></Input>
                     </Col>
                     <Col md={3}>
@@ -201,6 +240,7 @@ const SubMenu = () => {
                       <Input
                         className="form-control"
                         placeholder="Description"
+                        value={descriptions[index]}
                       ></Input>
                     </Col>
                     <Col md={3}>
@@ -208,6 +248,7 @@ const SubMenu = () => {
                       <Input
                         className="form-control"
                         placeholder="Destination"
+                        value={destinations[index]}
                       ></Input>
                     </Col>
                   </Row>
@@ -225,7 +266,7 @@ const SubMenu = () => {
                 <CardBody>
                   <CardTitle>
                     <div className="d-flex justify-content-between">
-                      <span>{customMenu.title}</span>
+                      <span>{customMenu.textContent}</span>
                       <Button
                         onClick={() => removeCustomMenu(index)}
                         type="button"
@@ -271,7 +312,7 @@ const SubMenu = () => {
                                 saturationHeight={100}
                                 saturationWidth={100}
                                 value={customBackgroundColor[index]}
-                                onDrag={color =>
+                                onDrag={(color) =>
                                   onDragCustomBackgroundColor(color, index)
                                 }
                               />

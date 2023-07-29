@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import axios from "axios";
 import icons from "./free-icon.json";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -21,7 +21,6 @@ const Customize = () => {
   document.title = " My Product | Marketing tool platform";
 
   const { id, productId } = useParams();
-  const navigate = useNavigate();
 
   const [buttonText, setButtonText] = useState("Minible");
   const [backgroundColorEnable, setBackgroundColorEnable] = useState(false);
@@ -221,7 +220,7 @@ const Customize = () => {
           <Row className="mt-4">
             {prebuiltButtons.map((button) => {
               return (
-                <Col md={2}>
+                <Col key={button.id} md={2}>
                   <Card>
                     <CardBody>
                       <CardTitle className="d-flex justify-content-center">

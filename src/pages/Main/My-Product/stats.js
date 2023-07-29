@@ -358,9 +358,9 @@ const Stats = () => {
   return (
     <>
       <Row>
-        {reports.map(report => {
+        {reports.map((report, index) => {
           return (
-            <Col md={6} xl={3}>
+            <Col md={6} xl={3} key={index}>
               <Card>
                 <CardBody>
                   <div className="float-end mt-2">
