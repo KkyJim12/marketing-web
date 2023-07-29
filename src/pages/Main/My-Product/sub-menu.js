@@ -14,93 +14,248 @@ import ColorPicker from "@vtaits/react-color-picker";
 import ClickAwayListener from "react-click-away-listener";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import icons from "./free-icon.json";
 
 const SubMenu = () => {
   const { id, productId } = useParams();
-  const [backgroundColorEnable, setBackgroundColorEnable] = useState([]);
-  const [backgroundColor, setBackgroundColor] = useState([]);
-  const [textContents, setTextContents] = useState([]);
-  const [descriptions, setDescriptions] = useState([]);
-  const [destinations, setDesnations] = useState([]);
 
-  const onDragBackgroundColor = (color, index) => {
-    let newBackgroundColor = [...backgroundColor];
-    newBackgroundColor[index] = color;
-    setBackgroundColor(newBackgroundColor);
-  };
-  const closeBackgroundColorPicker = (index) => {
-    let newBackgroundColorEnable = [...backgroundColorEnable];
-    newBackgroundColorEnable[index] = false;
-    setBackgroundColorEnable(newBackgroundColorEnable);
+  const saveButtonSetting = () => {
+    console.log(selectedMenues);
+    console.log(customMenues);
   };
 
-  const openBackgroundColorPicker = (index) => {
-    let newBackgroundColorEnable = [...backgroundColorEnable];
-    newBackgroundColorEnable[index] = true;
-    setBackgroundColorEnable(newBackgroundColorEnable);
+  const handleCustomMenuTextContent = (e, id) => {
+    let index;
+    for (let i = 0; i < customMenues.length; i++) {
+      if (customMenues[i].id === id) {
+        index = i;
+        break;
+      }
+    }
+
+    const newCustomMenues = [...customMenues];
+    newCustomMenues[index].textContent = e.target.value;
+    setCustomMenues(newCustomMenues);
+  };
+
+  const handleCustomMenuDescription = (e, id) => {
+    let index;
+    for (let i = 0; i < customMenues.length; i++) {
+      if (customMenues[i].id === id) {
+        index = i;
+        break;
+      }
+    }
+
+    const newCustomMenues = [...customMenues];
+    newCustomMenues[index].description = e.target.value;
+    setCustomMenues(newCustomMenues);
+  };
+
+  const handleCustomMenuDestination = (e, id) => {
+    let index;
+    for (let i = 0; i < customMenues.length; i++) {
+      if (customMenues[i].id === id) {
+        index = i;
+        break;
+      }
+    }
+
+    const newCustomMenues = [...customMenues];
+    newCustomMenues[index].destination = e.target.value;
+    setCustomMenues(newCustomMenues);
+  };
+
+  const handleSelectedMenuDescription = (e, id) => {
+    let index;
+    for (let i = 0; i < selectedMenues.length; i++) {
+      if (selectedMenues[i].id === id) {
+        index = i;
+        break;
+      }
+    }
+
+    const newSelectedMenues = [...selectedMenues];
+    newSelectedMenues[index].description = e.target.value;
+    setSelectedMenues(newSelectedMenues);
+  };
+
+  const handleSelectedMenuDestination = (e, id) => {
+    let index;
+    for (let i = 0; i < selectedMenues.length; i++) {
+      if (selectedMenues[i].id === id) {
+        index = i;
+        break;
+      }
+    }
+
+    const newSelectedMenues = [...selectedMenues];
+    newSelectedMenues[index].destination = e.target.value;
+    setSelectedMenues(newSelectedMenues);
+  };
+
+  const onDragBackgroundColor = (color, id) => {
+    let index;
+    for (let i = 0; i < selectedMenues.length; i++) {
+      if (selectedMenues[i].id === id) {
+        index = i;
+        break;
+      }
+    }
+
+    const newSelectedMenues = [...selectedMenues];
+    newSelectedMenues[index].backgroundColor = color;
+    setSelectedMenues(newSelectedMenues);
+  };
+
+  const closeBackgroundColorPicker = (id) => {
+    let index;
+    for (let i = 0; i < selectedMenues.length; i++) {
+      if (selectedMenues[i].id === id) {
+        index = i;
+        break;
+      }
+    }
+
+    const newSelectedMenues = [...selectedMenues];
+    newSelectedMenues[index].backgroundColorPickerEnable = false;
+    setSelectedMenues(newSelectedMenues);
+  };
+
+  const openBackgroundColorPicker = (id) => {
+    let index;
+    for (let i = 0; i < selectedMenues.length; i++) {
+      if (selectedMenues[i].id === id) {
+        index = i;
+        break;
+      }
+    }
+
+    const newSelectedMenues = [...selectedMenues];
+    newSelectedMenues[index].backgroundColorPickerEnable = true;
+    setSelectedMenues(newSelectedMenues);
   };
 
   const [subMenues, setSubMenues] = useState([]);
   const [selectedMenues, setSelectedMenues] = useState([]);
 
   const selectMenu = (id, index) => {
-    console.log(id);
     const thisId = id;
-    if (selectedMenues.includes(thisId)) {
-      const newSelectedMenues = [...selectedMenues].filter((i) => i !== thisId);
-      setSelectedMenues(newSelectedMenues);
-      setBackgroundColor(
-        backgroundColor.filter((i, idx) => {
-          return idx !== index;
-        })
-      );
-    } else {
-      setBackgroundColor([...backgroundColor, "#3b82f6"]);
-      setSelectedMenues([...selectedMenues, thisId]);
+    let isChecked = false;
+
+    for (let i = 0; i < selectedMenues.length; i++) {
+      if (selectedMenues[i].id === thisId) {
+        isChecked = true;
+        break;
+      }
     }
+    if (isChecked) {
+      const clonedSelectedMenues = [...selectedMenues];
+      const newSelectedMenues = clonedSelectedMenues.filter((i) => {
+        return i.id !== thisId;
+      });
+      setSelectedMenues(newSelectedMenues);
+    } else {
+      const thisMenu = subMenues.filter((i) => {
+        return i.id === thisId;
+      });
+      setSelectedMenues([
+        ...selectedMenues,
+        {
+          id: thisMenu[0].id,
+          backgroundColor: thisMenu[0].backgroundColor,
+          icon: thisMenu[0].icon,
+          textContent: thisMenu[0].textContent,
+          description: thisMenu[0].description,
+          destination: thisMenu[0].destination,
+          backgroundColorPickerEnable: false,
+        },
+      ]);
+    }
+  };
+
+  const uuidv4 = () => {
+    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
+      /[xy]/g,
+      function (c) {
+        var r = (Math.random() * 16) | 0,
+          v = c == "x" ? r : (r & 0x3) | 0x8;
+        return v.toString(16);
+      }
+    );
   };
 
   // Custom
   const [customMenues, setCustomMenues] = useState([]);
-  const [customBackgroundColorEnable, setCustomBackgroundColorEnable] =
-    useState([]);
-  const [customBackgroundColor, setCustomBackgroundColor] = useState([]);
-  const onDragCustomBackgroundColor = (color, index) => {
-    let newCustomBackgroundColor = [...customBackgroundColor];
-    newCustomBackgroundColor[index] = color;
-    setCustomBackgroundColor(newCustomBackgroundColor);
-  };
-  const closeCustomBackgroundColorPicker = (index) => {
-    let newCustomBackgroundColorEnable = [...customBackgroundColorEnable];
-    newCustomBackgroundColorEnable[index] = false;
-    setCustomBackgroundColorEnable(newCustomBackgroundColorEnable);
+
+  const onDragCustomBackgroundColor = (color, id) => {
+    let index;
+    for (let i = 0; i < customMenues.length; i++) {
+      if (customMenues[i].id === id) {
+        index = i;
+        break;
+      }
+    }
+
+    const newCustomMenues = [...customMenues];
+    newCustomMenues[index].backgroundColor = color;
+    setCustomMenues(newCustomMenues);
   };
 
-  const openCustomBackgroundColorPicker = (index) => {
-    let newCustomBackgroundColorEnable = [...customBackgroundColorEnable];
-    newCustomBackgroundColorEnable[index] = true;
-    setCustomBackgroundColorEnable(newCustomBackgroundColorEnable);
+  const closeCustomBackgroundColorPicker = (id) => {
+    let index;
+    for (let i = 0; i < customMenues.length; i++) {
+      if (customMenues[i].id === id) {
+        index = i;
+        break;
+      }
+    }
+
+    const newCustomMenues = [...customMenues];
+    newCustomMenues[index].backgroundColorPickerEnable = false;
+    setCustomMenues(newCustomMenues);
+  };
+
+  const openCustomBackgroundColorPicker = (id) => {
+    let index;
+    for (let i = 0; i < customMenues.length; i++) {
+      if (customMenues[i].id === id) {
+        index = i;
+        break;
+      }
+    }
+
+    const newCustomMenues = [...customMenues];
+    newCustomMenues[index].backgroundColorPickerEnable = true;
+    setCustomMenues(newCustomMenues);
   };
 
   const addCustomMenu = () => {
-    setCustomMenues([...customMenues, { textContent: "Custom" }]);
-    setCustomBackgroundColor([...customBackgroundColor, "#3b82f6"]);
-    setCustomBackgroundColorEnable([...customBackgroundColorEnable, false]);
+    const newCustomMenu = {
+      id: uuidv4(),
+      label: "Custom",
+      backgroundColor: "#3b82f6",
+      icon: "",
+      textContent: "",
+      description: "",
+      destination: "",
+      backgroundColorPickerEnable: false,
+    };
+    setCustomMenues([...customMenues, newCustomMenu]);
   };
 
-  const removeCustomMenu = (index) => {
-    let newCustomMenues = [...customMenues];
+  const removeCustomMenu = (id) => {
+    let index;
+    for (let i = 0; i < customMenues.length; i++) {
+      if (customMenues[i].id === id) {
+        index = i;
+        break;
+      }
+    }
+
+    const newCustomMenues = [...customMenues];
     newCustomMenues.splice(index, 1);
     setCustomMenues(newCustomMenues);
-    let newCustomBackgroundColor = [...customBackgroundColor];
-    newCustomBackgroundColor.splice(index, 1);
-    setCustomBackgroundColor(newCustomBackgroundColor);
-  };
-
-  const handleTextContents = (e, index) => {
-    const clonedTextContents = [...textContents];
-    clonedTextContents[index] = e.target.value;
-    setTextContents(clonedTextContents);
   };
 
   useEffect(() => {
@@ -111,16 +266,6 @@ const SubMenu = () => {
         );
 
         setSubMenues(response.data.data);
-
-        for (let i = 0; i < response.data.data.length; i++) {
-          setBackgroundColor([
-            ...backgroundColor,
-            response.data.data[i].backgroundColor,
-          ]);
-          setTextContents([...textContents, response.data.data[i].textContent]);
-          setDescriptions([...descriptions, response.data.data[i].description]);
-          setDesnations([...destinations, response.data.data[i].destination]);
-        }
       } catch (error) {
         console.log(error);
       }
@@ -146,8 +291,7 @@ const SubMenu = () => {
                           type="checkbox"
                           id={subMenu.id}
                           value={subMenu.id}
-                          onChange={() => selectMenu(subMenu.id, index)}
-                          checked={selectedMenues.includes(subMenu.id)}
+                          onClick={() => selectMenu(subMenu.id, index)}
                         />
                         <label
                           className="form-check-label"
@@ -168,12 +312,7 @@ const SubMenu = () => {
             <Col key={index} md={12}>
               <Card>
                 <CardBody>
-                  <CardTitle>
-                    {
-                      subMenues.filter((i) => i.id === selectedMenu)[0]
-                        .textContent
-                    }
-                  </CardTitle>
+                  <CardTitle>{selectedMenu.textContent}</CardTitle>
                   <Row>
                     <Col md={2}>
                       <Label>Background color</Label>
@@ -181,22 +320,24 @@ const SubMenu = () => {
                         <Input
                           type="text"
                           className="colorpicker-default"
-                          value={backgroundColor[index]}
+                          value={selectedMenu.backgroundColor}
                           readOnly
                         />
                         <div
-                          onClick={() => openBackgroundColorPicker(index)}
+                          onClick={() =>
+                            openBackgroundColorPicker(selectedMenu.id)
+                          }
                           className="btn"
                           style={{
-                            backgroundColor: backgroundColor[index],
+                            backgroundColor: selectedMenu.backgroundColor,
                             width: 40,
                             height: 40,
                           }}
                         ></div>
-                        {backgroundColorEnable[index] ? (
+                        {selectedMenu.backgroundColorPickerEnable ? (
                           <ClickAwayListener
                             onClickAway={() =>
-                              closeBackgroundColorPicker(index)
+                              closeBackgroundColorPicker(selectedMenu.id)
                             }
                           >
                             <>
@@ -209,9 +350,9 @@ const SubMenu = () => {
                                 }}
                                 saturationHeight={100}
                                 saturationWidth={100}
-                                value={backgroundColor[index]}
+                                value={selectedMenu.backgroundColor}
                                 onDrag={(color) =>
-                                  onDragBackgroundColor(color, index)
+                                  onDragBackgroundColor(color, selectedMenu.id)
                                 }
                               />
                             </>
@@ -221,18 +362,29 @@ const SubMenu = () => {
                     </Col>
                     <Col md={2}>
                       <Label>Icon</Label>
-                      <select className="form-control">
+                      <select
+                        value={selectedMenu.icon}
+                        className="form-control"
+                      >
                         <option>Select Icon</option>
-                        <option>User</option>
+                        {icons &&
+                          icons.data.map((icon, index) => {
+                            return (
+                              <option key={index} value={icon}>
+                                {icon}
+                              </option>
+                            );
+                          })}
                       </select>
                     </Col>
                     <Col md={2}>
                       <Label>Text</Label>
                       <Input
+                        style={{ background: "#f5f5f5" }}
                         className="form-control"
                         placeholder="Text"
-                        value={textContents[index]}
-                        onChange={(e) => handleTextContents(e, index)}
+                        value={selectedMenu.textContent}
+                        readOnly
                       ></Input>
                     </Col>
                     <Col md={3}>
@@ -240,7 +392,10 @@ const SubMenu = () => {
                       <Input
                         className="form-control"
                         placeholder="Description"
-                        value={descriptions[index]}
+                        value={selectedMenu.description}
+                        onChange={(e) =>
+                          handleSelectedMenuDescription(e, selectedMenu.id)
+                        }
                       ></Input>
                     </Col>
                     <Col md={3}>
@@ -248,7 +403,10 @@ const SubMenu = () => {
                       <Input
                         className="form-control"
                         placeholder="Destination"
-                        value={destinations[index]}
+                        value={selectedMenu.destination}
+                        onChange={(e) =>
+                          handleSelectedMenuDestination(e, selectedMenu.id)
+                        }
                       ></Input>
                     </Col>
                   </Row>
@@ -266,9 +424,9 @@ const SubMenu = () => {
                 <CardBody>
                   <CardTitle>
                     <div className="d-flex justify-content-between">
-                      <span>{customMenu.textContent}</span>
+                      <span>{customMenu.label}</span>
                       <Button
-                        onClick={() => removeCustomMenu(index)}
+                        onClick={() => removeCustomMenu(customMenu.id)}
                         type="button"
                         className="btn btn-danger btn-sm"
                       >
@@ -283,22 +441,24 @@ const SubMenu = () => {
                         <Input
                           type="text"
                           className="colorpicker-default"
-                          value={customBackgroundColor[index]}
+                          value={customMenu.backgroundColor}
                           readOnly
                         />
                         <div
-                          onClick={() => openCustomBackgroundColorPicker(index)}
+                          onClick={() =>
+                            openCustomBackgroundColorPicker(customMenu.id)
+                          }
                           className="btn"
                           style={{
-                            backgroundColor: customBackgroundColor[index],
+                            backgroundColor: customMenu.backgroundColor,
                             width: 40,
                             height: 40,
                           }}
                         ></div>
-                        {customBackgroundColorEnable[index] ? (
+                        {customMenu.backgroundColorPickerEnable ? (
                           <ClickAwayListener
                             onClickAway={() =>
-                              closeCustomBackgroundColorPicker(index)
+                              closeCustomBackgroundColorPicker(customMenu.id)
                             }
                           >
                             <>
@@ -311,9 +471,12 @@ const SubMenu = () => {
                                 }}
                                 saturationHeight={100}
                                 saturationWidth={100}
-                                value={customBackgroundColor[index]}
+                                value={customMenu.backgroundColor}
                                 onDrag={(color) =>
-                                  onDragCustomBackgroundColor(color, index)
+                                  onDragCustomBackgroundColor(
+                                    color,
+                                    customMenu.id
+                                  )
                                 }
                               />
                             </>
@@ -333,6 +496,10 @@ const SubMenu = () => {
                       <Input
                         className="form-control"
                         placeholder="Text"
+                        value={customMenu.textContent}
+                        onChange={(e) =>
+                          handleCustomMenuTextContent(e, customMenu.id)
+                        }
                       ></Input>
                     </Col>
                     <Col md={3}>
@@ -340,6 +507,10 @@ const SubMenu = () => {
                       <Input
                         className="form-control"
                         placeholder="Description"
+                        value={customMenu.description}
+                        onChange={(e) =>
+                          handleCustomMenuDescription(e, customMenu.id)
+                        }
                       ></Input>
                     </Col>
                     <Col md={3}>
@@ -347,6 +518,10 @@ const SubMenu = () => {
                       <Input
                         className="form-control"
                         placeholder="Destination"
+                        value={customMenu.destination}
+                        onChange={(e) =>
+                          handleCustomMenuDestination(e, customMenu.id)
+                        }
                       ></Input>
                     </Col>
                   </Row>
@@ -360,9 +535,20 @@ const SubMenu = () => {
             <Button
               onClick={addCustomMenu}
               type="button"
-              className="btn btn-success"
+              className="btn btn-primary"
             >
               Add Custom
+            </Button>
+          </div>
+        </Col>
+        <Col md={12}>
+          <div className="d-grid gap-2 mt-2">
+            <Button
+              onClick={saveButtonSetting}
+              type="button"
+              className="btn btn-success"
+            >
+              Save Button Setting
             </Button>
           </div>
         </Col>
