@@ -1,9 +1,22 @@
 import { useParams } from "react-router-dom";
-import { Card, CardBody, CardTitle, Row, Col, Label, Input } from "reactstrap";
+import {
+  Card,
+  CardBody,
+  CardTitle,
+  Row,
+  Col,
+  Label,
+  Input,
+  Button,
+} from "reactstrap";
+import { CopyToClipboard } from "react-copy-to-clipboard";
 
 const Domain = () => {
   const { id, productId } = useParams();
-  const domains = [1, 2, 3];
+  const firstLine = `<script data-main="${process.env.REACT_APP_API_URL}/js/scripts/main.js" src="${process.env.REACT_APP_API_URL}/js/scripts/require.js"></script>`;
+  const secondLine = `<script src='${process.env.REACT_APP_API_URL}/js/floating-action-button.js'></script>`;
+  const thirdLine = `<script>generateButton("${id}")</script>`;
+  const domains = [];
   return (
     <>
       <Card>
@@ -20,12 +33,14 @@ const Domain = () => {
                   className="form-control"
                   rows="5"
                   style={{ resize: "none" }}
-                  value={`<script data-main="${process.env.REACT_APP_API_URL}/js/scripts/main.js" src="${process.env.REACT_APP_API_URL}/js/scripts/require.js"></script>`}
+                  value={firstLine}
                 />
               </div>
             </Col>
             <Col className="d-flex gap-2" md={1}>
-              <button className="btn btn-primary">Copy</button>
+              <CopyToClipboard text={firstLine}>
+                <button className="btn btn-primary">Copy</button>
+              </CopyToClipboard>
             </Col>
           </Row>
           <Row className="mt-2">
@@ -39,12 +54,14 @@ const Domain = () => {
                   className="form-control"
                   rows="5"
                   style={{ resize: "none" }}
-                  value={`<script src='${process.env.REACT_APP_API_URL}/js/floating-action-button.js'></script>`}
+                  value={secondLine}
                 />
               </div>
             </Col>
             <Col className="d-flex gap-2" md={1}>
-              <button className="btn btn-primary">Copy</button>
+              <CopyToClipboard text={secondLine}>
+                <button className="btn btn-primary">Copy</button>
+              </CopyToClipboard>
             </Col>
           </Row>
           <Row className="mt-2">
@@ -58,12 +75,14 @@ const Domain = () => {
                   className="form-control"
                   rows="5"
                   style={{ resize: "none" }}
-                  value={`<script>generateButton("${id}")</script>`}
+                  value={thirdLine}
                 />
               </div>
             </Col>
             <Col className="d-flex gap-2" md={1}>
-              <button className="btn btn-primary">Copy</button>
+              <CopyToClipboard text={thirdLine}>
+                <button className="btn btn-primary">Copy</button>
+              </CopyToClipboard>
             </Col>
           </Row>
         </CardBody>

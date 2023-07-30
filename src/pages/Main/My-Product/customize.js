@@ -48,13 +48,7 @@ const Customize = () => {
 
   const [prebuiltButtons, setPrebuiltButtons] = useState([]);
 
-  const contacts = [
-    { id: 1, title: "Email", icon: "fast-mail-alt" },
-    { id: 2, title: "Phone", icon: "phone" },
-    { id: 3, title: "Line", icon: "line" },
-    { id: 4, title: "Facebook", icon: "facebook" },
-    { id: 5, title: "Youtube", icon: "youtube" },
-  ];
+  const [contents, setContents] = useState([]);
 
   useEffect(() => {
     const getPrebuiltButtons = async () => {
@@ -91,8 +85,18 @@ const Customize = () => {
       setIsMobileChecked(style.visibleOnMobile);
     };
 
+    const getContents = async () => {
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}/api/v1/user/my-products/${id}/contents/${productId}`
+      );
+
+      console.log(response);
+      setContents(response.data.data);
+    };
+
     getPrebuiltButtons();
     getButton();
+    getContents();
   }, []);
 
   const saveButtonStyle = async () => {
@@ -801,7 +805,7 @@ const Customize = () => {
                 top: buttonPositionTop ? 10 : null,
                 left: buttonPositionLeft ? 10 : null,
                 bottom: buttonPositionBottom
-                  ? 450 + contacts.length * 10
+                  ? 150 + contents.length * 65
                   : null,
                 right: buttonPositionRight ? 280 : null,
               }}
@@ -834,7 +838,7 @@ const Customize = () => {
                     style={{
                       background: bodyColor,
                       cursor: "pointer",
-                      minHeight: 300,
+                      height: 65 * contents.length,
                       borderBottomLeftRadius: 15,
                       borderBottomRightRadius: 15,
                       color: "rgb(75 85 99)",
@@ -843,10 +847,10 @@ const Customize = () => {
                         "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
                     }}
                   >
-                    {contacts.map((contact, index) => {
+                    {contents.map((content, index) => {
                       return (
                         <div
-                          key={contact.id}
+                          key={content.id}
                           style={{
                             display: "flex",
                             alignItems: "center",
@@ -855,26 +859,25 @@ const Customize = () => {
                           }}
                           className="py-3 px-4"
                         >
-                          <i
-                            style={{
-                              fontSize: 24,
-                            }}
-                            className={"uil-" + contact.icon}
-                          ></i>
+                          {content.icon && (
+                            <FontAwesomeIcon
+                              icon={[
+                                content.icon.split(" ")[0],
+                                content.icon.split(" ")[1],
+                              ]}
+                            />
+                          )}
                           <span
                             style={{
                               fontSize: 20,
                             }}
                           >
-                            {contact.title}
+                            {content.textContent}
                           </span>
-                          <i
-                            style={{
-                              fontSize: 24,
-                              marginLeft: "auto",
-                            }}
-                            className="uil-angle-right"
-                          ></i>
+                          <FontAwesomeIcon
+                            style={{ marginLeft: "auto" }}
+                            icon={["fas", "chevron-right"]}
+                          />
                         </div>
                       );
                     })}
