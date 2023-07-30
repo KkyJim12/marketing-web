@@ -19,9 +19,24 @@ import icons from "./free-icon.json";
 const SubMenu = () => {
   const { id, productId } = useParams();
 
-  const saveButtonSetting = () => {
+  const saveButtonSetting = async () => {
     console.log(selectedMenues);
     console.log(customMenues);
+    try {
+      const headers = {
+        Authorization: localStorage.getItem("accessToken"),
+      };
+      const response = await axios.put(
+        `${process.env.REACT_APP_API_URL}/api/v1/user/my-products/${id}/save-button-contents/${productId}`,
+        {
+          contents: selectedMenues.concat(customMenues),
+        },
+        { headers }
+      );
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleCustomMenuTextContent = (e, id) => {
