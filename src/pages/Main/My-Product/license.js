@@ -16,18 +16,26 @@ const License = () => {
 
   useEffect(() => {
     const getProductDetail = async () => {
-      const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/api/v1/user/my-products/${id}/product-detail/${productId}`
-      );
+      try {
+        const headers = {
+          Authorization: localStorage.getItem("accessToken"),
+        };
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_URL}/api/v1/user/my-products/${id}/product-detail/${productId}`,
+          { headers }
+        );
 
-      console.log(response.data.data);
-      const product = response.data.data;
-      setDomains(product.domains);
-      setType(product.type);
-      setDuration(product.duration);
-      setStartDate(product.startDate);
-      setEndDate(product.endDate);
-      setStatus(product.status);
+        console.log(response.data.data);
+        const product = response.data.data;
+        setDomains(product.domains);
+        setType(product.type);
+        setDuration(product.duration);
+        setStartDate(product.startDate);
+        setEndDate(product.endDate);
+        setStatus(product.status);
+      } catch (error) {
+        console.log(error);
+      }
     };
 
     getProductDetail();

@@ -166,8 +166,12 @@ const MyProduct = () => {
   useEffect(() => {
     const getSetting = async () => {
       try {
+        const headers = {
+          Authorization: localStorage.getItem("accessToken"),
+        };
         const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/api/v1/user/settings`
+          `${process.env.REACT_APP_API_URL}/api/v1/user/settings`,
+          { headers }
         );
         setSetting(response.data.data);
       } catch (error) {

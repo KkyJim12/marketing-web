@@ -52,46 +52,70 @@ const Customize = () => {
 
   useEffect(() => {
     const getPrebuiltButtons = async () => {
-      const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/api/v1/user/my-products/${id}/prebuilt-buttons/${productId}`
-      );
+      try {
+        const headers = {
+          Authorization: localStorage.getItem("accessToken"),
+        };
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_URL}/api/v1/user/my-products/${id}/prebuilt-buttons/${productId}`,
+          { headers }
+        );
 
-      console.log(response.data.data);
+        console.log(response.data.data);
 
-      setPrebuiltButtons(response.data.data);
+        setPrebuiltButtons(response.data.data);
+      } catch (error) {
+        console.log(error);
+      }
     };
 
     const getButton = async () => {
-      const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/api/v1/user/my-products/${id}/button/${productId}`
-      );
+      try {
+        const headers = {
+          Authorization: localStorage.getItem("accessToken"),
+        };
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_URL}/api/v1/user/my-products/${id}/button/${productId}`,
+          { headers }
+        );
 
-      const style = response.data.data;
+        const style = response.data.data;
 
-      setBackgroundColor(style.backgroundColor);
-      setBodyColor(style.bodyColor);
-      setTextColor(style.textColor);
-      setButtonText(style.textContent);
-      setButtonSize(style.size);
-      setButtonPositionTop(style.top);
-      setButtonPositionRight(style.right);
-      setButtonPositionBottom(style.bottom);
-      setButtonPositionLeft(style.left);
-      setSelectedIcon(style.icon);
-      setSelectedIconPrefix(style.icon.split(" ")[0]);
-      setSelectedIconValue(style.icon.split(" ")[1]);
-      setIsPCChecked(style.visibleOnPC);
-      setIsTabletChecked(style.visibleOnTablet);
-      setIsMobileChecked(style.visibleOnMobile);
+        setBackgroundColor(style.backgroundColor);
+        setBodyColor(style.bodyColor);
+        setTextColor(style.textColor);
+        setButtonText(style.textContent);
+        setButtonSize(style.size);
+        setButtonPositionTop(style.top);
+        setButtonPositionRight(style.right);
+        setButtonPositionBottom(style.bottom);
+        setButtonPositionLeft(style.left);
+        setSelectedIcon(style.icon);
+        setSelectedIconPrefix(style.icon.split(" ")[0]);
+        setSelectedIconValue(style.icon.split(" ")[1]);
+        setIsPCChecked(style.visibleOnPC);
+        setIsTabletChecked(style.visibleOnTablet);
+        setIsMobileChecked(style.visibleOnMobile);
+      } catch (error) {
+        console.log(error);
+      }
     };
 
     const getContents = async () => {
-      const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/api/v1/user/my-products/${id}/contents/${productId}`
-      );
+      try {
+        const headers = {
+          Authorization: localStorage.getItem("accessToken"),
+        };
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_URL}/api/v1/user/my-products/${id}/contents/${productId}`,
+          { headers }
+        );
 
-      console.log(response);
-      setContents(response.data.data);
+        console.log(response);
+        setContents(response.data.data);
+      } catch (error) {
+        console.log(error);
+      }
     };
 
     getPrebuiltButtons();
@@ -101,6 +125,9 @@ const Customize = () => {
 
   const saveButtonStyle = async () => {
     try {
+      const headers = {
+        Authorization: localStorage.getItem("accessToken"),
+      };
       const response = await axios.put(
         `${process.env.REACT_APP_API_URL}/api/v1/user/my-products/${id}/save-button/${productId}`,
         {
@@ -118,7 +145,8 @@ const Customize = () => {
           visibleOnPC: isPCChecked,
           visibleOnTablet: isTabletChecked,
           visibleOnMobile: isMobileChecked,
-        }
+        },
+        { headers }
       );
 
       console.log(response);

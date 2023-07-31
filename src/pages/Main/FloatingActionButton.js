@@ -42,26 +42,34 @@ const FloatingActionButton = () => {
 
   useEffect(() => {
     const getButton = async () => {
-      const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/api/v1/user/my-products/${id}/button/${productId}`
-      );
+      try {
+        const headers = {
+          Authorization: localStorage.getItem("accessToken"),
+        };
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_URL}/api/v1/user/my-products/${id}/button/${productId}`,
+          { headers }
+        );
 
-      const style = response.data.data;
+        const style = response.data.data;
 
-      setBackgroundColor(style.backgroundColor);
-      setBodyColor(style.bodyColor);
-      setTextColor(style.textColor);
-      setButtonText(style.textContent);
-      setButtonSize(style.size);
-      setButtonPositionTop(style.top);
-      setButtonPositionRight(style.right);
-      setButtonPositionBottom(style.bottom);
-      setButtonPositionLeft(style.left);
-      setSelectedIconPrefix(style.icon.split(" ")[0]);
-      setSelectedIconValue(style.icon.split(" ")[1]);
-      setIsPCChecked(style.visibleOnPC);
-      setIsTabletChecked(style.visibleOnTablet);
-      setIsMobileChecked(style.visibleOnMobile);
+        setBackgroundColor(style.backgroundColor);
+        setBodyColor(style.bodyColor);
+        setTextColor(style.textColor);
+        setButtonText(style.textContent);
+        setButtonSize(style.size);
+        setButtonPositionTop(style.top);
+        setButtonPositionRight(style.right);
+        setButtonPositionBottom(style.bottom);
+        setButtonPositionLeft(style.left);
+        setSelectedIconPrefix(style.icon.split(" ")[0]);
+        setSelectedIconValue(style.icon.split(" ")[1]);
+        setIsPCChecked(style.visibleOnPC);
+        setIsTabletChecked(style.visibleOnTablet);
+        setIsMobileChecked(style.visibleOnMobile);
+      } catch (error) {
+        console.log(error);
+      }
     };
 
     getButton();

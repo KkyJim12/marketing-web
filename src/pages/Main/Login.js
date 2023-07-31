@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
 
@@ -28,6 +28,15 @@ import logolight from "../../assets/images/logo-full.png";
 const Login = () => {
   const navigate = useNavigate();
 
+  useEffect(() => {
+    if (
+      localStorage.getItem("authUser") ||
+      localStorage.getItem("accessToken")
+    ) {
+      navigate("/e-commerce");
+    }
+  }, []);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -42,7 +51,7 @@ const Login = () => {
     setRestError("");
   };
 
-  const loginProcess = async e => {
+  const loginProcess = async (e) => {
     e.preventDefault();
     resetLoginFormError();
     try {
@@ -61,7 +70,7 @@ const Login = () => {
     } catch (error) {
       const errors = error.response.data.errors;
       if (error.response.status === 422) {
-        errors.map(error => {
+        errors.map((error) => {
           if (error.key === "email") {
             return setEmailError(error.message);
           } else if (error.key === "password") {
@@ -105,7 +114,7 @@ const Login = () => {
                   </div>
                   <div className="p-2 mt-4">
                     <Form
-                      onSubmit={e => loginProcess(e)}
+                      onSubmit={(e) => loginProcess(e)}
                       className="form-horizontal"
                     >
                       {restError && <Alert color="danger">{restError}</Alert>}
@@ -117,7 +126,7 @@ const Login = () => {
                           placeholder="Enter email"
                           type="email"
                           value={email}
-                          onChange={e => setEmail(e.target.value)}
+                          onChange={(e) => setEmail(e.target.value)}
                         />
                         {emailError && (
                           <small className="text-danger">{emailError}</small>
@@ -131,7 +140,7 @@ const Login = () => {
                           type="password"
                           placeholder="Enter Password"
                           value={password}
-                          onChange={e => setPassword(e.target.value)}
+                          onChange={(e) => setPassword(e.target.value)}
                         />
                         {passwordError && (
                           <small className="text-danger">{passwordError}</small>

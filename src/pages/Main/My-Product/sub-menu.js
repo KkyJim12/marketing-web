@@ -20,8 +20,6 @@ const SubMenu = () => {
   const { id, productId } = useParams();
 
   const saveButtonSetting = async () => {
-    console.log(selectedMenues);
-    console.log(customMenues);
     try {
       const headers = {
         Authorization: localStorage.getItem("accessToken"),
@@ -276,8 +274,12 @@ const SubMenu = () => {
   useEffect(() => {
     const getPrebuiltContents = async () => {
       try {
+        const headers = {
+          Authorization: localStorage.getItem("accessToken"),
+        };
         const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/api/v1/user/my-products/${id}/prebuilt-contents/${productId}`
+          `${process.env.REACT_APP_API_URL}/api/v1/user/my-products/${id}/prebuilt-contents/${productId}`,
+          { headers }
         );
 
         setSubMenues(response.data.data);
