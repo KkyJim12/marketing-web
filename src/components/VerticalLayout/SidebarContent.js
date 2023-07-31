@@ -21,8 +21,12 @@ const SidebarContent = (props) => {
   useEffect(() => {
     const getPages = async () => {
       try {
+        const headers = {
+          Authorization: localStorage.getItem("accessToken"),
+        };
         const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/api/v1/user/pages`
+          `${process.env.REACT_APP_API_URL}/api/v1/user/pages`,
+          { headers }
         );
         const pages = response.data.data;
 
