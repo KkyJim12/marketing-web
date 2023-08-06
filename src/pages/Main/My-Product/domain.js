@@ -8,6 +8,7 @@ import {
   Label,
   Input,
   Modal,
+  Button,
 } from "reactstrap";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { useEffect, useState } from "react";
@@ -91,6 +92,23 @@ const Domain = () => {
     } catch (error) {
       console.log(error);
       setUrlError("No more domain slots.");
+    }
+  };
+
+  const removeDomain = async (domainId) => {
+    try {
+      const headers = {
+        Authorization: localStorage.getItem("accessToken"),
+      };
+      const response = await axios.delete(
+        `${process.env.REACT_APP_API_URL}/api/v1/user/my-products/whitelist-domain/${domainId}`,
+        { headers }
+      );
+
+      console.log(response);
+      setIsLoading(true);
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -249,12 +267,27 @@ const Domain = () => {
                 <Col md={12} key={index}>
                   <div>
                     <Label>Domain {index + 1}</Label>
-                    <Input
-                      type="text"
-                      className="form-control"
-                      placeholder="Whitelist URL"
-                      value={domain.url}
-                    />
+                    <div className="d-flex gap-3">
+                      <Input
+                        type="text"
+                        className="form-control"
+                        placeholder="Whitelist URL"
+                        value={domain.url}
+                      />
+                      <a
+                        href={domain.url}
+                        target="_blank"
+                        className="btn btn-info"
+                      >
+                        Open
+                      </a>
+                      <Button
+                        onClick={() => removeDomain(domain.id)}
+                        className="btn btn-danger"
+                      >
+                        Remove
+                      </Button>
+                    </div>
                   </div>
                 </Col>
               );
