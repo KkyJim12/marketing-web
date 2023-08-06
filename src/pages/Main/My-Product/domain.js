@@ -7,16 +7,98 @@ import {
   Col,
   Label,
   Input,
-  Button,
+  Modal,
 } from "reactstrap";
 import { CopyToClipboard } from "react-copy-to-clipboard";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 const Domain = () => {
   const { id, productId } = useParams();
   const firstLine = `<script data-main="${process.env.REACT_APP_API_URL}/js/scripts/main.js" src="${process.env.REACT_APP_API_URL}/js/scripts/require.js"></script>`;
   const secondLine = `<script src='${process.env.REACT_APP_API_URL}/js/floating-action-button.js'></script>`;
   const thirdLine = `<script>generateButton("${id}")</script>`;
-  const domains = [];
+  const [addDomainModal, setAddDomainModal] = useState(false);
+  const [url, setUrl] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
+  const [domains, setDomains] = useState([]);
+  const [urlError, setUrlError] = useState("");
+  const [maxDomain, setMaxDomain] = useState("");
+
+  const toggleAddDomainModal = () => {
+    setAddDomainModal(!addDomainModal);
+  };
+
+  const resetError = () => {
+    setUrlError("");
+  };
+
+  useEffect(() => {
+    const getProductDetail = async () => {
+      try {
+        const headers = {
+          Authorization: localStorage.getItem("accessToken"),
+        };
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_URL}/api/v1/user/my-products/${id}/product-detail/${productId}`,
+          { headers }
+        );
+
+        setMaxDomain(response.data.data.domains);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    getProductDetail();
+
+    const getDomains = async () => {
+      try {
+        const headers = {
+          Authorization: localStorage.getItem("accessToken"),
+        };
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_URL}/api/v1/user/my-products/${id}/whitelist-domain/${productId}`,
+          { headers }
+        );
+
+        console.log(response);
+        setDomains(response.data.data);
+        setIsLoading(false);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    getDomains();
+  }, [isLoading]);
+
+  const addDomain = async () => {
+    resetError();
+    try {
+      const headers = {
+        Authorization: localStorage.getItem("accessToken"),
+      };
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/api/v1/user/my-products/${id}/whitelist-domain/${productId}`,
+        { url: url },
+        { headers }
+      );
+
+      setIsLoading(true);
+      setUrl("");
+      setAddDomainModal(false);
+    } catch (error) {
+      console.log(error);
+      setUrlError("No more domain slots.");
+    }
+  };
+
+  const closeAddDomainModal = () => {
+    setUrlError("");
+    setAddDomainModal(false);
+  };
+
   return (
     <>
       <Card>
@@ -89,17 +171,89 @@ const Domain = () => {
       </Card>
       <Card>
         <CardBody>
-          <CardTitle>Domain Setup</CardTitle>
+          <CardTitle>
+            <div className="d-flex justify-content-between">
+              <h5>
+                Domain Setup ({domains.length}/{maxDomain})
+              </h5>
+              <div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    toggleAddDomainModal();
+                  }}
+                  className="btn btn-success waves-effect waves-light"
+                  data-toggle="modal"
+                  data-target="#myModal"
+                >
+                  Add Domain
+                </button>
+                <Modal
+                  className="modal-dialog-centered modal-lg"
+                  isOpen={addDomainModal}
+                  toggle={() => {
+                    toggleAddDomainModal("");
+                  }}
+                >
+                  <div className="modal-header">
+                    <h5 className="modal-title mt-0" id="myModalLabel">
+                      Add Domain
+                    </h5>
+                    <button
+                      type="button"
+                      className="close"
+                      data-dismiss="modal"
+                      aria-label="Close"
+                      onClick={() => setAddDomainModal(false)}
+                    >
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div className="modal-body">
+                    <Input
+                      type="text"
+                      className="form-control"
+                      placeholder="Website URL"
+                      value={url}
+                      onChange={(e) => setUrl(e.target.value)}
+                    />
+                    {urlError && (
+                      <small className="text-danger">{urlError}</small>
+                    )}
+                  </div>
+                  <div className="modal-footer">
+                    <button
+                      onClick={addDomain}
+                      type="button"
+                      className="btn btn-success waves-effect waves-light"
+                    >
+                      Add Domain
+                    </button>
+                    <button
+                      type="button"
+                      className="btn btn-danger waves-effect"
+                      data-dismiss="modal"
+                      onClick={closeAddDomainModal}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </Modal>
+              </div>
+            </div>
+          </CardTitle>
+
           <Row className="gap-4">
             {domains.map((domain, index) => {
               return (
-                <Col md={12}>
+                <Col md={12} key={index}>
                   <div>
                     <Label>Domain {index + 1}</Label>
                     <Input
                       type="text"
                       className="form-control"
                       placeholder="Whitelist URL"
+                      value={domain.url}
                     />
                   </div>
                 </Col>
