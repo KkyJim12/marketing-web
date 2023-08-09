@@ -18,9 +18,7 @@ const MyProduct = () => {
   const [setting, setSetting] = useState([]);
 
   const ReNewButton = (props) => {
-    if (props.status === "On going") {
-      return <>-</>;
-    } else {
+    if (props.status === "Expired") {
       return (
         <button
           className="btn btn-success waves-effect waves-light btn-sm"
@@ -29,6 +27,8 @@ const MyProduct = () => {
           {t("Re new")}
         </button>
       );
+    } else {
+      return <>-</>;
     }
   };
 
@@ -141,7 +141,10 @@ const MyProduct = () => {
             "DD/MM/YYYY, h:mm a"
           ),
           expireDate: moment(fetchData[i].endDate).format("DD/MM/YYYY, h:mm a"),
-          expireIn: moment(fetchData[i].endDate).fromNow(),
+          expireIn:
+            fetchData[i].status === "On going"
+              ? moment(fetchData[i].endDate).fromNow()
+              : "-",
           status: fetchData[i].status,
           reNew: <ReNewButton status={fetchData[i].status} />,
           manage: (

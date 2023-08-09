@@ -191,7 +191,7 @@ const SidebarContent = (props) => {
                 return (
                   <li key={upperPage.id} className="">
                     <Link to={`/info/${upperPage.name}/${upperPage.id}`}>
-                      <i className="uil-comment-info-alt"></i>
+                      <i className={upperPage.icon}></i>
                       <span>{upperPage.name}</span>
                     </Link>
                     <ul className="sub-menu">
@@ -199,7 +199,7 @@ const SidebarContent = (props) => {
                         return (
                           <li>
                             <Link to={`/info/${sub_page.name}/${sub_page.id}`}>
-                              <i className="uil-comment-info-alt"></i>
+                              <i className={upperPage.icon}></i>
                               <span>{sub_page.name}</span>
                             </Link>
                           </li>
@@ -212,7 +212,7 @@ const SidebarContent = (props) => {
                 return (
                   <li key={upperPage.id}>
                     <Link to={`/info/${upperPage.name}/${upperPage.id}`}>
-                      <i className="uil-invoice"></i>
+                      <i className={upperPage.icon}></i>
                       <span>{upperPage.name}</span>
                     </Link>
                   </li>
@@ -233,7 +233,7 @@ const SidebarContent = (props) => {
                   return (
                     <li key={middlePage.id} className="">
                       <Link to={`/info/${middlePage.name}/${middlePage.id}`}>
-                        <i className="uil-comment-info-alt"></i>
+                        <i className={middlePage.icon}></i>
                         <span>{middlePage.name}</span>
                       </Link>
                       <ul className="sub-menu">
@@ -243,7 +243,7 @@ const SidebarContent = (props) => {
                               <Link
                                 to={`/info/${sub_page.name}/${sub_page.id}`}
                               >
-                                <i className="uil-comment-info-alt"></i>
+                                <i className={sub_page.icon}></i>
                                 <span>{sub_page.name}</span>
                               </Link>
                             </li>
@@ -256,7 +256,7 @@ const SidebarContent = (props) => {
                   return (
                     <li key={middlePage.id}>
                       <Link to={`/info/${middlePage.name}/${middlePage.id}`}>
-                        <i className="uil-invoice"></i>
+                        <i className={middlePage.icon}></i>
                         <span>{middlePage.name}</span>
                       </Link>
                     </li>
@@ -280,7 +280,7 @@ const SidebarContent = (props) => {
                   return (
                     <li key={middlePage.id} className="">
                       <Link to={`/info/${middlePage.name}/${middlePage.id}`}>
-                        <i className="uil-comment-info-alt"></i>
+                        <i className={middlePage.icon}></i>
                         <span>{middlePage.name}</span>
                       </Link>
                       <ul className="sub-menu">
@@ -290,7 +290,7 @@ const SidebarContent = (props) => {
                               <Link
                                 to={`/info/${sub_page.name}/${sub_page.id}`}
                               >
-                                <i className="uil-comment-info-alt"></i>
+                                <i className={sub_page.icon}></i>
                                 <span>{sub_page.name}</span>
                               </Link>
                             </li>
@@ -303,7 +303,7 @@ const SidebarContent = (props) => {
                   return (
                     <li key={middlePage.id}>
                       <Link to={`/info/${middlePage.name}/${middlePage.id}`}>
-                        <i className="uil-invoice"></i>
+                        <i className={middlePage.icon}></i>
                         <span>{middlePage.name}</span>
                       </Link>
                     </li>
@@ -326,7 +326,7 @@ const SidebarContent = (props) => {
                 return (
                   <li key={lowerPage.id} className="">
                     <Link to={`/info/${lowerPage.name}/${lowerPage.id}`}>
-                      <i className="uil-comment-info-alt"></i>
+                      <i className={lowerPage.icon}></i>
                       <span>{lowerPage.name}</span>
                     </Link>
                     <ul className="sub-menu">
@@ -334,7 +334,7 @@ const SidebarContent = (props) => {
                         return (
                           <li>
                             <Link to={`/info/${sub_page.name}/${sub_page.id}`}>
-                              <i className="uil-comment-info-alt"></i>
+                              <i className={sub_page.icon}></i>
                               <span>{sub_page.name}</span>
                             </Link>
                           </li>
@@ -347,7 +347,7 @@ const SidebarContent = (props) => {
                 return (
                   <li key={lowerPage.id}>
                     <Link to={`/info/${lowerPage.name}/${lowerPage.id}`}>
-                      <i className="uil-invoice"></i>
+                      <i className={lowerPage.icon}></i>
                       <span>{lowerPage.name}</span>
                     </Link>
                   </li>
