@@ -199,7 +199,7 @@ const SidebarContent = (props) => {
                         return (
                           <li>
                             <Link to={`/info/${sub_page.name}/${sub_page.id}`}>
-                              <i className={upperPage.icon}></i>
+                              <i className={sub_page.icon}></i>
                               <span>{sub_page.name}</span>
                             </Link>
                           </li>
