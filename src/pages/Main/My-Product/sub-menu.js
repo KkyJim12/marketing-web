@@ -31,7 +31,6 @@ const SubMenu = () => {
         },
         { headers }
       );
-      console.log(response);
     } catch (error) {
       console.log(error);
     }
@@ -152,35 +151,28 @@ const SubMenu = () => {
   const [subMenues, setSubMenues] = useState([]);
   const [selectedMenues, setSelectedMenues] = useState([]);
 
-  const selectMenu = (id, index) => {
-    const thisId = id;
-    let isChecked = false;
-
-    for (let i = 0; i < selectedMenues.length; i++) {
-      if (selectedMenues[i].id === thisId) {
-        isChecked = true;
-        break;
-      }
-    }
-    if (isChecked) {
-      const clonedSelectedMenues = [...selectedMenues];
-      const newSelectedMenues = clonedSelectedMenues.filter((i) => {
-        return i.id !== thisId;
+  const selectMenu = (id) => {
+    if (
+      selectedMenues.filter((selectedMenu) => selectedMenu.id === id).length > 0
+    ) {
+      const newSelectedMenues = selectedMenues.filter((selectedMenu) => {
+        return selectedMenu.id !== id;
       });
       setSelectedMenues(newSelectedMenues);
     } else {
-      const thisMenu = subMenues.filter((i) => {
-        return i.id === thisId;
-      });
+      const thisMenu = subMenues.filter((subMenu) => {
+        return subMenu.id === id;
+      })[0];
+
       setSelectedMenues([
         ...selectedMenues,
         {
-          id: thisMenu[0].id,
-          backgroundColor: thisMenu[0].backgroundColor,
-          icon: thisMenu[0].icon,
-          textContent: thisMenu[0].textContent,
-          description: thisMenu[0].description,
-          destination: thisMenu[0].destination,
+          id: thisMenu.id,
+          backgroundColor: thisMenu.backgroundColor,
+          icon: thisMenu.icon,
+          textContent: thisMenu.textContent,
+          description: thisMenu.description,
+          destination: thisMenu.destination,
           backgroundColorPickerEnable: false,
         },
       ]);
@@ -288,7 +280,39 @@ const SubMenu = () => {
       }
     };
 
+    const getExistContents = async () => {
+      try {
+        const headers = {
+          Authorization: localStorage.getItem("accessToken"),
+        };
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_URL}/api/v1/user/my-products/${id}/exist-contents/${productId}`,
+          { headers }
+        );
+
+        const existContents = response.data.data;
+
+        for (let i = 0; i < existContents.length; i++) {
+          setSelectedMenues([
+            ...selectedMenues,
+            {
+              id: existContents[i].prebuiltContentId,
+              backgroundColor: existContents[i].backgroundColor,
+              icon: existContents[i].icon,
+              textContent: existContents[i].textContent,
+              description: existContents[i].description,
+              destination: existContents[i].destination,
+              backgroundColorPickerEnable: false,
+            },
+          ]);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
     getPrebuiltContents();
+    getExistContents();
   }, []);
 
   return (
@@ -302,20 +326,24 @@ const SubMenu = () => {
                 {subMenues.map((subMenu, index) => {
                   return (
                     <Col key={subMenu.id} md={1}>
-                      <div className="form-check">
-                        <Input
-                          className="form-check-input"
-                          type="checkbox"
-                          id={subMenu.id}
-                          value={subMenu.id}
-                          onClick={() => selectMenu(subMenu.id, index)}
-                        />
-                        <label
-                          className="form-check-label"
-                          htmlFor={subMenu.id}
+                      <div className="d-flex gap-2 justify-content-centern align-items-center">
+                        <Button
+                          className={
+                            selectedMenues.filter(
+                              (selectedMenu) => selectedMenu.id === subMenu.id
+                            ).length > 0
+                              ? "btn btn-success"
+                              : "btn btn-info"
+                          }
+                          onClick={() => selectMenu(subMenu.id)}
                         >
-                          {subMenu.textContent}
-                        </label>
+                          {selectedMenues.filter(
+                            (selectedMenu) => selectedMenu.id === subMenu.id
+                          ).length > 0
+                            ? "Selected"
+                            : "Select"}
+                        </Button>
+                        <p>{subMenu.textContent}</p>
                       </div>
                     </Col>
                   );
