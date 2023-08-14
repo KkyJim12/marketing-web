@@ -291,11 +291,12 @@ const SubMenu = () => {
         );
 
         const existContents = response.data.data;
+        const newSelectedMenues = [];
+        const newCustomMenues = [];
 
         for (let i = 0; i < existContents.length; i++) {
-          setSelectedMenues([
-            ...selectedMenues,
-            {
+          if (existContents[i].prebuiltContentId) {
+            newSelectedMenues.push({
               id: existContents[i].prebuiltContentId,
               backgroundColor: existContents[i].backgroundColor,
               icon: existContents[i].icon,
@@ -303,9 +304,22 @@ const SubMenu = () => {
               description: existContents[i].description,
               destination: existContents[i].destination,
               backgroundColorPickerEnable: false,
-            },
-          ]);
+            });
+          } else {
+            newCustomMenues.push({
+              id: uuidv4(),
+              backgroundColor: existContents[i].backgroundColor,
+              icon: existContents[i].icon,
+              textContent: existContents[i].textContent,
+              description: existContents[i].description,
+              destination: existContents[i].destination,
+              backgroundColorPickerEnable: false,
+              label: "Custom",
+            });
+          }
         }
+        setSelectedMenues(newSelectedMenues);
+        setCustomMenues(newCustomMenues);
       } catch (error) {
         console.log(error);
       }
