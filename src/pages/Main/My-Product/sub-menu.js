@@ -263,6 +263,18 @@ const SubMenu = () => {
     setCustomMenues(newCustomMenues);
   };
 
+  const handleSelectedCustomMenuIcon = (e, id) => {
+    const clonedCustomMenues = [...customMenues];
+    for (let i = 0; i < clonedCustomMenues.length; i++) {
+      if (clonedCustomMenues[i].id === id) {
+        clonedCustomMenues[i].icon = e.target.value;
+        break;
+      }
+    }
+
+    setCustomMenues(clonedCustomMenues);
+  };
+
   useEffect(() => {
     const getPrebuiltContents = async () => {
       try {
@@ -419,22 +431,16 @@ const SubMenu = () => {
                         ) : null}
                       </div>
                     </Col>
+
                     <Col md={2}>
                       <Label>Icon</Label>
-                      <select
-                        value={selectedMenu.icon}
+                      <Input
+                        style={{ background: "#f5f5f5" }}
                         className="form-control"
-                      >
-                        <option>Select Icon</option>
-                        {icons &&
-                          icons.data.map((icon, index) => {
-                            return (
-                              <option key={index} value={icon}>
-                                {icon}
-                              </option>
-                            );
-                          })}
-                      </select>
+                        placeholder="Text"
+                        value={selectedMenu.icon}
+                        readOnly
+                      ></Input>
                     </Col>
                     <Col md={2}>
                       <Label>Text</Label>
@@ -545,9 +551,22 @@ const SubMenu = () => {
                     </Col>
                     <Col md={2}>
                       <Label>Icon</Label>
-                      <select className="form-control">
+                      <select
+                        onChange={(e) =>
+                          handleSelectedCustomMenuIcon(e, customMenu.id)
+                        }
+                        className="form-control"
+                        value={customMenu.icon}
+                      >
                         <option>Select Icon</option>
-                        <option>User</option>
+                        {icons &&
+                          icons.data.map((icon, index) => {
+                            return (
+                              <option key={index} value={icon}>
+                                {icon}
+                              </option>
+                            );
+                          })}
                       </select>
                     </Col>
                     <Col md={2}>
