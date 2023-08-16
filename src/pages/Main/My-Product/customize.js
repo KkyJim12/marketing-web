@@ -168,6 +168,7 @@ const Customize = () => {
       const response = await axios.put(
         `${process.env.REACT_APP_API_URL}/api/v1/user/my-products/${id}/save-button/${productId}`,
         {
+          buttonStyle: selectedButtonStyle,
           backgroundColor: backgroundColor,
           bodyColor: bodyColor,
           textColor: textColor,
