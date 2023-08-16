@@ -22,6 +22,13 @@ const Customize = () => {
 
   const { id, productId } = useParams();
 
+  const buttonStyles = [
+    "Rounded Button",
+    "Rounded Button With Text",
+    "Long Rounded Button#1",
+    "Long Rounded Button#2",
+  ];
+
   const [buttonText, setButtonText] = useState("Minible");
   const [backgroundColorEnable, setBackgroundColorEnable] = useState(false);
   const [bodyColorEnable, setBodyColorEnable] = useState(false);
@@ -49,6 +56,12 @@ const Customize = () => {
   const [prebuiltButtons, setPrebuiltButtons] = useState([]);
 
   const [contents, setContents] = useState([]);
+
+  const [uploadedIcon, setUploadedIcon] = useState("");
+  const [previewUploadedIcon, setPreviewUploadedIcon] = useState("");
+
+  const [selectedButtonStyle, setSelectedButtonStyle] =
+    useState("Rounded Button");
 
   useEffect(() => {
     const getPrebuiltButtons = async () => {
@@ -81,6 +94,7 @@ const Customize = () => {
 
         const style = response.data.data;
 
+        setSelectedButtonStyle(style.buttonStyle);
         setBackgroundColor(style.backgroundColor);
         setBodyColor(style.bodyColor);
         setTextColor(style.textColor);
@@ -122,6 +136,29 @@ const Customize = () => {
     getButton();
     getContents();
   }, []);
+
+  useEffect(() => {
+    if (!uploadedIcon) {
+      setPreviewUploadedIcon(undefined);
+      return;
+    }
+    // create the preview
+    const objectUrl = URL.createObjectURL(uploadedIcon);
+    setPreviewUploadedIcon(objectUrl);
+
+    // free memory when ever this component is unmounted
+    return () => URL.revokeObjectURL(objectUrl);
+  }, [uploadedIcon]);
+
+  const handleUploadIcon = (e) => {
+    if (!e.target.files || e.target.files.length === 0) {
+      setUploadedIcon(undefined);
+      return;
+    }
+
+    // I've kept this example simple by using the first image instead of multiple
+    setUploadedIcon(e.target.files[0]);
+  };
 
   const saveButtonStyle = async () => {
     try {
@@ -244,9 +281,46 @@ const Customize = () => {
     document.getElementById("iconUploadInput").click();
   };
 
+  const selectButtonStyle = (buttonStyle) => {
+    setSelectedButtonStyle(buttonStyle);
+  };
+
   return (
     <>
       <Row>
+        <Col md={12}>
+          <Card>
+            <CardBody>
+              <CardTitle className="h4 mb-4">
+                <span>Button Styles</span>
+              </CardTitle>
+              <Row>
+                {buttonStyles.map((buttonStyle) => {
+                  return (
+                    <Col md={2}>
+                      <div className="d-flex flex-column gap-2">
+                        <Label>{buttonStyle}</Label>
+                        <Button
+                          onClick={() => selectButtonStyle(buttonStyle)}
+                          type="button"
+                          className={
+                            buttonStyle === selectedButtonStyle
+                              ? "btn btn-success"
+                              : "btn btn-info"
+                          }
+                        >
+                          {buttonStyle === selectedButtonStyle
+                            ? "Selected"
+                            : "Choose this style"}
+                        </Button>
+                      </div>
+                    </Col>
+                  );
+                })}
+              </Row>
+            </CardBody>
+          </Card>
+        </Col>
         <Col md={12}>
           <h6>Pre-built Buttons</h6>
           <Row className="mt-4">
@@ -807,35 +881,178 @@ const Customize = () => {
             zIndex: 99999,
           }}
         >
-          <button
-            onClick={(e) => setFloatingActionButton(!floatingActionButton)}
-            type="button"
-            style={{
-              width: buttonSize,
-              height: buttonSize,
-              borderRadius: "50%",
-              border: 0,
-              boxShadow:
-                "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
-              backgroundColor: backgroundColor,
-              color: textColor,
-              fontSize: 32,
-            }}
-          >
-            {selectedIconValue && (
-              <FontAwesomeIcon icon={[selectedIconPrefix, selectedIconValue]} />
-            )}
-          </button>
+          {selectedButtonStyle === "Rounded Button" ? (
+            <div
+              style={{ float: "right" }}
+              className="d-flex gap-2 align-items-center"
+            >
+              <button
+                onClick={(e) => setFloatingActionButton(!floatingActionButton)}
+                type="button"
+                style={{
+                  width: buttonSize,
+                  height: buttonSize,
+                  borderRadius: "50%",
+                  border: 0,
+                  boxShadow:
+                    "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
+                  backgroundColor: backgroundColor,
+                  color: textColor,
+                  fontSize:
+                    iconInput === "upload" && previewUploadedIcon ? "" : 32,
+                }}
+                className={
+                  iconInput === "upload" && previewUploadedIcon ? "p-3" : ""
+                }
+              >
+                {iconInput === "upload" && previewUploadedIcon ? (
+                  <img
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                    }}
+                    src={previewUploadedIcon}
+                  />
+                ) : (
+                  <FontAwesomeIcon
+                    icon={[selectedIconPrefix, selectedIconValue]}
+                  />
+                )}
+              </button>
+            </div>
+          ) : selectedButtonStyle === "Long Rounded Button#1" ? (
+            <div
+              style={{
+                float: buttonPositionRight === null ? "left" : "right",
+              }}
+              className="d-flex gap-2 align-items-center"
+            >
+              <button
+                onClick={(e) => setFloatingActionButton(!floatingActionButton)}
+                type="button"
+                className="d-flex justify-content-center align-items-center gap-3 px-4"
+                style={{
+                  width: "100%",
+                  height: buttonSize,
+                  borderRadius: 9999,
+                  border: 0,
+                  boxShadow:
+                    "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
+                  backgroundColor: backgroundColor,
+                  color: textColor,
+                  fontSize: 32,
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {selectedIconValue && (
+                  <FontAwesomeIcon
+                    icon={[selectedIconPrefix, selectedIconValue]}
+                  />
+                )}
+                <h5 style={{ color: textColor }}>{buttonText}</h5>
+              </button>
+            </div>
+          ) : selectedButtonStyle === "Rounded Button With Text" ? (
+            <div
+              style={{
+                float: buttonPositionRight === null ? "left" : "right",
+                whiteSpace: "nowrap",
+              }}
+              className="d-flex gap-2 align-items-center"
+            >
+              {buttonPositionRight && (
+                <div
+                  className="px-3 py-2 d-flex justify-content-center align-items-center"
+                  style={{
+                    background: "white",
+                    borderRadius: 10,
+                    boxShadow:
+                      "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
+                  }}
+                >
+                  <h5>{buttonText}</h5>
+                </div>
+              )}
+              <button
+                onClick={(e) => setFloatingActionButton(!floatingActionButton)}
+                type="button"
+                style={{
+                  width: buttonSize,
+                  height: buttonSize,
+                  borderRadius: "50%",
+                  border: 0,
+                  boxShadow:
+                    "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
+                  backgroundColor: backgroundColor,
+                  color: textColor,
+                  fontSize: 32,
+                }}
+              >
+                {selectedIconValue && (
+                  <FontAwesomeIcon
+                    icon={[selectedIconPrefix, selectedIconValue]}
+                  />
+                )}
+              </button>
+              {buttonPositionLeft && <h5>{buttonText}</h5>}
+            </div>
+          ) : (
+            <div
+              style={{
+                float: buttonPositionRight === null ? "left" : "right",
+              }}
+              className="d-flex gap-2 align-items-center"
+            >
+              <button
+                onClick={(e) => setFloatingActionButton(!floatingActionButton)}
+                type="button"
+                className="d-flex justify-content-center align-items-center gap-3 px-2"
+                style={{
+                  width: "100%",
+                  height: buttonSize,
+                  borderRadius: 9999,
+                  border: 0,
+                  boxShadow:
+                    "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
+                  backgroundColor: "white",
+                  color: textColor,
+                  fontSize: 32,
+                  whiteSpace: "nowrap",
+                }}
+              >
+                <h5
+                  style={{
+                    color: "#374151",
+                  }}
+                >
+                  {buttonText}
+                </h5>
+                <div
+                  className="d-flex align-items-center justify-content-center"
+                  style={{
+                    background: backgroundColor,
+                    width: buttonSize * 0.9,
+                    height: buttonSize * 0.9,
+                    borderRadius: "50%",
+                  }}
+                >
+                  {selectedIconValue && (
+                    <FontAwesomeIcon
+                      icon={[selectedIconPrefix, selectedIconValue]}
+                    />
+                  )}
+                </div>
+              </button>
+            </div>
+          )}
           {floatingActionButton && (
             <div
               style={{
                 position: "relative",
-                top: buttonPositionTop ? 10 : null,
-                left: buttonPositionLeft ? 10 : null,
-                bottom: buttonPositionBottom
-                  ? 150 + contents.length * 65
-                  : null,
-                right: buttonPositionRight ? 280 : null,
+                top: buttonPositionTop ? 90 : null,
+                left: buttonPositionLeft ? 0 : null,
+                bottom: buttonPositionBottom ? 75 + contents.length * 75 : null,
+                right: buttonPositionRight ? 300 : null,
               }}
             >
               <div
@@ -853,9 +1070,12 @@ const Customize = () => {
                     color: textColor,
                     borderTopLeftRadius: 15,
                     borderTopRightRadius: 15,
-                    minWidth: 350,
+                    width: 350,
                     fontWeight: 600,
                     fontSize: 20,
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
                   }}
                 >
                   {buttonText}
@@ -864,9 +1084,13 @@ const Customize = () => {
                 <ClickAwayListener onClickAway={closeFloatingActionButton}>
                   <div
                     style={{
+                      marginRight: buttonPositionRight
+                        ? buttonPositionRight
+                        : null,
                       background: bodyColor,
                       cursor: "pointer",
-                      height: 65 * contents.length,
+                      height: contents.length * 75,
+                      width: "100%",
                       borderBottomLeftRadius: 15,
                       borderBottomRightRadius: 15,
                       color: "rgb(75 85 99)",
@@ -875,7 +1099,7 @@ const Customize = () => {
                         "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
                     }}
                   >
-                    {contents.map((content, index) => {
+                    {contents.map((content) => {
                       return (
                         <div
                           key={content.id}
@@ -889,6 +1113,7 @@ const Customize = () => {
                         >
                           {content.icon && (
                             <FontAwesomeIcon
+                              style={{ fontSize: 16 }}
                               icon={[
                                 content.icon.split(" ")[0],
                                 content.icon.split(" ")[1],
@@ -902,10 +1127,13 @@ const Customize = () => {
                           >
                             {content.textContent}
                           </span>
-                          <FontAwesomeIcon
-                            style={{ marginLeft: "auto" }}
-                            icon={["fas", "chevron-right"]}
-                          />
+                          <i
+                            style={{
+                              fontSize: 24,
+                              marginLeft: "auto",
+                            }}
+                            className="uil-angle-right"
+                          ></i>
                         </div>
                       );
                     })}

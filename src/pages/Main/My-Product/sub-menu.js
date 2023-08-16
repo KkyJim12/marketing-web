@@ -352,7 +352,7 @@ const SubMenu = () => {
                 {subMenues.map((subMenu, index) => {
                   return (
                     <Col key={subMenu.id} md={1}>
-                      <div className="d-flex gap-2 justify-content-centern align-items-center">
+                      <div className="d-flex gap-2 align-items-center">
                         <Button
                           className={
                             selectedMenues.filter(
