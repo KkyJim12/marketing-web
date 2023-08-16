@@ -17,10 +17,31 @@ const MyProduct = () => {
 
   const [setting, setSetting] = useState([]);
 
+  const reNewProduct = async (product) => {
+    try {
+      const headers = {
+        Authorization: localStorage.getItem("accessToken"),
+      };
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/api/v1/user/my-products/renew-product`,
+        {
+          product: product,
+        },
+        { headers }
+      );
+
+      console.log(response.data.data);
+      setIsLoading(true);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const ReNewButton = (props) => {
     if (props.status === "Expired") {
       return (
         <button
+          onClick={() => reNewProduct(props.product)}
           className="btn btn-success waves-effect waves-light btn-sm"
           type="button"
         >
@@ -146,7 +167,9 @@ const MyProduct = () => {
               ? moment(fetchData[i].endDate).fromNow()
               : "-",
           status: fetchData[i].status,
-          reNew: <ReNewButton status={fetchData[i].status} />,
+          reNew: (
+            <ReNewButton product={fetchData[i]} status={fetchData[i].status} />
+          ),
           manage: (
             <ManageButton
               productId={fetchData[i].productId}

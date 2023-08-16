@@ -48,9 +48,6 @@ const License = () => {
           <CardTitle>
             <div className="d-flex justify-content-between">
               <span>Detail</span>
-              <Button type="button" className="btn btn-success">
-                Re new
-              </Button>
             </div>
           </CardTitle>
           <Row className="gap-2 mt-2">
