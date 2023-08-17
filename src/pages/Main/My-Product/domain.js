@@ -19,6 +19,7 @@ const Domain = () => {
   const firstLine = `<script data-main="${process.env.REACT_APP_API_URL}/js/scripts/main.js" src="${process.env.REACT_APP_API_URL}/js/scripts/require.js"></script>`;
   const secondLine = `<script src='${process.env.REACT_APP_API_URL}/js/floating-action-button.js'></script>`;
   const thirdLine = `<script>generateButton("${id}")</script>`;
+  const fourthLine = `<link rel="stylesheet" href="${process.env.REACT_APP_API_URL}/css/floating-action-button.css" />`;
   const [addDomainModal, setAddDomainModal] = useState(false);
   const [url, setUrl] = useState("");
   const [isLoading, setIsLoading] = useState(true);
@@ -181,6 +182,28 @@ const Domain = () => {
             </Col>
             <Col className="d-flex gap-2" md={1}>
               <CopyToClipboard text={thirdLine}>
+                <button className="btn btn-primary">Copy</button>
+              </CopyToClipboard>
+            </Col>
+          </Row>
+
+          <Row className="mt-2">
+            <Col md={11}>
+              <div className="d-flex gap-2 align-items-center">
+                3.
+                <input
+                  type="text"
+                  readOnly
+                  placeholder="Attach Script Tag"
+                  className="form-control"
+                  rows="5"
+                  style={{ resize: "none" }}
+                  value={fourthLine}
+                />
+              </div>
+            </Col>
+            <Col className="d-flex gap-2" md={1}>
+              <CopyToClipboard text={fourthLine}>
                 <button className="btn btn-primary">Copy</button>
               </CopyToClipboard>
             </Col>
