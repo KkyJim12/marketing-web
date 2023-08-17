@@ -221,6 +221,7 @@ const Customize = () => {
   };
 
   const selectPrebuiltButton = (style) => {
+    setSelectedButtonStyle(style.buttonStyle);
     setBackgroundColor(style.backgroundColor);
     setBodyColor(style.bodyColor);
     setTextColor(style.textColor);
@@ -230,12 +231,20 @@ const Customize = () => {
     setButtonPositionBottom(style.bottom);
     setButtonPositionLeft(style.left);
     setIconInput(style.iconType);
-    setSelectedIcon(style.icon);
-    setSelectedIconPrefix(style.icon.split(" ")[0]);
-    setSelectedIconValue(style.icon.split(" ")[1]);
     setIsPCChecked(style.visibleOnPC);
     setIsTabletChecked(style.visibleOnTablet);
     setIsMobileChecked(style.visibleOnMobile);
+
+    setIconInput(style.iconType);
+
+    if (style.iconType === "upload") {
+      setUploadedIconUrl(style.icon);
+      setPreviewUploadedIcon(style.icon);
+    } else {
+      setSelectedIcon(style.icon);
+      setSelectedIconPrefix(style.icon.split(" ")[0]);
+      setSelectedIconValue(style.icon.split(" ")[1]);
+    }
   };
 
   const handleSelectedIcon = (e) => {
@@ -358,38 +367,209 @@ const Customize = () => {
                   <Card>
                     <CardBody>
                       <CardTitle className="d-flex justify-content-center">
-                        <button
-                          type="button"
-                          style={{
-                            width: button.size,
-                            height: button.size,
-                            borderRadius: "50%",
-                            border: 0,
-                            boxShadow:
-                              "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
-                            backgroundColor: button.backgroundColor,
-                            color: button.textColor,
-                            fontSize: 32,
-                          }}
-                        >
-                          {button.iconType === "upload" ? (
-                            <img
+                        {button.buttonStyle === "Rounded Button" ? (
+                          <div
+                            style={{ float: "right" }}
+                            className="d-flex gap-2 align-items-center"
+                          >
+                            <button
+                              type="button"
                               style={{
-                                width: 35,
-                                height: 35,
+                                width: button.size,
+                                height: button.size,
+                                borderRadius: "50%",
+                                border: 0,
+                                boxShadow:
+                                  "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
+                                backgroundColor: button.backgroundColor,
+                                color: button.textColor,
+                                fontSize:
+                                  button.iconType === "upload" && button.icon
+                                    ? ""
+                                    : 32,
                               }}
-                              src={button.icon}
-                              alt="icon"
-                            />
-                          ) : (
-                            <FontAwesomeIcon
-                              icon={[
-                                button.icon.split(" ")[0],
-                                button.icon.split(" ")[1],
-                              ]}
-                            />
-                          )}
-                        </button>
+                              className={
+                                button.iconType === "upload" && button.icon
+                                  ? "p-3"
+                                  : ""
+                              }
+                            >
+                              {button.iconType === "upload" && button.icon ? (
+                                <img
+                                  style={{
+                                    width: "100%",
+                                    height: "100%",
+                                  }}
+                                  src={button.icon}
+                                />
+                              ) : (
+                                <FontAwesomeIcon
+                                  icon={[
+                                    button.icon.split(" ")[0],
+                                    button.icon.split(" ")[1],
+                                  ]}
+                                />
+                              )}
+                            </button>
+                          </div>
+                        ) : button.buttonStyle === "Long Rounded Button#1" ? (
+                          <div
+                            style={{
+                              float: button.right === null ? "left" : "right",
+                            }}
+                            className="d-flex gap-2 align-items-center"
+                          >
+                            <button
+                              type="button"
+                              className="d-flex justify-content-center align-items-center gap-3 px-4"
+                              style={{
+                                width: "100%",
+                                height: button.size,
+                                borderRadius: 9999,
+                                border: 0,
+                                boxShadow:
+                                  "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
+                                backgroundColor: button.backgroundColor,
+                                color: button.textColor,
+                                fontSize: 32,
+                                whiteSpace: "nowrap",
+                              }}
+                            >
+                              {button.iconType === "upload" && button.icon ? (
+                                <img
+                                  style={{
+                                    width: 35,
+                                    height: 35,
+                                  }}
+                                  src={button.icon}
+                                />
+                              ) : (
+                                <FontAwesomeIcon
+                                  icon={[
+                                    button.icon.split(" ")[0],
+                                    button.icon.split(" ")[1],
+                                  ]}
+                                />
+                              )}
+                              <h5 style={{ color: button.textColor }}>
+                                {button.textContent}
+                              </h5>
+                            </button>
+                          </div>
+                        ) : button.buttonStyle ===
+                          "Rounded Button With Text" ? (
+                          <div
+                            style={{
+                              float: button.right === null ? "left" : "right",
+                              whiteSpace: "nowrap",
+                            }}
+                            className="d-flex gap-2 align-items-center"
+                          >
+                            {button.right && (
+                              <div
+                                className="px-3 py-2 d-flex justify-content-center align-items-center"
+                                style={{
+                                  background: "white",
+                                  borderRadius: 10,
+                                  boxShadow:
+                                    "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
+                                }}
+                              >
+                                <h5>{button.textContent}</h5>
+                              </div>
+                            )}
+                            <button
+                              type="button"
+                              style={{
+                                width: button.size,
+                                height: button.size,
+                                borderRadius: "50%",
+                                border: 0,
+                                boxShadow:
+                                  "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
+                                backgroundColor: button.backgroundColor,
+                                color: button.textColor,
+                                fontSize: 32,
+                              }}
+                            >
+                              {button.iconType === "upload" && button.icon ? (
+                                <img
+                                  style={{
+                                    width: 35,
+                                    height: 35,
+                                  }}
+                                  src={button.icon}
+                                />
+                              ) : (
+                                <FontAwesomeIcon
+                                  icon={[
+                                    button.icon.split(" ")[0],
+                                    button.icon.split(" ")[1],
+                                  ]}
+                                />
+                              )}
+                            </button>
+                            {button.left && <h5>{button.textContent}</h5>}
+                          </div>
+                        ) : (
+                          <div
+                            style={{
+                              float: button.right === null ? "left" : "right",
+                            }}
+                            className="d-flex gap-2 align-items-center"
+                          >
+                            <button
+                              type="button"
+                              className="d-flex justify-content-center align-items-center gap-3 px-2"
+                              style={{
+                                width: "100%",
+                                height: button.size,
+                                borderRadius: 9999,
+                                border: 0,
+                                boxShadow:
+                                  "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
+                                backgroundColor: "white",
+                                color: button.textColor,
+                                fontSize: 32,
+                                whiteSpace: "nowrap",
+                              }}
+                            >
+                              <h5
+                                style={{
+                                  color: "#374151",
+                                }}
+                              >
+                                {button.textContent}
+                              </h5>
+                              <div
+                                className="d-flex align-items-center justify-content-center"
+                                style={{
+                                  background: button.backgroundColor,
+                                  width: button.size * 0.9,
+                                  height: button.size * 0.9,
+                                  borderRadius: "50%",
+                                }}
+                              >
+                                {button.iconType === "upload" && button.icon ? (
+                                  <img
+                                    style={{
+                                      width: 35,
+                                      height: 35,
+                                    }}
+                                    src={button.icon}
+                                  />
+                                ) : (
+                                  <FontAwesomeIcon
+                                    icon={[
+                                      button.icon.split(" ")[0],
+                                      button.icon.split(" ")[1],
+                                    ]}
+                                  />
+                                )}
+                              </div>
+                            </button>
+                          </div>
+                        )}
                       </CardTitle>
                       <Row>
                         <Col className="mt-2" md={12}>
