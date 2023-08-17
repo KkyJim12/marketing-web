@@ -58,6 +58,7 @@ const Customize = () => {
   const [contents, setContents] = useState([]);
 
   const [uploadedIcon, setUploadedIcon] = useState("");
+  const [uploadedIconUrl, setUploadedIconUrl] = useState("");
   const [previewUploadedIcon, setPreviewUploadedIcon] = useState("");
 
   const [selectedButtonStyle, setSelectedButtonStyle] =
@@ -104,12 +105,20 @@ const Customize = () => {
         setButtonPositionRight(style.right);
         setButtonPositionBottom(style.bottom);
         setButtonPositionLeft(style.left);
-        setSelectedIcon(style.icon);
-        setSelectedIconPrefix(style.icon.split(" ")[0]);
-        setSelectedIconValue(style.icon.split(" ")[1]);
         setIsPCChecked(style.visibleOnPC);
         setIsTabletChecked(style.visibleOnTablet);
         setIsMobileChecked(style.visibleOnMobile);
+
+        setIconInput(style.iconType);
+
+        if (style.iconType === "upload") {
+          setUploadedIconUrl(style.icon);
+          setPreviewUploadedIcon(style.icon);
+        } else {
+          setSelectedIcon(style.icon);
+          setSelectedIconPrefix(style.icon.split(" ")[0]);
+          setSelectedIconValue(style.icon.split(" ")[1]);
+        }
       } catch (error) {
         console.log(error);
       }
@@ -150,13 +159,28 @@ const Customize = () => {
     return () => URL.revokeObjectURL(objectUrl);
   }, [uploadedIcon]);
 
-  const handleUploadIcon = (e) => {
+  const handleUploadIcon = async (e) => {
     if (!e.target.files || e.target.files.length === 0) {
       setUploadedIcon(undefined);
       return;
     }
 
-    // I've kept this example simple by using the first image instead of multiple
+    try {
+      const headers = {
+        Authorization: localStorage.getItem("accessToken"),
+      };
+      const formData = new FormData();
+      formData.append("image", e.target.files[0]);
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/api/v1/user/images`,
+        formData,
+        { headers }
+      );
+      setUploadedIconUrl(response.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+
     setUploadedIcon(e.target.files[0]);
   };
 
@@ -178,8 +202,11 @@ const Customize = () => {
           right: buttonPositionRight,
           bottom: buttonPositionBottom,
           left: buttonPositionLeft,
-          iconType: "font-awesome",
-          icon: selectedIconPrefix + " " + selectedIconValue,
+          iconType: iconInput,
+          icon:
+            iconInput === "font-awesome"
+              ? selectedIconPrefix + " " + selectedIconValue
+              : uploadedIconUrl,
           visibleOnPC: isPCChecked,
           visibleOnTablet: isTabletChecked,
           visibleOnMobile: isMobileChecked,
@@ -345,19 +372,35 @@ const Customize = () => {
                             fontSize: 32,
                           }}
                         >
-                          <FontAwesomeIcon
-                            icon={[
-                              button.icon.split(" ")[0],
-                              button.icon.split(" ")[1],
-                            ]}
-                          />
+                          {button.iconType === "upload" ? (
+                            <img
+                              style={{
+                                width: 35,
+                                height: 35,
+                              }}
+                              src={button.icon}
+                              alt="icon"
+                            />
+                          ) : (
+                            <FontAwesomeIcon
+                              icon={[
+                                button.icon.split(" ")[0],
+                                button.icon.split(" ")[1],
+                              ]}
+                            />
+                          )}
                         </button>
                       </CardTitle>
                       <Row>
                         <Col className="mt-2" md={12}>
                           <p>Background Color: {button.backgroundColor}</p>
                           <p>Text Color: {button.textColor}</p>
-                          <p>Icon: {button.icon}</p>
+                          <p>
+                            Icon:{" "}
+                            {button.iconType === "font-awesome"
+                              ? button.icon
+                              : "uploaded Icon"}
+                          </p>
                           <p>Size: {button.size}</p>
                         </Col>
                       </Row>
@@ -703,6 +746,7 @@ const Customize = () => {
           <Row>
             <Col md={6}>
               {/* Icon Editor */}
+
               <Card>
                 <CardBody>
                   <div className="d-flex gap-4">
@@ -716,7 +760,7 @@ const Customize = () => {
                             name="icon"
                             id="manual"
                             value="manual"
-                            onChange={(e) => setIconInput("font-awesome")}
+                            onClick={(e) => setIconInput("font-awesome")}
                             checked={iconInput === "font-awesome"}
                           />
                           <label className="form-check-label" htmlFor="manual">
@@ -732,7 +776,7 @@ const Customize = () => {
                             name="icon"
                             id="upload"
                             value="upload"
-                            onChange={(e) => setIconInput("upload")}
+                            onClick={(e) => setIconInput("upload")}
                             checked={iconInput === "upload"}
                           />
                           <label className="form-check-label" htmlFor="upload">
@@ -751,7 +795,6 @@ const Customize = () => {
                             id="floatingSelectGrid"
                             aria-label="Floating label select example"
                             onChange={handleSelectedIcon}
-                            value={selectedIcon}
                           >
                             {icons &&
                               icons.data.map((icon, index) => {
@@ -768,14 +811,23 @@ const Customize = () => {
                         </div>
                       ) : (
                         <div className="form-floating mb-3">
+                          {previewUploadedIcon && (
+                            <div className="d-flex justify-content-center mb-3">
+                              <img
+                                style={{ height: 100 }}
+                                src={previewUploadedIcon}
+                              />
+                            </div>
+                          )}
                           <button
-                            className="btn-rounded waves-effect waves-light btn btn-primary  w-100"
+                            className="btn-rounded waves-effect waves-light btn btn-primary w-100"
                             type="button"
                             onClick={openIconUploadInput}
                           >
                             Upload
                           </button>
                           <input
+                            onChange={handleUploadIcon}
                             id="iconUploadInput"
                             className="d-none"
                             type="file"
@@ -945,7 +997,15 @@ const Customize = () => {
                   whiteSpace: "nowrap",
                 }}
               >
-                {selectedIconValue && (
+                {iconInput === "upload" && previewUploadedIcon ? (
+                  <img
+                    style={{
+                      width: 35,
+                      height: 35,
+                    }}
+                    src={previewUploadedIcon}
+                  />
+                ) : (
                   <FontAwesomeIcon
                     icon={[selectedIconPrefix, selectedIconValue]}
                   />
@@ -989,7 +1049,15 @@ const Customize = () => {
                   fontSize: 32,
                 }}
               >
-                {selectedIconValue && (
+                {iconInput === "upload" && previewUploadedIcon ? (
+                  <img
+                    style={{
+                      width: 35,
+                      height: 35,
+                    }}
+                    src={previewUploadedIcon}
+                  />
+                ) : (
                   <FontAwesomeIcon
                     icon={[selectedIconPrefix, selectedIconValue]}
                   />
@@ -1037,7 +1105,15 @@ const Customize = () => {
                     borderRadius: "50%",
                   }}
                 >
-                  {selectedIconValue && (
+                  {iconInput === "upload" && previewUploadedIcon ? (
+                    <img
+                      style={{
+                        width: 35,
+                        height: 35,
+                      }}
+                      src={previewUploadedIcon}
+                    />
+                  ) : (
                     <FontAwesomeIcon
                       icon={[selectedIconPrefix, selectedIconValue]}
                     />
