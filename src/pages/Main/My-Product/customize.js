@@ -1036,7 +1036,7 @@ const Customize = () => {
                           type="checkbox"
                           id="defaultCheck1"
                           checked={isPCChecked}
-                          onChange={(e) => setIsPCChecked(!isPCChecked)}
+                          onClick={(e) => setIsPCChecked(!isPCChecked)}
                         />
                         <label
                           className="form-check-label"
@@ -1054,7 +1054,7 @@ const Customize = () => {
                           id="defaultCheck2"
                           value=""
                           checked={isTabletChecked}
-                          onChange={(e) => setIsTabletChecked(!isTabletChecked)}
+                          onClick={(e) => setIsTabletChecked(!isTabletChecked)}
                         />
                         <label
                           className="form-check-label"
@@ -1072,7 +1072,7 @@ const Customize = () => {
                           id="defaultCheck2"
                           value=""
                           checked={isMobileChecked}
-                          onChange={(e) => setIsMobileChecked(!isMobileChecked)}
+                          onClick={(e) => setIsMobileChecked(!isMobileChecked)}
                         />
                         <label
                           className="form-check-label"
