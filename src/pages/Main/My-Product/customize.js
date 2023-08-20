@@ -1141,8 +1141,8 @@ const Customize = () => {
                 {iconInput === "upload" && previewUploadedIcon ? (
                   <img
                     style={{
-                      width: "100%",
-                      height: "100%",
+                      width: 35,
+                      height: 35,
                     }}
                     src={previewUploadedIcon}
                   />
