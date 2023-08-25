@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Row, Col, Card, CardTitle, CardBody, CardSubtitle } from "reactstrap";
+import { useParams } from "react-router-dom";
 import "./datatables.scss";
 
 import ReactEcharts from "echarts-for-react";
@@ -7,8 +8,47 @@ import ReactEcharts from "echarts-for-react";
 import CountUp from "react-countup";
 import ReactApexChart from "react-apexcharts";
 import { MDBDataTable } from "mdbreact";
+import axios from "axios";
 
 const Stats = () => {
+  const { id, productId } = useParams();
+
+  const [directs, setDirects] = useState([]);
+  const [searchEngines, setSearchEngines] = useState([]);
+  const [socialMedias, setSocialMedias] = useState([]);
+  const [others, setOthers] = useState([]);
+
+  const getStatsByDate = async () => {
+    try {
+      const headers = {
+        Authorization: localStorage.getItem("accessToken"),
+      };
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}/api/v1/user/my-products/${id}/stats/${productId}`,
+        { headers }
+      );
+      const data = response.data.data;
+      if (data.Direct) {
+        setDirects(data.Direct);
+      }
+      if (data.searchEngine) {
+        setSearchEngines(data.SearchEngines);
+      }
+      if (data.socialMedia) {
+        setSocialMedias(data.SocialMedia);
+      }
+      if (data.others) {
+        setOthers(data.Others);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getStatsByDate();
+  }, []);
+
   const series1 = [
     {
       data: [25, 66, 41, 89, 63, 25, 44, 20, 36, 40, 54],
@@ -59,8 +99,12 @@ const Stats = () => {
     {
       id: 1,
       icon: "mdi mdi-arrow-up-bold",
-      title: "Sessions",
-      value: 200,
+      title: "All Sessions",
+      value:
+        directs.length +
+        searchEngines.length +
+        socialMedias.length +
+        others.length,
       prefix: "",
       suffix: "",
       badgeValue: "2.65%",
