@@ -25,7 +25,7 @@
 }
 
 body {
-  * {
+  * :not(i) {
     font-family: Iconic, sans-serif !important;
     outline: none;
   }
