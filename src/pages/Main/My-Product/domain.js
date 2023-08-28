@@ -298,7 +298,7 @@ const Domain = () => {
                         value={domain.url}
                       />
                       <a
-                        href={domain.url}
+                        href={"https://" + domain.url}
                         target="_blank"
                         className="btn btn-info"
                       >
