@@ -1,7 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { Row, Col, Card, CardTitle, CardBody, CardSubtitle } from "reactstrap";
+import {
+  Row,
+  Col,
+  Card,
+  CardTitle,
+  CardBody,
+  CardSubtitle,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
+  Dropdown,
+} from "reactstrap";
 import { useParams } from "react-router-dom";
 import "./datatables.scss";
+import moment from "moment";
 
 import ReactEcharts from "echarts-for-react";
 
@@ -11,12 +23,36 @@ import { MDBDataTable } from "mdbreact";
 import axios from "axios";
 
 const Stats = () => {
-  const { id, productId } = useParams();
+  const periods = [
+    { title: "Today", range: 0 },
+    { title: "7 Days", range: 6 },
+    { title: "30 Days", range: 29 },
+    {
+      title: "90 Days",
+      range: 89,
+    },
+    {
+      title: "Custom",
+      range: 0,
+    },
+  ];
 
-  const [directs, setDirects] = useState([]);
-  const [searchEngines, setSearchEngines] = useState([]);
-  const [socialMedias, setSocialMedias] = useState([]);
-  const [others, setOthers] = useState([]);
+  const { id, productId } = useParams();
+  const [isLoading, setIsLoading] = useState(true);
+  const [stats, setStats] = useState(null);
+  const [startDate, setStartDate] = useState(moment().format("YYYY-MM-DD"));
+  const [endDate, setEndDate] = useState(moment().format("YYYY-MM-DD"));
+  const [singlebtn, setSinglebtn] = useState(false);
+  const [activePeriod, setActivePeriod] = useState("Today");
+
+  const selectActivePeriod = (period) => {
+    setActivePeriod(period.title);
+    setEndDate(moment().format("YYYY-MM-DD"));
+    setStartDate(
+      moment().subtract(parseInt(period.range), "days").format("YYYY-MM-DD")
+    );
+    setIsLoading(true);
+  };
 
   const getStatsByDate = async () => {
     try {
@@ -24,22 +60,13 @@ const Stats = () => {
         Authorization: localStorage.getItem("accessToken"),
       };
       const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/api/v1/user/my-products/${id}/stats/${productId}`,
+        `${process.env.REACT_APP_API_URL}/api/v1/user/my-products/${id}/stats/${productId}?startDate=${startDate}&endDate=${endDate}&period=${activePeriod}`,
         { headers }
       );
       const data = response.data.data;
-      if (data.Direct) {
-        setDirects(data.Direct);
-      }
-      if (data.searchEngine) {
-        setSearchEngines(data.SearchEngines);
-      }
-      if (data.socialMedia) {
-        setSocialMedias(data.SocialMedia);
-      }
-      if (data.others) {
-        setOthers(data.Others);
-      }
+      setStats(response.data.data);
+      setIsLoading(false);
+      console.log(data);
     } catch (error) {
       console.log(error);
     }
@@ -47,7 +74,7 @@ const Stats = () => {
 
   useEffect(() => {
     getStatsByDate();
-  }, []);
+  }, [isLoading, startDate, endDate]);
 
   const series1 = [
     {
@@ -100,11 +127,7 @@ const Stats = () => {
       id: 1,
       icon: "mdi mdi-arrow-up-bold",
       title: "All Sessions",
-      value:
-        directs.length +
-        searchEngines.length +
-        socialMedias.length +
-        others.length,
+      value: stats ? stats.sessionCount : 0,
       prefix: "",
       suffix: "",
       badgeValue: "2.65%",
@@ -120,8 +143,8 @@ const Stats = () => {
     {
       id: 2,
       icon: "mdi mdi-arrow-down-bold",
-      title: "Conversions",
-      value: 150,
+      title: "Total Users",
+      value: stats ? stats.totalUserCount : 0,
       prefix: "",
       suffix: "",
       badgeValue: "4%",
@@ -137,8 +160,8 @@ const Stats = () => {
     {
       id: 3,
       icon: "mdi mdi-arrow-down-bold",
-      title: "Conversions",
-      value: 150,
+      title: "Total Conversions",
+      value: stats ? stats.conversionCount : 0,
       prefix: "",
       suffix: "",
       badgeValue: "4%",
@@ -154,12 +177,12 @@ const Stats = () => {
     {
       id: 4,
       icon: "mdi mdi-arrow-down-bold",
-      title: "Conversions",
-      value: 150,
+      title: "Conversion Rate",
+      value: stats ? stats.conversionRate : 0,
       prefix: "",
       suffix: "",
       badgeValue: "4%",
-      decimal: 0,
+      decimal: 2,
       charttype: "bar",
       chartheight: 40,
       chartwidth: 70,
@@ -226,24 +249,6 @@ const Stats = () => {
         facebook: 50,
       },
       {
-        source: "Organic Search",
-        session: 30,
-        line: 40,
-        mobile: 50,
-        email: 100,
-        leadFrom: 30,
-        facebook: 50,
-      },
-      {
-        source: "Paid Search",
-        session: 30,
-        line: 40,
-        mobile: 50,
-        email: 100,
-        leadFrom: 30,
-        facebook: 50,
-      },
-      {
         source: "Social Media",
         session: 30,
         line: 40,
@@ -275,7 +280,7 @@ const Stats = () => {
     legend: {
       orient: "vertical",
       x: "left",
-      data: ["Direct", "Organic Search", "Paid Search", "Social Media"],
+      data: ["Direct", "Search Engine", "Social Media", "Others"],
       textStyle: {
         color: ["#74788d"],
       },
@@ -306,29 +311,53 @@ const Stats = () => {
           },
         },
         data: [
-          { value: 335, name: "Direct" },
-          { value: 310, name: "Organic Search" },
-          { value: 234, name: "Paid Search" },
-          { value: 135, name: "Social Media" },
+          {
+            value:
+              !isLoading && stats.sourceTypes.direct
+                ? stats.sourceTypes.direct.length
+                : 0,
+            name: "Direct",
+          },
+          {
+            value:
+              !isLoading && stats.sourceTypes.search_engine
+                ? stats.sourceTypes.search_engine.length
+                : 0,
+            name: "Search Engine",
+          },
+          {
+            value:
+              !isLoading && stats.sourceTypes.social_media
+                ? stats.sourceTypes.social_media.length
+                : 0,
+            name: "Social Media",
+          },
+          {
+            value:
+              !isLoading && stats.sourceTypes.others
+                ? stats.sourceTypes.others.length
+                : 0,
+            name: "Others",
+          },
         ],
       },
     ],
   };
   const series = [
     {
-      name: "Percentage",
+      name: "Conversion",
       type: "column",
-      data: [30, 40, 50, 20, 25, 60, 70],
+      data: !isLoading ? stats.graphData.conversions : [],
     },
     {
       name: "Sessions",
-      type: "area",
-      data: [100, 120, 130, 150, 125, 180, 200],
+      type: "line",
+      data: !isLoading ? stats.graphData.sessions : [],
     },
     {
-      name: "Conversions",
+      name: "Total User",
       type: "line",
-      data: [30, 48, 65, 30, 31, 120, 140],
+      data: !isLoading ? stats.graphData.users : [],
     },
   ];
 
@@ -340,7 +369,7 @@ const Stats = () => {
       },
     },
     stroke: {
-      width: [0, 2, 4],
+      width: [0, 4, 4],
       curve: "smooth",
     },
     plotOptions: {
@@ -348,10 +377,10 @@ const Stats = () => {
         columnWidth: "30%",
       },
     },
-    colors: ["#5b73e8", "#dfe2e6", "#f1b44c"],
+    colors: ["#5b73e8", "#ec4561", "#f1b44c"],
 
     fill: {
-      opacity: [0.85, 0.25, 1],
+      opacity: [1, 0.8, 0.8],
       gradient: {
         inverseColors: !1,
         shade: "light",
@@ -361,15 +390,7 @@ const Stats = () => {
         stops: [0, 100, 100, 100],
       },
     },
-    labels: [
-      "01/01/2003",
-      "02/01/2003",
-      "03/01/2003",
-      "04/01/2003",
-      "05/01/2003",
-      "06/01/2003",
-      "07/01/2003",
-    ],
+    labels: !isLoading ? stats.graphData.labels : [],
     markers: {
       size: 0,
     },
@@ -401,47 +422,115 @@ const Stats = () => {
 
   return (
     <>
+      <Row className="mb-4">
+        <Col md={12}>
+          <div className="d-flex align-items-center justify-content-between">
+            <div className="d-flex flex-column align-items-center justify-content-center">
+              <h5>Websites</h5>
+              <div className="d-flex align-items-center gap-3">
+                <button className="d-flex align-items-center justify-content-center px-4 py-2 btn btn-outline-primary">
+                  Test
+                </button>
+              </div>
+            </div>
+            <div className="d-flex align-items-center gap-4">
+              <div>
+                <label htmlFor="example-date-input" className="col-form-label">
+                  Start Date
+                </label>
+                <input
+                  disabled={activePeriod !== "Custom"}
+                  className="form-control"
+                  type="date"
+                  value={startDate}
+                  onChange={(e) => setStartDate(e.target.value)}
+                  id="example-date-input"
+                  max={moment().format("YYYY-MM-DD")}
+                />
+              </div>
+              <div>
+                <label htmlFor="example-date-input" className="col-form-label">
+                  End Date
+                </label>
+                <input
+                  disabled={activePeriod !== "Custom"}
+                  className="form-control"
+                  type="date"
+                  value={endDate}
+                  onChange={(e) => setEndDate(e.target.value)}
+                  id="example-date-input"
+                  max={moment().format("YYYY-MM-DD")}
+                />
+              </div>
+              <div>
+                <label className="col-form-label">Duration</label>
+                <Dropdown
+                  isOpen={singlebtn}
+                  toggle={() => setSinglebtn(!singlebtn)}
+                >
+                  <DropdownToggle
+                    tag="button"
+                    className="btn btn-info d-flex gap-2 align-items-center"
+                    caret
+                  >
+                    {activePeriod}
+                    <i className="mdi mdi-chevron-down" />
+                  </DropdownToggle>
+                  <DropdownMenu>
+                    {periods.map((period) => {
+                      return (
+                        <DropdownItem
+                          key={period.title}
+                          onClick={() => selectActivePeriod(period)}
+                        >
+                          {period.title}
+                        </DropdownItem>
+                      );
+                    })}
+                  </DropdownMenu>
+                </Dropdown>
+              </div>
+              <div className="d-flex flex-column">
+                <label className="col-form-label">Export</label>
+                <div className="d-flex gap-2">
+                  <button className="btn btn-danger" type="button">
+                    PDF
+                  </button>
+                  <button className="btn btn-success" type="button">
+                    Excel
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </Col>
+      </Row>
       <Row>
-        {reports.map((report, index) => {
-          return (
-            <Col md={6} xl={3} key={index}>
-              <Card>
-                <CardBody>
-                  <div className="float-end mt-2">
-                    <ReactApexChart
-                      options={report.options}
-                      series={report.series}
-                      type={report.charttype}
-                      height={report.chartheight}
-                      width={report.chartwidth}
-                    />
-                  </div>
-                  <div>
-                    <h4 className="mb-1 mt-1">
-                      <span>
-                        <CountUp
-                          end={report.value}
-                          separator=","
-                          prefix={report.prefix}
-                          suffix={report.suffix}
-                          decimals={report.decimal}
-                        />
-                      </span>
-                    </h4>
-                    <p className="text-muted mb-0">{report.title}</p>
-                  </div>
-                  <p className="text-muted mt-3 mb-0">
-                    <span className={"text-" + report.color + " me-1"}>
-                      <i className={report.icon + " me-1"}></i>
-                      {report.badgeValue}
-                    </span>{" "}
-                    {report.desc}
-                  </p>
-                </CardBody>
-              </Card>
-            </Col>
-          );
-        })}
+        {!isLoading &&
+          reports.map((report, index) => {
+            return (
+              <Col md={6} xl={3} key={index}>
+                <Card>
+                  <CardBody>
+                      <div>
+                        <h4 className="mb-1 mt-1">
+                          <span>
+                            <CountUp
+                              end={report.value}
+                              separator=","
+                              prefix={report.prefix}
+                              suffix={report.suffix}
+                              decimals={report.decimal}
+                            />
+                          </span>
+                        </h4>
+                        <p className="text-muted mb-0">{report.title}</p>
+                      </div>
+                  </CardBody>
+                </Card>
+              </Col>
+            );
+          })}
       </Row>
       <Row>
         <Col className="pb-4" md={6}>
@@ -453,7 +542,21 @@ const Stats = () => {
                   <li className="list-inline-item chart-border-left me-0 border-0">
                     <h3 className="text-primary">
                       <span>
-                        <CountUp end={200} separator="," prefix="" />
+                        <CountUp
+                          end={!isLoading ? stats.sessionCount : 0}
+                          separator=","
+                          prefix=""
+                        />
+                      </span>
+                      <span className="text-muted d-inline-block font-size-15 ms-3">
+                        Sessions
+                      </span>
+                    </h3>
+                  </li>{" "}
+                  <li className="list-inline-item chart-border-left me-0">
+                    <h3>
+                      <span data-plugin="counterup">
+                        <CountUp end={!isLoading ? stats.totalUserCount : 0} />
                       </span>
                       <span className="text-muted d-inline-block font-size-15 ms-3">
                         Users
@@ -463,20 +566,10 @@ const Stats = () => {
                   <li className="list-inline-item chart-border-left me-0">
                     <h3>
                       <span data-plugin="counterup">
-                        <CountUp end={120} />
+                        <CountUp end={!isLoading ? stats.conversionCount : 0} />
                       </span>
                       <span className="text-muted d-inline-block font-size-15 ms-3">
                         Conversions
-                      </span>
-                    </h3>
-                  </li>{" "}
-                  <li className="list-inline-item chart-border-left me-0">
-                    <h3>
-                      <span data-plugin="counterup">
-                        <CountUp end={60} decimals={1} suffix="%" />
-                      </span>
-                      <span className="text-muted d-inline-block font-size-15 ms-3">
-                        Conversions Ratio
                       </span>
                     </h3>
                   </li>
@@ -484,13 +577,15 @@ const Stats = () => {
               </div>
 
               <div className="mt-3">
-                <ReactApexChart
-                  options={options}
-                  series={series}
-                  height="339"
-                  type="line"
-                  className="apex-charts"
-                />
+                {!isLoading && (
+                  <ReactApexChart
+                    options={options}
+                    series={series}
+                    height="339"
+                    type="line"
+                    className="apex-charts"
+                  />
+                )}
               </div>
             </CardBody>
           </Card>
@@ -499,10 +594,12 @@ const Stats = () => {
           <Card className="h-100">
             <CardBody>
               <CardTitle className="mb-4 h4">Sessions</CardTitle>
-              <ReactEcharts
-                style={{ height: "400px" }}
-                option={doughnutOption}
-              />
+              {!isLoading && (
+                <ReactEcharts
+                  style={{ height: "400px" }}
+                  option={doughnutOption}
+                />
+              )}
             </CardBody>
           </Card>
         </Col>
@@ -512,7 +609,7 @@ const Stats = () => {
           <Card>
             <CardBody>
               <CardSubtitle className="mb-3">
-                List of purchased products.
+                List of session statistic.
               </CardSubtitle>
 
               <MDBDataTable responsive bordered data={data} noBottomColumns />

@@ -3,10 +3,6 @@ import {
   Row,
   Col,
   Container,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
-  Dropdown,
   Nav,
   NavItem,
   NavLink,
@@ -30,7 +26,6 @@ const Manage = () => {
       setActiveTab(tab);
     }
   }
-  const [singlebtn, setSinglebtn] = useState(false);
 
   return (
     <React.Fragment>
@@ -126,72 +121,6 @@ const Manage = () => {
             <Col className="col-12">
               <div className="page-title-box d-flex align-items-center justify-content-between">
                 <h4 className="mb-0">{activeTab}</h4>
-
-                {activeTab === "Statistic" && (
-                  <div className="page-title-right d-flex align-items-center gap-4">
-                    <div>
-                      <label
-                        htmlFor="example-date-input"
-                        className="col-form-label"
-                      >
-                        Start Date
-                      </label>
-                      <input
-                        className="form-control"
-                        type="date"
-                        defaultValue="2019-08-19"
-                        id="example-date-input"
-                      />
-                    </div>
-                    <div>
-                      <label
-                        htmlFor="example-date-input"
-                        className="col-form-label"
-                      >
-                        End Date
-                      </label>
-                      <input
-                        className="form-control"
-                        type="date"
-                        defaultValue="2019-08-19"
-                        id="example-date-input"
-                      />
-                    </div>
-                    <div>
-                      <label className="col-form-label">Duration</label>
-                      <Dropdown
-                        isOpen={singlebtn}
-                        toggle={() => setSinglebtn(!singlebtn)}
-                      >
-                        <DropdownToggle
-                          tag="button"
-                          className="btn btn-info"
-                          caret
-                        >
-                          Duration <i className="mdi mdi-chevron-down" />
-                        </DropdownToggle>
-                        <DropdownMenu>
-                          <DropdownItem>Today</DropdownItem>
-                          <DropdownItem>This Week</DropdownItem>
-                          <DropdownItem>This Month</DropdownItem>
-                          <DropdownItem>This Year</DropdownItem>
-                          <DropdownItem>All Time</DropdownItem>
-                        </DropdownMenu>
-                      </Dropdown>
-                    </div>
-                    <div className="d-flex flex-column">
-                      <label className="col-form-label">Export</label>
-                      <div className="d-flex gap-2">
-                        <button className="btn btn-danger" type="button">
-                          PDF
-                        </button>
-                        <button className="btn btn-success" type="button">
-                          Excel
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                )}
               </div>
             </Col>
           </Row>
