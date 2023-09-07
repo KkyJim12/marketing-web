@@ -44,6 +44,8 @@ const Stats = () => {
   const [endDate, setEndDate] = useState(moment().format("YYYY-MM-DD"));
   const [singlebtn, setSinglebtn] = useState(false);
   const [activePeriod, setActivePeriod] = useState("Today");
+  const [websites, setWebsites] = useState([]);
+  const [activeWebsite, setActiveWebsite] = useState("All");
 
   const selectActivePeriod = (period) => {
     setActivePeriod(period.title);
@@ -60,7 +62,7 @@ const Stats = () => {
         Authorization: localStorage.getItem("accessToken"),
       };
       const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/api/v1/user/my-products/${id}/stats/${productId}?startDate=${startDate}&endDate=${endDate}&period=${activePeriod}`,
+        `${process.env.REACT_APP_API_URL}/api/v1/user/my-products/${id}/stats/${productId}?startDate=${startDate}&endDate=${endDate}&period=${activePeriod}&activeWebsite=${activeWebsite}`,
         { headers }
       );
       const data = response.data.data;
@@ -72,9 +74,28 @@ const Stats = () => {
     }
   };
 
+  const getWebsites = async () => {
+    try {
+      const headers = {
+        Authorization: localStorage.getItem("accessToken"),
+      };
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}/api/v1/user/my-products/${id}/websites/${productId}?startDate=${startDate}&endDate=${endDate}&activeWebsite=${activeWebsite}`,
+        { headers }
+      );
+      setWebsites(response.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getWebsites();
+  }, [startDate, endDate]);
+
   useEffect(() => {
     getStatsByDate();
-  }, [isLoading, startDate, endDate]);
+  }, [isLoading, startDate, endDate, activeWebsite]);
 
   const series1 = [
     {
@@ -425,12 +446,35 @@ const Stats = () => {
       <Row className="mb-4">
         <Col md={12}>
           <div className="d-flex align-items-center justify-content-between">
-            <div className="d-flex flex-column align-items-center justify-content-center">
+            <div className="d-flex flex-column justify-content-center">
               <h5>Websites</h5>
               <div className="d-flex align-items-center gap-3">
-                <button className="d-flex align-items-center justify-content-center px-4 py-2 btn btn-outline-primary">
-                  Test
+                <button
+                  onClick={() => setActiveWebsite("All")}
+                  className={
+                    activeWebsite === "All"
+                      ? "d-flex align-items-center justify-content-center px-4 py-2 btn btn-primary"
+                      : "d-flex align-items-center justify-content-center px-4 py-2 btn btn-outline-primary"
+                  }
+                >
+                  All
                 </button>
+                {websites &&
+                  websites.map((website) => {
+                    return (
+                      <button
+                        key={website}
+                        onClick={() => setActiveWebsite(website)}
+                        className={
+                          activeWebsite === website
+                            ? "d-flex align-items-center justify-content-center px-4 py-2 btn btn-primary"
+                            : "d-flex align-items-center justify-content-center px-4 py-2 btn btn-outline-primary"
+                        }
+                      >
+                        {website}
+                      </button>
+                    );
+                  })}
               </div>
             </div>
             <div className="d-flex align-items-center gap-4">
@@ -512,20 +556,20 @@ const Stats = () => {
               <Col md={6} xl={3} key={index}>
                 <Card>
                   <CardBody>
-                      <div>
-                        <h4 className="mb-1 mt-1">
-                          <span>
-                            <CountUp
-                              end={report.value}
-                              separator=","
-                              prefix={report.prefix}
-                              suffix={report.suffix}
-                              decimals={report.decimal}
-                            />
-                          </span>
-                        </h4>
-                        <p className="text-muted mb-0">{report.title}</p>
-                      </div>
+                    <div>
+                      <h4 className="mb-1 mt-1">
+                        <span>
+                          <CountUp
+                            end={report.value}
+                            separator=","
+                            prefix={report.prefix}
+                            suffix={report.suffix}
+                            decimals={report.decimal}
+                          />
+                        </span>
+                      </h4>
+                      <p className="text-muted mb-0">{report.title}</p>
+                    </div>
                   </CardBody>
                 </Card>
               </Col>
