@@ -66,9 +66,35 @@ const Stats = () => {
         { headers }
       );
       const data = response.data.data;
-      setStats(response.data.data);
-      setIsLoading(false);
+
+      // Bind empty table fields
+      const allFields = [];
+
+      for (let i = 0; i < data.tableContents.length; i++) {
+        for (const [key, value] of Object.entries(data.tableContents[i])) {
+          if (
+            key !== "sessions" &&
+            key !== "conversions" &&
+            key !== "source" &&
+            !allFields.includes(key)
+          ) {
+            allFields.push(key);
+          }
+        }
+      }
+
+      for (let j = 0; j < allFields.length; j++) {
+        for (let k = 0; k < data.tableContents.length; k++) {
+          if (!data.tableContents[k][allFields[j]]) {
+            data.tableContents[k][allFields[j]] = 0;
+          }
+        }
+      }
+
       console.log(data);
+
+      setStats(data);
+      setIsLoading(false);
     } catch (error) {
       console.log(error);
     }
@@ -215,79 +241,18 @@ const Stats = () => {
   ];
 
   const data = {
-    columns: [
-      {
-        label: "Source",
-        field: "source",
-        sort: "asc",
-        width: 150,
-      },
-      {
-        label: "Sessions",
-        field: "session",
-        sort: "asc",
-        width: 270,
-      },
-      {
-        label: "Line",
-        field: "line",
-        sort: "asc",
-        width: 270,
-      },
-      {
-        label: "Mobile",
-        field: "mobile",
-        sort: "asc",
-        width: 270,
-      },
-      {
-        label: "Email",
-        field: "email",
-        sort: "asc",
-        width: 270,
-      },
-      {
-        label: "Lead From",
-        field: "leadFrom",
-        sort: "asc",
-        width: 270,
-      },
-      {
-        label: "Facebook",
-        field: "facebook",
-        sort: "asc",
-        width: 270,
-      },
-    ],
-    rows: [
-      {
-        source: "Direct",
-        session: 30,
-        line: 40,
-        mobile: 50,
-        email: 100,
-        leadFrom: 30,
-        facebook: 50,
-      },
-      {
-        source: "Social Media",
-        session: 30,
-        line: 40,
-        mobile: 50,
-        email: 100,
-        leadFrom: 30,
-        facebook: 50,
-      },
-      {
-        source: "Total",
-        session: 30,
-        line: 40,
-        mobile: 50,
-        email: 100,
-        leadFrom: 30,
-        facebook: 50,
-      },
-    ],
+    columns: !isLoading
+      ? [
+          {
+            label: "Source",
+            field: "source",
+            sort: "asc",
+            width: 150,
+          },
+          ...stats.tableHeaders,
+        ]
+      : [],
+    rows: !isLoading ? stats.tableContents : [],
   };
 
   const doughnutOption = {
@@ -653,7 +618,7 @@ const Stats = () => {
           <Card>
             <CardBody>
               <CardSubtitle className="mb-3">
-                List of session statistic.
+                List of session statistic by sources.
               </CardSubtitle>
 
               <MDBDataTable responsive bordered data={data} noBottomColumns />
