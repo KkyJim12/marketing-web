@@ -21,6 +21,10 @@ import CountUp from "react-countup";
 import ReactApexChart from "react-apexcharts";
 import { MDBDataTable } from "mdbreact";
 import axios from "axios";
+import { PDFViewer } from "@react-pdf/renderer";
+import ReactDOM from "react-dom";
+
+import { Page, Text, View, Document, StyleSheet } from "@react-pdf/renderer";
 
 const Stats = () => {
   const periods = [
@@ -54,6 +58,114 @@ const Stats = () => {
       moment().subtract(parseInt(period.range), "days").format("YYYY-MM-DD")
     );
     setIsLoading(true);
+  };
+
+  const MyDocument = () => (
+    <>
+      <Document>
+        <Page
+          size="A4"
+          style={{
+            flexDirection: "column",
+            backgroundColor: "#E4E4E4",
+            padding: 10,
+            gap: 20,
+          }}
+        >
+          <View style={{ display: "flex" }}>
+            <Text style={{ fontSize: 12, marginBottom: 5 }}>
+              Date:
+              {" " + moment(startDate).format("DD/MM/YYYY")}-
+              {moment(endDate).format("DD/MM/YYYY")}
+            </Text>
+
+            <Text style={{ fontSize: 12 }}>Domain: {activeWebsite}</Text>
+          </View>
+          <View style={{ display: "flex", flexDirection: "row", gap: 10 }}>
+            <div
+              style={{
+                backgroundColor: "white",
+                width: "25%",
+                height: 60,
+                borderRadius: 5,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                boxShadow:
+                  "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
+              }}
+            >
+              <Text style={{ fontSize: 12 }}>
+                All Sessions: {stats.sessionCount}
+              </Text>
+            </div>
+            <div
+              style={{
+                backgroundColor: "white",
+                width: "25%",
+                height: 60,
+                borderRadius: 5,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                boxShadow:
+                  "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
+              }}
+            >
+              <Text style={{ fontSize: 12 }}>
+                Total User: {stats.totalUserCount}
+              </Text>
+            </div>
+            <div
+              style={{
+                backgroundColor: "white",
+                width: "25%",
+                height: 60,
+                borderRadius: 5,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                boxShadow:
+                  "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
+              }}
+            >
+              <Text style={{ fontSize: 12 }}>
+                Total Conversion: {stats.conversionCount}
+              </Text>
+            </div>
+            <div
+              style={{
+                backgroundColor: "white",
+                width: "25%",
+                height: 60,
+                borderRadius: 5,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                boxShadow:
+                  "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
+              }}
+            >
+              <Text style={{ fontSize: 12 }}>
+                Conversion Rate: {stats.conversionRate}
+              </Text>
+            </div>
+          </View>
+        </Page>
+      </Document>
+    </>
+  );
+
+  const App = () => (
+    <>
+      <PDFViewer style={{ width: "100vw", height: "100vh" }}>
+        <MyDocument />
+      </PDFViewer>
+    </>
+  );
+
+  const exportPDF = () => {
+    ReactDOM.render(<App />, document.getElementById("root"));
   };
 
   const getStatsByDate = async () => {
@@ -502,7 +614,11 @@ const Stats = () => {
               <div className="d-flex flex-column">
                 <label className="col-form-label">Export</label>
                 <div className="d-flex gap-2">
-                  <button className="btn btn-danger" type="button">
+                  <button
+                    onClick={exportPDF}
+                    className="btn btn-danger"
+                    type="button"
+                  >
                     PDF
                   </button>
                   <button className="btn btn-success" type="button">

@@ -30,7 +30,10 @@ const userRoutes = [
 const authRoutes = [
   { path: "/login", component: <Login /> },
   { path: "/forgot-password", component: <ForgetPwd /> },
-  { path: "/floating-action-button/:id/:productId", component: <FloatingActionButton /> },
+  {
+    path: "/floating-action-button/:id/:productId",
+    component: <FloatingActionButton />,
+  },
 ];
 
 export { userRoutes, authRoutes };
