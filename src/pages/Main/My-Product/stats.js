@@ -297,8 +297,10 @@ const Stats = () => {
         avoidLabelOverlap: false,
         label: {
           normal: {
-            show: false,
-            position: "center",
+            show: true,
+            position: "inner",
+            alignTo: "none",
+            bleedMargin: 5,
           },
           emphasis: {
             show: true,
@@ -318,28 +320,28 @@ const Stats = () => {
             value:
               !isLoading && stats.sourceTypes.direct
                 ? stats.sourceTypes.direct.length
-                : 0,
+                : null,
             name: "Direct",
           },
           {
             value:
               !isLoading && stats.sourceTypes.search_engine
                 ? stats.sourceTypes.search_engine.length
-                : 0,
+                : null,
             name: "Search Engine",
           },
           {
             value:
               !isLoading && stats.sourceTypes.social_media
                 ? stats.sourceTypes.social_media.length
-                : 0,
+                : null,
             name: "Social Media",
           },
           {
             value:
               !isLoading && stats.sourceTypes.others
                 ? stats.sourceTypes.others.length
-                : 0,
+                : null,
             name: "Others",
           },
         ],
@@ -449,14 +451,30 @@ const Stats = () => {
               gap: 40,
             }}
           >
-            <View style={{ display: "flex" }}>
-              <Text style={{ fontSize: 12, marginBottom: 5 }}>
-                Date:
-                {" " + moment(startDate).format("DD/MM/YYYY")}-
-                {moment(endDate).format("DD/MM/YYYY")}
-              </Text>
+            <View
+              style={{
+                display: "flex",
+                flexDirection: "row",
+              }}
+            >
+              <Text style={{ fontSize: 20 }}>Statistic Report</Text>
+              <View
+                style={{
+                  marginLeft: "auto",
+                }}
+              >
+                <Text
+                  style={{ marginLeft: "auto", fontSize: 12, marginBottom: 5 }}
+                >
+                  Date:
+                  {" " + moment(startDate).format("DD/MM/YYYY")}-
+                  {moment(endDate).format("DD/MM/YYYY")}
+                </Text>
 
-              <Text style={{ fontSize: 12 }}>Domain: {activeWebsite}</Text>
+                <Text style={{ marginLeft: "auto", fontSize: 12 }}>
+                  Domain: {activeWebsite}
+                </Text>
+              </View>
             </View>
             <View style={{ display: "flex", flexDirection: "row", gap: 10 }}>
               <div
@@ -529,26 +547,30 @@ const Stats = () => {
               </div>
             </View>
             <View>
-              <Text style={{ fontSize: 12 }}>Sessions Stats Chart</Text>
+              <Text style={{ fontSize: 12, marginBottom: 40 }}>
+                Sessions Stats Chart
+              </Text>
               <div
                 style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  width: "100%",
-                  height: 300,
+                  marginLeft: "auto",
+                  marginRight: "auto",
+                  width: "80%",
+                  height: 250,
                 }}
               >
                 <Image src={sessionChart}></Image>
               </div>
             </View>
             <View>
-              <Text style={{ fontSize: 12 }}>Sessions Source Type Stats</Text>
+              <Text style={{ fontSize: 12, marginBottom: 40 }}>
+                Sessions Source Type Stats
+              </Text>
               <div
                 style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  width: "100%",
-                  height: 300,
+                  marginLeft: "auto",
+                  marginRight: "auto",
+                  width: "80%",
+                  height: 250,
                 }}
               >
                 <Image src={sourceTypesChart}></Image>
