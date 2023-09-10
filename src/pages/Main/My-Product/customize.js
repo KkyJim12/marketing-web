@@ -1365,6 +1365,7 @@ const Customize = () => {
                             alignItems: "center",
                             gap: 10,
                             borderTop: "1px solid rgb(229 231 235)",
+                            color: content.textColor,
                           }}
                           className="py-3 px-4"
                         >

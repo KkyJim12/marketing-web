@@ -106,7 +106,7 @@ const SubMenu = () => {
     setSelectedMenues(newSelectedMenues);
   };
 
-  const onDragBackgroundColor = (color, id) => {
+  const onDragTextColor = (color, id) => {
     let index;
     for (let i = 0; i < selectedMenues.length; i++) {
       if (selectedMenues[i].id === id) {
@@ -116,11 +116,11 @@ const SubMenu = () => {
     }
 
     const newSelectedMenues = [...selectedMenues];
-    newSelectedMenues[index].backgroundColor = color;
+    newSelectedMenues[index].textColor = color;
     setSelectedMenues(newSelectedMenues);
   };
 
-  const closeBackgroundColorPicker = (id) => {
+  const closeTextColorPicker = (id) => {
     let index;
     for (let i = 0; i < selectedMenues.length; i++) {
       if (selectedMenues[i].id === id) {
@@ -130,11 +130,11 @@ const SubMenu = () => {
     }
 
     const newSelectedMenues = [...selectedMenues];
-    newSelectedMenues[index].backgroundColorPickerEnable = false;
+    newSelectedMenues[index].textColorPickerEnable = false;
     setSelectedMenues(newSelectedMenues);
   };
 
-  const openBackgroundColorPicker = (id) => {
+  const openTextColorPicker = (id) => {
     let index;
     for (let i = 0; i < selectedMenues.length; i++) {
       if (selectedMenues[i].id === id) {
@@ -144,7 +144,7 @@ const SubMenu = () => {
     }
 
     const newSelectedMenues = [...selectedMenues];
-    newSelectedMenues[index].backgroundColorPickerEnable = true;
+    newSelectedMenues[index].textColorPickerEnable = true;
     setSelectedMenues(newSelectedMenues);
   };
 
@@ -168,12 +168,12 @@ const SubMenu = () => {
         ...selectedMenues,
         {
           id: thisMenu.id,
-          backgroundColor: thisMenu.backgroundColor,
+          textColor: thisMenu.textColor,
           icon: thisMenu.icon,
           textContent: thisMenu.textContent,
           description: thisMenu.description,
           destination: thisMenu.destination,
-          backgroundColorPickerEnable: false,
+          textColorPickerEnable: false,
         },
       ]);
     }
@@ -193,7 +193,7 @@ const SubMenu = () => {
   // Custom
   const [customMenues, setCustomMenues] = useState([]);
 
-  const onDragCustomBackgroundColor = (color, id) => {
+  const onDragCustomTextColor = (color, id) => {
     let index;
     for (let i = 0; i < customMenues.length; i++) {
       if (customMenues[i].id === id) {
@@ -203,11 +203,11 @@ const SubMenu = () => {
     }
 
     const newCustomMenues = [...customMenues];
-    newCustomMenues[index].backgroundColor = color;
+    newCustomMenues[index].textColor = color;
     setCustomMenues(newCustomMenues);
   };
 
-  const closeCustomBackgroundColorPicker = (id) => {
+  const closeCustomTextColorPicker = (id) => {
     let index;
     for (let i = 0; i < customMenues.length; i++) {
       if (customMenues[i].id === id) {
@@ -217,11 +217,11 @@ const SubMenu = () => {
     }
 
     const newCustomMenues = [...customMenues];
-    newCustomMenues[index].backgroundColorPickerEnable = false;
+    newCustomMenues[index].textColorPickerEnable = false;
     setCustomMenues(newCustomMenues);
   };
 
-  const openCustomBackgroundColorPicker = (id) => {
+  const openCustomTextColorPicker = (id) => {
     let index;
     for (let i = 0; i < customMenues.length; i++) {
       if (customMenues[i].id === id) {
@@ -231,7 +231,7 @@ const SubMenu = () => {
     }
 
     const newCustomMenues = [...customMenues];
-    newCustomMenues[index].backgroundColorPickerEnable = true;
+    newCustomMenues[index].textColorPickerEnable = true;
     setCustomMenues(newCustomMenues);
   };
 
@@ -239,12 +239,12 @@ const SubMenu = () => {
     const newCustomMenu = {
       id: uuidv4(),
       label: "Custom",
-      backgroundColor: "#3b82f6",
+      textColor: "#343a40",
       icon: "",
       textContent: "",
       description: "",
       destination: "",
-      backgroundColorPickerEnable: false,
+      textColorPickerEnable: false,
     };
     setCustomMenues([...customMenues, newCustomMenu]);
   };
@@ -310,22 +310,22 @@ const SubMenu = () => {
           if (existContents[i].prebuiltContentId) {
             newSelectedMenues.push({
               id: existContents[i].prebuiltContentId,
-              backgroundColor: existContents[i].backgroundColor,
+              textColor: existContents[i].textColor,
               icon: existContents[i].icon,
               textContent: existContents[i].textContent,
               description: existContents[i].description,
               destination: existContents[i].destination,
-              backgroundColorPickerEnable: false,
+              textColorPickerEnable: false,
             });
           } else {
             newCustomMenues.push({
               id: uuidv4(),
-              backgroundColor: existContents[i].backgroundColor,
+              textColor: existContents[i].textColor,
               icon: existContents[i].icon,
               textContent: existContents[i].textContent,
               description: existContents[i].description,
               destination: existContents[i].destination,
-              backgroundColorPickerEnable: false,
+              textColorPickerEnable: false,
               label: "Custom",
             });
           }
@@ -386,29 +386,27 @@ const SubMenu = () => {
                   <CardTitle>{selectedMenu.textContent}</CardTitle>
                   <Row>
                     <Col md={2}>
-                      <Label>Background color</Label>
+                      <Label>Text color</Label>
                       <div className="d-flex gap-2">
                         <Input
                           type="text"
                           className="colorpicker-default"
-                          value={selectedMenu.backgroundColor}
+                          value={selectedMenu.textColor}
                           readOnly
                         />
                         <div
-                          onClick={() =>
-                            openBackgroundColorPicker(selectedMenu.id)
-                          }
+                          onClick={() => openTextColorPicker(selectedMenu.id)}
                           className="btn"
                           style={{
-                            backgroundColor: selectedMenu.backgroundColor,
+                            backgroundColor: selectedMenu.textColor,
                             width: 40,
                             height: 40,
                           }}
                         ></div>
-                        {selectedMenu.backgroundColorPickerEnable ? (
+                        {selectedMenu.textColorPickerEnable ? (
                           <ClickAwayListener
                             onClickAway={() =>
-                              closeBackgroundColorPicker(selectedMenu.id)
+                              closeTextColorPicker(selectedMenu.id)
                             }
                           >
                             <>
@@ -421,9 +419,9 @@ const SubMenu = () => {
                                 }}
                                 saturationHeight={100}
                                 saturationWidth={100}
-                                value={selectedMenu.backgroundColor}
+                                value={selectedMenu.textColor}
                                 onDrag={(color) =>
-                                  onDragBackgroundColor(color, selectedMenu.id)
+                                  onDragTextColor(color, selectedMenu.id)
                                 }
                               />
                             </>
@@ -501,29 +499,29 @@ const SubMenu = () => {
                   </CardTitle>
                   <Row>
                     <Col md={2}>
-                      <Label>Background color</Label>
+                      <Label>Text color</Label>
                       <div className="d-flex gap-2">
                         <Input
                           type="text"
                           className="colorpicker-default"
-                          value={customMenu.backgroundColor}
+                          value={customMenu.textColor}
                           readOnly
                         />
                         <div
                           onClick={() =>
-                            openCustomBackgroundColorPicker(customMenu.id)
+                            openCustomTextColorPicker(customMenu.id)
                           }
                           className="btn"
                           style={{
-                            backgroundColor: customMenu.backgroundColor,
+                            backgroundColor: customMenu.textColor,
                             width: 40,
                             height: 40,
                           }}
                         ></div>
-                        {customMenu.backgroundColorPickerEnable ? (
+                        {customMenu.textColorPickerEnable ? (
                           <ClickAwayListener
                             onClickAway={() =>
-                              closeCustomBackgroundColorPicker(customMenu.id)
+                              closeCustomTextColorPicker(customMenu.id)
                             }
                           >
                             <>
@@ -536,12 +534,9 @@ const SubMenu = () => {
                                 }}
                                 saturationHeight={100}
                                 saturationWidth={100}
-                                value={customMenu.backgroundColor}
+                                value={customMenu.textColor}
                                 onDrag={(color) =>
-                                  onDragCustomBackgroundColor(
-                                    color,
-                                    customMenu.id
-                                  )
+                                  onDragCustomTextColor(color, customMenu.id)
                                 }
                               />
                             </>
