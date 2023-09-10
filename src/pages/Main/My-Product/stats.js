@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import html2canvas from "html2canvas";
 import {
   Row,
   Col,
@@ -24,7 +25,7 @@ import axios from "axios";
 import { PDFViewer } from "@react-pdf/renderer";
 import ReactDOM from "react-dom";
 
-import { Page, Text, View, Document, StyleSheet } from "@react-pdf/renderer";
+import { Page, Text, View, Document, Image } from "@react-pdf/renderer";
 
 const Stats = () => {
   const periods = [
@@ -58,114 +59,6 @@ const Stats = () => {
       moment().subtract(parseInt(period.range), "days").format("YYYY-MM-DD")
     );
     setIsLoading(true);
-  };
-
-  const MyDocument = () => (
-    <>
-      <Document>
-        <Page
-          size="A4"
-          style={{
-            flexDirection: "column",
-            backgroundColor: "#E4E4E4",
-            padding: 10,
-            gap: 20,
-          }}
-        >
-          <View style={{ display: "flex" }}>
-            <Text style={{ fontSize: 12, marginBottom: 5 }}>
-              Date:
-              {" " + moment(startDate).format("DD/MM/YYYY")}-
-              {moment(endDate).format("DD/MM/YYYY")}
-            </Text>
-
-            <Text style={{ fontSize: 12 }}>Domain: {activeWebsite}</Text>
-          </View>
-          <View style={{ display: "flex", flexDirection: "row", gap: 10 }}>
-            <div
-              style={{
-                backgroundColor: "white",
-                width: "25%",
-                height: 60,
-                borderRadius: 5,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                boxShadow:
-                  "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
-              }}
-            >
-              <Text style={{ fontSize: 12 }}>
-                All Sessions: {stats.sessionCount}
-              </Text>
-            </div>
-            <div
-              style={{
-                backgroundColor: "white",
-                width: "25%",
-                height: 60,
-                borderRadius: 5,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                boxShadow:
-                  "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
-              }}
-            >
-              <Text style={{ fontSize: 12 }}>
-                Total User: {stats.totalUserCount}
-              </Text>
-            </div>
-            <div
-              style={{
-                backgroundColor: "white",
-                width: "25%",
-                height: 60,
-                borderRadius: 5,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                boxShadow:
-                  "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
-              }}
-            >
-              <Text style={{ fontSize: 12 }}>
-                Total Conversion: {stats.conversionCount}
-              </Text>
-            </div>
-            <div
-              style={{
-                backgroundColor: "white",
-                width: "25%",
-                height: 60,
-                borderRadius: 5,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                boxShadow:
-                  "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
-              }}
-            >
-              <Text style={{ fontSize: 12 }}>
-                Conversion Rate: {stats.conversionRate}
-              </Text>
-            </div>
-          </View>
-        </Page>
-      </Document>
-    </>
-  );
-
-  const App = () => (
-    <>
-      <PDFViewer style={{ width: "100vw", height: "100vh" }}>
-        <MyDocument />
-      </PDFViewer>
-    </>
-  );
-
-  const exportPDF = () => {
-    ReactDOM.render(<App />, document.getElementById("root"));
   };
 
   const getStatsByDate = async () => {
@@ -222,6 +115,18 @@ const Stats = () => {
         { headers }
       );
       setWebsites(response.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const saveChartToImage = async (chartId) => {
+    try {
+      const element = document.getElementById(chartId);
+      const canvas = await html2canvas(element);
+      const imageBlob = canvas.toDataURL("image/png");
+
+      return imageBlob;
     } catch (error) {
       console.log(error);
     }
@@ -518,6 +423,151 @@ const Stats = () => {
     },
   };
 
+  let sessionChart;
+  let sourceTypesChart;
+  const exportPDF = async () => {
+    try {
+      sessionChart = await saveChartToImage("sessionChart");
+      sourceTypesChart = await saveChartToImage("sourceTypeChart");
+
+      ReactDOM.render(<App />, document.getElementById("root"));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const MyDocument = () => {
+    return (
+      <>
+        <Document>
+          <Page
+            size="A4"
+            style={{
+              flexDirection: "column",
+              backgroundColor: "#ffffff",
+              padding: 10,
+              gap: 40,
+            }}
+          >
+            <View style={{ display: "flex" }}>
+              <Text style={{ fontSize: 12, marginBottom: 5 }}>
+                Date:
+                {" " + moment(startDate).format("DD/MM/YYYY")}-
+                {moment(endDate).format("DD/MM/YYYY")}
+              </Text>
+
+              <Text style={{ fontSize: 12 }}>Domain: {activeWebsite}</Text>
+            </View>
+            <View style={{ display: "flex", flexDirection: "row", gap: 10 }}>
+              <div
+                style={{
+                  backgroundColor: "#f5f5f5",
+                  width: "25%",
+                  height: 60,
+                  borderRadius: 5,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  boxShadow:
+                    "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
+                }}
+              >
+                <Text style={{ fontSize: 12 }}>
+                  All Sessions: {stats.sessionCount}
+                </Text>
+              </div>
+              <div
+                style={{
+                  backgroundColor: "#f5f5f5",
+                  width: "25%",
+                  height: 60,
+                  borderRadius: 5,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  boxShadow:
+                    "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
+                }}
+              >
+                <Text style={{ fontSize: 12 }}>
+                  Total User: {stats.totalUserCount}
+                </Text>
+              </div>
+              <div
+                style={{
+                  backgroundColor: "#f5f5f5",
+                  width: "25%",
+                  height: 60,
+                  borderRadius: 5,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  boxShadow:
+                    "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
+                }}
+              >
+                <Text style={{ fontSize: 12 }}>
+                  Total Conversion: {stats.conversionCount}
+                </Text>
+              </div>
+              <div
+                style={{
+                  backgroundColor: "#f5f5f5",
+                  width: "25%",
+                  height: 60,
+                  borderRadius: 5,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  boxShadow:
+                    "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
+                }}
+              >
+                <Text style={{ fontSize: 12 }}>
+                  Conversion Rate: {stats.conversionRate}
+                </Text>
+              </div>
+            </View>
+            <View>
+              <Text style={{ fontSize: 12 }}>Sessions Stats Chart</Text>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  width: "100%",
+                  height: 300,
+                }}
+              >
+                <Image src={sessionChart}></Image>
+              </div>
+            </View>
+            <View>
+              <Text style={{ fontSize: 12 }}>Sessions Source Type Stats</Text>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  width: "100%",
+                  height: 300,
+                }}
+              >
+                <Image src={sourceTypesChart}></Image>
+              </div>
+            </View>
+          </Page>
+        </Document>
+      </>
+    );
+  };
+
+  const App = () => (
+    <>
+      <PDFViewer style={{ width: "100vw", height: "100vh" }}>
+        <MyDocument />
+      </PDFViewer>
+    </>
+  );
+
   return (
     <>
       <Row className="mb-4">
@@ -632,9 +682,9 @@ const Stats = () => {
       </Row>
       <Row>
         {!isLoading &&
-          reports.map((report, index) => {
+          reports.map((report) => {
             return (
-              <Col md={6} xl={3} key={index}>
+              <Col md={6} xl={3} key={report.id}>
                 <Card>
                   <CardBody>
                     <div>
@@ -704,6 +754,7 @@ const Stats = () => {
               <div className="mt-3">
                 {!isLoading && (
                   <ReactApexChart
+                    id="sessionChart"
                     options={options}
                     series={series}
                     height="339"
@@ -719,12 +770,14 @@ const Stats = () => {
           <Card className="h-100">
             <CardBody>
               <CardTitle className="mb-4 h4">Sessions</CardTitle>
-              {!isLoading && (
-                <ReactEcharts
-                  style={{ height: "400px" }}
-                  option={doughnutOption}
-                />
-              )}
+              <div id="sourceTypeChart">
+                {!isLoading && (
+                  <ReactEcharts
+                    style={{ height: "400px" }}
+                    option={doughnutOption}
+                  />
+                )}
+              </div>
             </CardBody>
           </Card>
         </Col>
