@@ -16,7 +16,6 @@ import axios from "axios";
 
 const Domain = () => {
   const { id, productId } = useParams();
-  const firstLine = `<script data-main="${process.env.REACT_APP_API_URL}/js/scripts/main.js" src="${process.env.REACT_APP_API_URL}/js/scripts/require.js"></script>`;
   const secondLine = `<script src='${process.env.REACT_APP_API_URL}/js/floating-action-button.js'></script>`;
   const thirdLine = `<script>generateButton("${id}")</script>`;
   const fourthLine = `<link rel="stylesheet" href="${process.env.REACT_APP_API_URL}/css/floating-action-button.css" />`;
@@ -122,8 +121,19 @@ const Domain = () => {
     <>
       <Card>
         <CardBody>
-          <CardTitle>Attached Script</CardTitle>
-          <Row>
+          <CardTitle>
+            <Row>
+              <Col md={11}>
+                <span>Attached Script</span>
+              </Col>
+              <Col md={1}>
+                <CopyToClipboard text={secondLine + thirdLine + fourthLine}>
+                  <button className="btn btn-primary w-100">Copy All</button>
+                </CopyToClipboard>
+              </Col>
+            </Row>
+          </CardTitle>
+          <Row className="mt-2">
             <Col md={11}>
               <div className="d-flex gap-2 align-items-center">
                 1.
@@ -134,13 +144,13 @@ const Domain = () => {
                   className="form-control"
                   rows="5"
                   style={{ resize: "none" }}
-                  value={firstLine}
+                  value={secondLine}
                 />
               </div>
             </Col>
             <Col className="d-flex gap-2" md={1}>
-              <CopyToClipboard text={firstLine}>
-                <button className="btn btn-primary">Copy</button>
+              <CopyToClipboard text={secondLine}>
+                <button className="btn btn-primary w-100">Copy</button>
               </CopyToClipboard>
             </Col>
           </Row>
@@ -155,34 +165,13 @@ const Domain = () => {
                   className="form-control"
                   rows="5"
                   style={{ resize: "none" }}
-                  value={secondLine}
-                />
-              </div>
-            </Col>
-            <Col className="d-flex gap-2" md={1}>
-              <CopyToClipboard text={secondLine}>
-                <button className="btn btn-primary">Copy</button>
-              </CopyToClipboard>
-            </Col>
-          </Row>
-          <Row className="mt-2">
-            <Col md={11}>
-              <div className="d-flex gap-2 align-items-center">
-                3.
-                <input
-                  type="text"
-                  readOnly
-                  placeholder="Attach Script Tag"
-                  className="form-control"
-                  rows="5"
-                  style={{ resize: "none" }}
                   value={thirdLine}
                 />
               </div>
             </Col>
             <Col className="d-flex gap-2" md={1}>
               <CopyToClipboard text={thirdLine}>
-                <button className="btn btn-primary">Copy</button>
+                <button className="btn btn-primary w-100">Copy</button>
               </CopyToClipboard>
             </Col>
           </Row>
@@ -204,7 +193,7 @@ const Domain = () => {
             </Col>
             <Col className="d-flex gap-2" md={1}>
               <CopyToClipboard text={fourthLine}>
-                <button className="btn btn-primary">Copy</button>
+                <button className="btn btn-primary w-100">Copy</button>
               </CopyToClipboard>
             </Col>
           </Row>
