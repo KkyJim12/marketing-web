@@ -5,7 +5,7 @@ import { Route, Routes } from "react-router-dom";
 import { connect } from "react-redux";
 
 // Import Routes all
-import { userRoutes, authRoutes } from "./routes/allRoutes";
+import { userRoutes, authRoutes, publicRoutes } from "./routes/allRoutes";
 
 // Import all middleware
 import Authmiddleware from "./routes/middleware/Authmiddleware";
@@ -77,6 +77,15 @@ const App = (props) => {
             }
             key={idx}
             isAuthProtected={true}
+            exact
+          />
+        ))}
+
+        {publicRoutes.map((route, idx) => (
+          <Route
+            path={route.path}
+            element={route.component}
+            key={idx}
             exact
           />
         ))}

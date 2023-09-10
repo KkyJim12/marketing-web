@@ -12,6 +12,7 @@ import Info from "../pages/Main/Info/index";
 import Login from "../pages/Main/Login";
 import ForgetPwd from "../pages/Main/ForgetPassword";
 import FloatingActionButton from "../pages/Main/FloatingActionButton";
+import Icon from "../pages/Main/Icon";
 
 const userRoutes = [
   { path: "/e-commerce", component: <ECommerce /> },
@@ -36,4 +37,6 @@ const authRoutes = [
   },
 ];
 
-export { userRoutes, authRoutes };
+const publicRoutes = [{ path: "/icons/:name/:color/:backgroundColor", component: <Icon /> }];
+
+export { userRoutes, authRoutes, publicRoutes };
