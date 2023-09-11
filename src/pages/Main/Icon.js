@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { Row, Col } from "reactstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const Icon = () => {
-  const { name, color, backgroundColor } = useParams();
+  const { name, color, backgroundColor, size } = useParams();
   return (
     <>
       <Row>
@@ -16,8 +16,8 @@ const Icon = () => {
             }}
           >
             <FontAwesomeIcon
-              style={{ color: "#" + color, width: 35, height: 35 }}
-              icon={[name.split("-")[0], name.split("-")[1]]}
+              style={{ color: "#" + color, width: size, height: size }}
+              icon={[name.split("_")[0], name.split("_")[1]]}
             />
           </div>
         </Col>

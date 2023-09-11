@@ -37,6 +37,6 @@ const authRoutes = [
   },
 ];
 
-const publicRoutes = [{ path: "/icons/:name/:color/:backgroundColor", component: <Icon /> }];
+const publicRoutes = [{ path: "/icons/:name/:color/:backgroundColor/:size", component: <Icon /> }];
 
 export { userRoutes, authRoutes, publicRoutes };
