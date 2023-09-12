@@ -19,7 +19,61 @@ import icons from "./free-icon.json";
 const SubMenu = () => {
   const { id, productId } = useParams();
 
+  const [selectedMenuErrorsResult, setSelectedMenuErrorsResult] = useState([]);
+  const [customMenuErrorsResult, setCustomMenuErrorsResult] = useState([]);
+
+  const validateRequests = () => {
+    const selectedMenuesError = [];
+
+    for (let i = 0; i < selectedMenues.length; i++) {
+      let selectedMenuError = {};
+      if (selectedMenues[i].icon === "") {
+        selectedMenuError.icon = "Please select icon";
+      }
+
+      if (selectedMenues[i].textContent === "") {
+        selectedMenuError.textContent = "Please type content";
+      }
+
+      if (selectedMenues[i].description === "") {
+        selectedMenuError.description = "Please type description";
+      }
+
+      if (selectedMenues[i].destination === "") {
+        selectedMenuError.destination = "Please type destination";
+      }
+
+      selectedMenuesError.push(selectedMenuError);
+    }
+    setSelectedMenuErrorsResult(selectedMenuesError);
+
+    const customMenuesError = [];
+
+    for (let i = 0; i < customMenues.length; i++) {
+      let customMenuError = {};
+      if (customMenues[i].icon === "") {
+        customMenuError.icon = "Please select icon";
+      }
+
+      if (customMenues[i].textContent === "") {
+        customMenuError.textContent = "Please type content";
+      }
+
+      if (customMenues[i].description === "") {
+        customMenuError.description = "Please type description";
+      }
+
+      if (customMenues[i].destination === "") {
+        customMenuError.destination = "Please type destination";
+      }
+
+      customMenuesError.push(customMenuError);
+    }
+    setCustomMenuErrorsResult(customMenuesError);
+  };
+
   const saveButtonSetting = async () => {
+    validateRequests();
     try {
       const headers = {
         Authorization: localStorage.getItem("accessToken"),
@@ -32,7 +86,7 @@ const SubMenu = () => {
         { headers }
       );
     } catch (error) {
-      console.log(error);
+      console.log(error.response);
     }
   };
 
@@ -152,6 +206,7 @@ const SubMenu = () => {
   const [selectedMenues, setSelectedMenues] = useState([]);
 
   const selectMenu = (id) => {
+    setSelectedMenuErrorsResult([]);
     if (
       selectedMenues.filter((selectedMenu) => selectedMenu.id === id).length > 0
     ) {
@@ -260,6 +315,11 @@ const SubMenu = () => {
 
     const newCustomMenues = [...customMenues];
     newCustomMenues.splice(index, 1);
+
+    const customMenuErrors = [...customMenuErrorsResult];
+    customMenuErrors.splice(index, 1);
+    setCustomMenuErrorsResult(customMenuErrors);
+
     setCustomMenues(newCustomMenues);
   };
 
@@ -349,7 +409,7 @@ const SubMenu = () => {
             <CardBody>
               <CardTitle>Sub Menu</CardTitle>
               <Row>
-                {subMenues.map((subMenu, index) => {
+                {subMenues.map((subMenu) => {
                   return (
                     <Col key={subMenu.id} md={1}>
                       <div className="d-flex gap-2 align-items-center">
@@ -439,6 +499,11 @@ const SubMenu = () => {
                         value={selectedMenu.icon}
                         readOnly
                       ></Input>
+                      {selectedMenuErrorsResult[index] && (
+                        <small className="text-danger">
+                          {selectedMenuErrorsResult[index].icon}
+                        </small>
+                      )}
                     </Col>
                     <Col md={2}>
                       <Label>Text</Label>
@@ -449,6 +514,11 @@ const SubMenu = () => {
                         value={selectedMenu.textContent}
                         readOnly
                       ></Input>
+                      {selectedMenuErrorsResult[index] && (
+                        <small className="text-danger">
+                          {selectedMenuErrorsResult[index].textContent}
+                        </small>
+                      )}
                     </Col>
                     <Col md={3}>
                       <Label>Description</Label>
@@ -460,6 +530,11 @@ const SubMenu = () => {
                           handleSelectedMenuDescription(e, selectedMenu.id)
                         }
                       ></Input>
+                      {selectedMenuErrorsResult[index] && (
+                        <small className="text-danger">
+                          {selectedMenuErrorsResult[index].description}
+                        </small>
+                      )}
                     </Col>
                     <Col md={3}>
                       <Label>Destination</Label>
@@ -471,6 +546,11 @@ const SubMenu = () => {
                           handleSelectedMenuDestination(e, selectedMenu.id)
                         }
                       ></Input>
+                      {selectedMenuErrorsResult[index] && (
+                        <small className="text-danger">
+                          {selectedMenuErrorsResult[index].destination}
+                        </small>
+                      )}
                     </Col>
                   </Row>
                 </CardBody>
@@ -482,7 +562,7 @@ const SubMenu = () => {
       <Row>
         {customMenues.map((customMenu, index) => {
           return (
-            <Col md={12}>
+            <Col md={12} key={index}>
               <Card>
                 <CardBody>
                   <CardTitle>
@@ -563,6 +643,12 @@ const SubMenu = () => {
                             );
                           })}
                       </select>
+
+                      {customMenuErrorsResult[index] && (
+                        <small className="text-danger">
+                          {customMenuErrorsResult[index].icon}
+                        </small>
+                      )}
                     </Col>
                     <Col md={2}>
                       <Label>Text</Label>
@@ -574,6 +660,11 @@ const SubMenu = () => {
                           handleCustomMenuTextContent(e, customMenu.id)
                         }
                       ></Input>
+                      {customMenuErrorsResult[index] && (
+                        <small className="text-danger">
+                          {customMenuErrorsResult[index].textContent}
+                        </small>
+                      )}
                     </Col>
                     <Col md={3}>
                       <Label>Description</Label>
@@ -585,6 +676,11 @@ const SubMenu = () => {
                           handleCustomMenuDescription(e, customMenu.id)
                         }
                       ></Input>
+                      {customMenuErrorsResult[index] && (
+                        <small className="text-danger">
+                          {customMenuErrorsResult[index].description}
+                        </small>
+                      )}
                     </Col>
                     <Col md={3}>
                       <Label>Destination</Label>
@@ -596,6 +692,11 @@ const SubMenu = () => {
                           handleCustomMenuDestination(e, customMenu.id)
                         }
                       ></Input>
+                      {customMenuErrorsResult[index] && (
+                        <small className="text-danger">
+                          {customMenuErrorsResult[index].destination}
+                        </small>
+                      )}
                     </Col>
                   </Row>
                 </CardBody>
