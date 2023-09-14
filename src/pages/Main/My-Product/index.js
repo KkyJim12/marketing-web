@@ -239,7 +239,7 @@ const MyProduct = () => {
               </Card>
             </Col>
           </Row>
-          <Row>
+          <Row className="ql-editor">
             <Col md={12}>
               {setting.myProductPage && Parser(setting.myProductPage)}
             </Col>

@@ -84,7 +84,8 @@ const ECommerce = () => {
           Authorization: localStorage.getItem("accessToken"),
         };
         const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/api/v1/user/settings`,{headers}
+          `${process.env.REACT_APP_API_URL}/api/v1/user/settings`,
+          { headers }
         );
         setSetting(response.data.data);
       } catch (error) {
@@ -224,7 +225,7 @@ const ECommerce = () => {
               );
             })}
           </Row>
-          <Row>
+          <Row className="ql-editor">
             <Col md={12}>
               {setting.eCommercePage && Parser(setting.eCommercePage)}
             </Col>

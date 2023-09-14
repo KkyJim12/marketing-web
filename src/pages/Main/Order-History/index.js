@@ -491,7 +491,7 @@ const OrderHistory = () => {
               </div>
             </Modal>
           </Row>
-          <Row>
+          <Row className="ql-editor">
             <Col md={12}>
               {setting.orderHistoryPage && Parser(setting.orderHistoryPage)}
             </Col>

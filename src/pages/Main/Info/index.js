@@ -38,7 +38,7 @@ const Info = () => {
       <div className="page-content">
         <Container fluid>
           <Breadcrumbs title={t("Platform Name")} breadcrumbItem={page.name} />
-          <Row>
+          <Row className="ql-editor">
             <Col md={12}>{page.content && Parser(page.content)}</Col>
           </Row>
         </Container>
