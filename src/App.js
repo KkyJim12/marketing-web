@@ -18,6 +18,7 @@ import NonAuthLayout from "./components/NonAuthLayout";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { fab } from "@fortawesome/free-brands-svg-icons";
 import { fas } from "@fortawesome/free-solid-svg-icons";
+import { far } from "@fortawesome/free-regular-svg-icons";
 
 // Import scss
 import "./assets/scss/theme.scss";
@@ -82,19 +83,14 @@ const App = (props) => {
         ))}
 
         {publicRoutes.map((route, idx) => (
-          <Route
-            path={route.path}
-            element={route.component}
-            key={idx}
-            exact
-          />
+          <Route path={route.path} element={route.component} key={idx} exact />
         ))}
       </Routes>
     </React.Fragment>
   );
 };
 
-library.add(fab, fas);
+library.add(fab, fas, far);
 
 App.propTypes = {
   layout: PropTypes.any,

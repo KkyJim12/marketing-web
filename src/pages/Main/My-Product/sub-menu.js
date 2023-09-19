@@ -14,7 +14,7 @@ import ColorPicker from "@vtaits/react-color-picker";
 import ClickAwayListener from "react-click-away-listener";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import icons from "./free-icon.json";
+import icons from "../../../assets/icons/free-fontawesome-icons.json";
 
 const SubMenu = () => {
   const { id, productId } = useParams();

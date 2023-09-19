@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import icons from "./free-icon.json";
+import icons from "../../../assets/icons/free-fontawesome-icons.json";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ClickAwayListener from "react-click-away-listener";
 import {
