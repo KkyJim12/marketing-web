@@ -25,6 +25,8 @@ import axios from "axios";
 import { PDFViewer } from "@react-pdf/renderer";
 import ReactDOM from "react-dom";
 
+import { utils, writeFile } from "xlsx";
+
 import { Page, Text, View, Document, Image } from "@react-pdf/renderer";
 
 const Stats = () => {
@@ -95,8 +97,6 @@ const Stats = () => {
           }
         }
       }
-
-      console.log(data);
 
       setStats(data);
       setIsLoading(false);
@@ -438,6 +438,48 @@ const Stats = () => {
     }
   };
 
+  const exportExcel = () => {
+    //creates an empty workbook with no worksheet
+    let wb = utils.book_new(), //creates a new workbook
+      //coverts JSON data into a sheet
+      ws = utils.json_to_sheet([]);
+
+    let Heading = [
+      ["Date: " + startDate + " to " + endDate],
+      ["Website: " + activeWebsite],
+      [""],
+      ["All Stats"],
+      ["Session: ", stats.sessionCount],
+      ["Total Users: ", stats.totalUserCount],
+      ["Total Conversions: ", stats.conversionCount],
+      ["Conversion Rate: ", stats.conversionRate],
+      [""],
+      ["Session statistic by sources."],
+    ];
+    utils.sheet_add_aoa(ws, Heading);
+
+    utils.sheet_add_json(ws, stats.tableContents, {
+      origin: "A11",
+      skipHeader: false,
+    });
+
+    ws["!cols"] = [
+      { width: 25 },
+      { width: 25 },
+      { width: 25 },
+      { width: 25 },
+      { width: 25 },
+      { width: 25 },
+    ];
+
+    utils.book_append_sheet(wb, ws, "Statistic", "Statistic");
+    // package and release data (`writeFile` tries to write and save an XLSX file)
+    writeFile(
+      wb,
+      "stats_" + activeWebsite + "_" + startDate + "_" + endDate + ".xlsx"
+    );
+  };
+
   const MyDocument = () => {
     return (
       <>
@@ -693,7 +735,11 @@ const Stats = () => {
                   >
                     PDF
                   </button>
-                  <button className="btn btn-success" type="button">
+                  <button
+                    onClick={exportExcel}
+                    className="btn btn-success"
+                    type="button"
+                  >
                     Excel
                   </button>
                 </div>
