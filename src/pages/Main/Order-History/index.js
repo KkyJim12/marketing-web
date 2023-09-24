@@ -248,9 +248,11 @@ const OrderHistory = () => {
   const [selectedFile, setSelectedFile] = useState();
   const [preview, setPreview] = useState();
   const [imageUrl, setImageUrl] = useState("");
+  const [error, setError] = useState("");
 
   const toggleMakePaymentModal = (order) => {
     resetImageUpload();
+    setError("");
     setMakePaymentModal(!makePaymentModal);
     setToggleOrder(order);
   };
@@ -270,7 +272,6 @@ const OrderHistory = () => {
     const objectUrl = URL.createObjectURL(selectedFile);
     setPreview(objectUrl);
 
-    // free memory when ever this component is unmounted
     return () => URL.revokeObjectURL(objectUrl);
   }, [selectedFile]);
 
@@ -280,7 +281,11 @@ const OrderHistory = () => {
       return;
     }
 
-    // I've kept this example simple by using the first image instead of multiple
+    if (!e.target.files[0].type.includes("image")) {
+      setError("* Please upload image file type");
+      return;
+    }
+
     setSelectedFile(e.target.files[0]);
 
     try {
@@ -304,6 +309,12 @@ const OrderHistory = () => {
   };
 
   const confirmMakePayment = async () => {
+    setError("");
+    if (imageUrl === "") {
+      setError("* Please upload slip");
+      return;
+    }
+
     try {
       const headers = {
         Authorization: localStorage.getItem("accessToken"),
@@ -325,7 +336,6 @@ const OrderHistory = () => {
   const [viewSlipModal, setViewSlipModal] = useState(false);
   const [slipImage, setSlipImage] = useState("");
   const toggleViewSlipModal = (imageUrl) => {
-    console.log(imageUrl);
     setViewSlipModal(!viewSlipModal);
     setSlipImage(imageUrl);
   };
@@ -424,10 +434,16 @@ const OrderHistory = () => {
                   >
                     Upload Slip
                   </button>
+                  {error && (
+                    <div style={{ textAlign: "right" }}>
+                      <small className="text-danger">{error}</small>
+                    </div>
+                  )}
                   <input
                     onChange={uploadSlip}
                     id="uploadInput"
                     type="file"
+                    accept="image/*"
                     style={{ visibility: "hidden" }}
                   />
                 </div>

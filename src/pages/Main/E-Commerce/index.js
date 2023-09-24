@@ -10,19 +10,18 @@ import {
   CardText,
   Container,
   Modal,
-  Toast,
-  ToastBody,
 } from "reactstrap";
 import { useTranslation } from "react-i18next";
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
 import Parser from "html-react-parser";
+import { useNavigate } from "react-router-dom";
 
 const ECommerce = () => {
   const { t } = useTranslation();
   document.title = " E-Commerce | Marketing tool platform";
+  const navigate = useNavigate();
   const [products, setProducts] = useState([]);
   const [setting, setSetting] = useState([]);
-  const [purchaseSuccessToasts, setPurchaseSuccessToasts] = useState([]);
 
   const getEcommerce = async () => {
     try {
@@ -60,21 +59,10 @@ const ECommerce = () => {
       console.log(response);
 
       setProductPurchaseModal(false);
-      setPurchaseSuccessToasts([...purchaseSuccessToasts, "Purchase Success."]);
-
-      setTimeout(() => {
-        closePurchaseToast(purchaseSuccessToasts.length - 1);
-      }, 2000);
+      navigate("/order-history");
     } catch (error) {
       console.log(error);
     }
-  };
-
-  const closePurchaseToast = async (index) => {
-    const clonedData = [...purchaseSuccessToasts].filter(
-      (i, idx) => idx !== index
-    );
-    setPurchaseSuccessToasts(clonedData);
   };
 
   useEffect(() => {
@@ -101,37 +89,6 @@ const ECommerce = () => {
     <React.Fragment>
       <div className="page-content">
         <Container fluid>
-          <div
-            aria-live="polite"
-            aria-atomic="true"
-            className="position-relative"
-          >
-            <div className="toast-container position-absolute end-0 top-0 p-2 p-lg-3">
-              {purchaseSuccessToasts.map((i, index) => {
-                return (
-                  <Toast
-                    style={{
-                      background: "rgb(52,195,143,0.8)",
-                      cursor: "pointer",
-                    }}
-                    key={index}
-                    className="toast fade show align-items-center text-white border-0"
-                  >
-                    <div className="d-flex">
-                      <ToastBody>{i}</ToastBody>
-                      <button
-                        type="button"
-                        onClick={() => closePurchaseToast(index)}
-                        className="btn-close btn-close-white me-2 m-auto"
-                        data-bs-dismiss="toast"
-                        aria-label="Close"
-                      ></button>
-                    </div>
-                  </Toast>
-                );
-              })}
-            </div>
-          </div>
           <Breadcrumbs
             title={t("Platform Name")}
             breadcrumbItem={t("E-Commerce")}
