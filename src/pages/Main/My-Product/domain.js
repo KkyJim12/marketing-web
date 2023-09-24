@@ -13,6 +13,7 @@ import {
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
 
 const Domain = () => {
   const { id, productId } = useParams();
@@ -32,6 +33,10 @@ const Domain = () => {
 
   const resetError = () => {
     setUrlError("");
+  };
+
+  const copySuccess = () => {
+    toast.success("Copied");
   };
 
   useEffect(() => {
@@ -119,6 +124,9 @@ const Domain = () => {
 
   return (
     <>
+      <div>
+        <Toaster />
+      </div>
       <Card>
         <CardBody>
           <CardTitle>
@@ -128,7 +136,13 @@ const Domain = () => {
               </Col>
               <Col md={1}>
                 <CopyToClipboard text={secondLine + thirdLine + fourthLine}>
-                  <button className="btn btn-primary w-100">Copy All</button>
+                  <button
+                    type="button"
+                    onClick={copySuccess}
+                    className="btn btn-primary w-100"
+                  >
+                    Copy All
+                  </button>
                 </CopyToClipboard>
               </Col>
             </Row>
@@ -150,7 +164,13 @@ const Domain = () => {
             </Col>
             <Col className="d-flex gap-2" md={1}>
               <CopyToClipboard text={secondLine}>
-                <button className="btn btn-primary w-100">Copy</button>
+                <button
+                  type="button"
+                  onClick={copySuccess}
+                  className="btn btn-primary w-100"
+                >
+                  Copy
+                </button>
               </CopyToClipboard>
             </Col>
           </Row>
@@ -171,7 +191,13 @@ const Domain = () => {
             </Col>
             <Col className="d-flex gap-2" md={1}>
               <CopyToClipboard text={thirdLine}>
-                <button className="btn btn-primary w-100">Copy</button>
+                <button
+                  type="button"
+                  onClick={copySuccess}
+                  className="btn btn-primary w-100"
+                >
+                  Copy
+                </button>
               </CopyToClipboard>
             </Col>
           </Row>
@@ -193,7 +219,13 @@ const Domain = () => {
             </Col>
             <Col className="d-flex gap-2" md={1}>
               <CopyToClipboard text={fourthLine}>
-                <button className="btn btn-primary w-100">Copy</button>
+                <button
+                  type="button"
+                  onClick={copySuccess}
+                  className="btn btn-primary w-100"
+                >
+                  Copy
+                </button>
               </CopyToClipboard>
             </Col>
           </Row>

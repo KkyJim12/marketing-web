@@ -16,6 +16,7 @@ import {
 } from "reactstrap";
 import ColorPicker from "@vtaits/react-color-picker";
 import "@vtaits/react-color-picker/dist/index.css";
+import toast, { Toaster } from "react-hot-toast";
 
 const Customize = () => {
   document.title = " My Product | Marketing tool platform";
@@ -215,6 +216,7 @@ const Customize = () => {
       );
 
       console.log(response);
+      toast.success("Saved");
     } catch (error) {
       console.log(error);
     }
@@ -324,6 +326,9 @@ const Customize = () => {
 
   return (
     <>
+      <div>
+        <Toaster />
+      </div>
       <Row>
         <Col md={12}>
           <Card>

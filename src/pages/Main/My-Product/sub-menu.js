@@ -15,6 +15,7 @@ import ClickAwayListener from "react-click-away-listener";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import icons from "../../../assets/icons/free-fontawesome-icons.json";
+import toast, { Toaster } from "react-hot-toast";
 
 const SubMenu = () => {
   const { id, productId } = useParams();
@@ -85,6 +86,8 @@ const SubMenu = () => {
         },
         { headers }
       );
+
+      toast.success("Saved");
     } catch (error) {
       console.log(error.response);
     }
@@ -402,332 +405,337 @@ const SubMenu = () => {
   }, []);
 
   return (
-    <Container fluid>
-      <Row>
-        <Col md={12}>
-          <Card>
-            <CardBody>
-              <CardTitle>Sub Menu</CardTitle>
-              <Row>
-                {subMenues.map((subMenu) => {
-                  return (
-                    <Col key={subMenu.id} md={1}>
-                      <div className="d-flex gap-2 align-items-center">
-                        <Button
-                          className={
-                            selectedMenues.filter(
+    <>
+      <div>
+        <Toaster />
+      </div>
+      <Container fluid>
+        <Row>
+          <Col md={12}>
+            <Card>
+              <CardBody>
+                <CardTitle>Sub Menu</CardTitle>
+                <Row>
+                  {subMenues.map((subMenu) => {
+                    return (
+                      <Col key={subMenu.id} md={1}>
+                        <div className="d-flex gap-2 align-items-center">
+                          <Button
+                            className={
+                              selectedMenues.filter(
+                                (selectedMenu) => selectedMenu.id === subMenu.id
+                              ).length > 0
+                                ? "btn btn-success"
+                                : "btn btn-info"
+                            }
+                            onClick={() => selectMenu(subMenu.id)}
+                          >
+                            {selectedMenues.filter(
                               (selectedMenu) => selectedMenu.id === subMenu.id
                             ).length > 0
-                              ? "btn btn-success"
-                              : "btn btn-info"
+                              ? "Selected"
+                              : "Select"}
+                          </Button>
+                          <p>{subMenu.textContent}</p>
+                        </div>
+                      </Col>
+                    );
+                  })}
+                </Row>
+              </CardBody>
+            </Card>
+          </Col>
+          {selectedMenues.map((selectedMenu, index) => {
+            return (
+              <Col key={index} md={12}>
+                <Card>
+                  <CardBody>
+                    <CardTitle>{selectedMenu.textContent}</CardTitle>
+                    <Row>
+                      <Col md={2}>
+                        <Label>Text color</Label>
+                        <div className="d-flex gap-2">
+                          <Input
+                            type="text"
+                            className="colorpicker-default"
+                            value={selectedMenu.textColor}
+                            readOnly
+                          />
+                          <div
+                            onClick={() => openTextColorPicker(selectedMenu.id)}
+                            className="btn"
+                            style={{
+                              backgroundColor: selectedMenu.textColor,
+                              width: 40,
+                              height: 40,
+                            }}
+                          ></div>
+                          {selectedMenu.textColorPickerEnable ? (
+                            <ClickAwayListener
+                              onClickAway={() =>
+                                closeTextColorPicker(selectedMenu.id)
+                              }
+                            >
+                              <>
+                                <ColorPicker
+                                  style={{
+                                    position: "absolute",
+                                    right: 10,
+                                    marginTop: "2.8rem",
+                                    zIndex: 500,
+                                  }}
+                                  saturationHeight={100}
+                                  saturationWidth={100}
+                                  value={selectedMenu.textColor}
+                                  onDrag={(color) =>
+                                    onDragTextColor(color, selectedMenu.id)
+                                  }
+                                />
+                              </>
+                            </ClickAwayListener>
+                          ) : null}
+                        </div>
+                      </Col>
+
+                      <Col md={2}>
+                        <Label>Icon</Label>
+                        <Input
+                          style={{ background: "#f5f5f5" }}
+                          className="form-control"
+                          placeholder="Text"
+                          value={selectedMenu.icon}
+                          readOnly
+                        ></Input>
+                        {selectedMenuErrorsResult[index] && (
+                          <small className="text-danger">
+                            {selectedMenuErrorsResult[index].icon}
+                          </small>
+                        )}
+                      </Col>
+                      <Col md={2}>
+                        <Label>Text</Label>
+                        <Input
+                          style={{ background: "#f5f5f5" }}
+                          className="form-control"
+                          placeholder="Text"
+                          value={selectedMenu.textContent}
+                          readOnly
+                        ></Input>
+                        {selectedMenuErrorsResult[index] && (
+                          <small className="text-danger">
+                            {selectedMenuErrorsResult[index].textContent}
+                          </small>
+                        )}
+                      </Col>
+                      <Col md={3}>
+                        <Label>Description</Label>
+                        <Input
+                          className="form-control"
+                          placeholder="Description"
+                          value={selectedMenu.description}
+                          onChange={(e) =>
+                            handleSelectedMenuDescription(e, selectedMenu.id)
                           }
-                          onClick={() => selectMenu(subMenu.id)}
+                        ></Input>
+                        {selectedMenuErrorsResult[index] && (
+                          <small className="text-danger">
+                            {selectedMenuErrorsResult[index].description}
+                          </small>
+                        )}
+                      </Col>
+                      <Col md={3}>
+                        <Label>Destination</Label>
+                        <Input
+                          className="form-control"
+                          placeholder="Destination"
+                          value={selectedMenu.destination}
+                          onChange={(e) =>
+                            handleSelectedMenuDestination(e, selectedMenu.id)
+                          }
+                        ></Input>
+                        {selectedMenuErrorsResult[index] && (
+                          <small className="text-danger">
+                            {selectedMenuErrorsResult[index].destination}
+                          </small>
+                        )}
+                      </Col>
+                    </Row>
+                  </CardBody>
+                </Card>
+              </Col>
+            );
+          })}
+        </Row>
+        <Row>
+          {customMenues.map((customMenu, index) => {
+            return (
+              <Col md={12} key={index}>
+                <Card>
+                  <CardBody>
+                    <CardTitle>
+                      <div className="d-flex justify-content-between">
+                        <span>{customMenu.label}</span>
+                        <Button
+                          onClick={() => removeCustomMenu(customMenu.id)}
+                          type="button"
+                          className="btn btn-danger btn-sm"
                         >
-                          {selectedMenues.filter(
-                            (selectedMenu) => selectedMenu.id === subMenu.id
-                          ).length > 0
-                            ? "Selected"
-                            : "Select"}
+                          Remove
                         </Button>
-                        <p>{subMenu.textContent}</p>
                       </div>
-                    </Col>
-                  );
-                })}
-              </Row>
-            </CardBody>
-          </Card>
-        </Col>
-        {selectedMenues.map((selectedMenu, index) => {
-          return (
-            <Col key={index} md={12}>
-              <Card>
-                <CardBody>
-                  <CardTitle>{selectedMenu.textContent}</CardTitle>
-                  <Row>
-                    <Col md={2}>
-                      <Label>Text color</Label>
-                      <div className="d-flex gap-2">
-                        <Input
-                          type="text"
-                          className="colorpicker-default"
-                          value={selectedMenu.textColor}
-                          readOnly
-                        />
-                        <div
-                          onClick={() => openTextColorPicker(selectedMenu.id)}
-                          className="btn"
-                          style={{
-                            backgroundColor: selectedMenu.textColor,
-                            width: 40,
-                            height: 40,
-                          }}
-                        ></div>
-                        {selectedMenu.textColorPickerEnable ? (
-                          <ClickAwayListener
-                            onClickAway={() =>
-                              closeTextColorPicker(selectedMenu.id)
+                    </CardTitle>
+                    <Row>
+                      <Col md={2}>
+                        <Label>Text color</Label>
+                        <div className="d-flex gap-2">
+                          <Input
+                            type="text"
+                            className="colorpicker-default"
+                            value={customMenu.textColor}
+                            readOnly
+                          />
+                          <div
+                            onClick={() =>
+                              openCustomTextColorPicker(customMenu.id)
                             }
-                          >
-                            <>
-                              <ColorPicker
-                                style={{
-                                  position: "absolute",
-                                  right: 10,
-                                  marginTop: "2.8rem",
-                                  zIndex: 500,
-                                }}
-                                saturationHeight={100}
-                                saturationWidth={100}
-                                value={selectedMenu.textColor}
-                                onDrag={(color) =>
-                                  onDragTextColor(color, selectedMenu.id)
-                                }
-                              />
-                            </>
-                          </ClickAwayListener>
-                        ) : null}
-                      </div>
-                    </Col>
-
-                    <Col md={2}>
-                      <Label>Icon</Label>
-                      <Input
-                        style={{ background: "#f5f5f5" }}
-                        className="form-control"
-                        placeholder="Text"
-                        value={selectedMenu.icon}
-                        readOnly
-                      ></Input>
-                      {selectedMenuErrorsResult[index] && (
-                        <small className="text-danger">
-                          {selectedMenuErrorsResult[index].icon}
-                        </small>
-                      )}
-                    </Col>
-                    <Col md={2}>
-                      <Label>Text</Label>
-                      <Input
-                        style={{ background: "#f5f5f5" }}
-                        className="form-control"
-                        placeholder="Text"
-                        value={selectedMenu.textContent}
-                        readOnly
-                      ></Input>
-                      {selectedMenuErrorsResult[index] && (
-                        <small className="text-danger">
-                          {selectedMenuErrorsResult[index].textContent}
-                        </small>
-                      )}
-                    </Col>
-                    <Col md={3}>
-                      <Label>Description</Label>
-                      <Input
-                        className="form-control"
-                        placeholder="Description"
-                        value={selectedMenu.description}
-                        onChange={(e) =>
-                          handleSelectedMenuDescription(e, selectedMenu.id)
-                        }
-                      ></Input>
-                      {selectedMenuErrorsResult[index] && (
-                        <small className="text-danger">
-                          {selectedMenuErrorsResult[index].description}
-                        </small>
-                      )}
-                    </Col>
-                    <Col md={3}>
-                      <Label>Destination</Label>
-                      <Input
-                        className="form-control"
-                        placeholder="Destination"
-                        value={selectedMenu.destination}
-                        onChange={(e) =>
-                          handleSelectedMenuDestination(e, selectedMenu.id)
-                        }
-                      ></Input>
-                      {selectedMenuErrorsResult[index] && (
-                        <small className="text-danger">
-                          {selectedMenuErrorsResult[index].destination}
-                        </small>
-                      )}
-                    </Col>
-                  </Row>
-                </CardBody>
-              </Card>
-            </Col>
-          );
-        })}
-      </Row>
-      <Row>
-        {customMenues.map((customMenu, index) => {
-          return (
-            <Col md={12} key={index}>
-              <Card>
-                <CardBody>
-                  <CardTitle>
-                    <div className="d-flex justify-content-between">
-                      <span>{customMenu.label}</span>
-                      <Button
-                        onClick={() => removeCustomMenu(customMenu.id)}
-                        type="button"
-                        className="btn btn-danger btn-sm"
-                      >
-                        Remove
-                      </Button>
-                    </div>
-                  </CardTitle>
-                  <Row>
-                    <Col md={2}>
-                      <Label>Text color</Label>
-                      <div className="d-flex gap-2">
-                        <Input
-                          type="text"
-                          className="colorpicker-default"
-                          value={customMenu.textColor}
-                          readOnly
-                        />
-                        <div
-                          onClick={() =>
-                            openCustomTextColorPicker(customMenu.id)
+                            className="btn"
+                            style={{
+                              backgroundColor: customMenu.textColor,
+                              width: 40,
+                              height: 40,
+                            }}
+                          ></div>
+                          {customMenu.textColorPickerEnable ? (
+                            <ClickAwayListener
+                              onClickAway={() =>
+                                closeCustomTextColorPicker(customMenu.id)
+                              }
+                            >
+                              <>
+                                <ColorPicker
+                                  style={{
+                                    position: "absolute",
+                                    right: 10,
+                                    marginTop: "2.8rem",
+                                    zIndex: 500,
+                                  }}
+                                  saturationHeight={100}
+                                  saturationWidth={100}
+                                  value={customMenu.textColor}
+                                  onDrag={(color) =>
+                                    onDragCustomTextColor(color, customMenu.id)
+                                  }
+                                />
+                              </>
+                            </ClickAwayListener>
+                          ) : null}
+                        </div>
+                      </Col>
+                      <Col md={2}>
+                        <Label>Icon</Label>
+                        <select
+                          onChange={(e) =>
+                            handleSelectedCustomMenuIcon(e, customMenu.id)
                           }
-                          className="btn"
-                          style={{
-                            backgroundColor: customMenu.textColor,
-                            width: 40,
-                            height: 40,
-                          }}
-                        ></div>
-                        {customMenu.textColorPickerEnable ? (
-                          <ClickAwayListener
-                            onClickAway={() =>
-                              closeCustomTextColorPicker(customMenu.id)
-                            }
-                          >
-                            <>
-                              <ColorPicker
-                                style={{
-                                  position: "absolute",
-                                  right: 10,
-                                  marginTop: "2.8rem",
-                                  zIndex: 500,
-                                }}
-                                saturationHeight={100}
-                                saturationWidth={100}
-                                value={customMenu.textColor}
-                                onDrag={(color) =>
-                                  onDragCustomTextColor(color, customMenu.id)
-                                }
-                              />
-                            </>
-                          </ClickAwayListener>
-                        ) : null}
-                      </div>
-                    </Col>
-                    <Col md={2}>
-                      <Label>Icon</Label>
-                      <select
-                        onChange={(e) =>
-                          handleSelectedCustomMenuIcon(e, customMenu.id)
-                        }
-                        className="form-control"
-                        value={customMenu.icon}
-                      >
-                        <option>Select Icon</option>
-                        {icons &&
-                          icons.data.map((icon, index) => {
-                            return (
-                              <option key={index} value={icon}>
-                                {icon}
-                              </option>
-                            );
-                          })}
-                      </select>
+                          className="form-control"
+                          value={customMenu.icon}
+                        >
+                          <option>Select Icon</option>
+                          {icons &&
+                            icons.data.map((icon, index) => {
+                              return (
+                                <option key={index} value={icon}>
+                                  {icon}
+                                </option>
+                              );
+                            })}
+                        </select>
 
-                      {customMenuErrorsResult[index] && (
-                        <small className="text-danger">
-                          {customMenuErrorsResult[index].icon}
-                        </small>
-                      )}
-                    </Col>
-                    <Col md={2}>
-                      <Label>Text</Label>
-                      <Input
-                        className="form-control"
-                        placeholder="Text"
-                        value={customMenu.textContent}
-                        onChange={(e) =>
-                          handleCustomMenuTextContent(e, customMenu.id)
-                        }
-                      ></Input>
-                      {customMenuErrorsResult[index] && (
-                        <small className="text-danger">
-                          {customMenuErrorsResult[index].textContent}
-                        </small>
-                      )}
-                    </Col>
-                    <Col md={3}>
-                      <Label>Description</Label>
-                      <Input
-                        className="form-control"
-                        placeholder="Description"
-                        value={customMenu.description}
-                        onChange={(e) =>
-                          handleCustomMenuDescription(e, customMenu.id)
-                        }
-                      ></Input>
-                      {customMenuErrorsResult[index] && (
-                        <small className="text-danger">
-                          {customMenuErrorsResult[index].description}
-                        </small>
-                      )}
-                    </Col>
-                    <Col md={3}>
-                      <Label>Destination</Label>
-                      <Input
-                        className="form-control"
-                        placeholder="Destination"
-                        value={customMenu.destination}
-                        onChange={(e) =>
-                          handleCustomMenuDestination(e, customMenu.id)
-                        }
-                      ></Input>
-                      {customMenuErrorsResult[index] && (
-                        <small className="text-danger">
-                          {customMenuErrorsResult[index].destination}
-                        </small>
-                      )}
-                    </Col>
-                  </Row>
-                </CardBody>
-              </Card>
-            </Col>
-          );
-        })}
-        <Col md={12}>
-          <div className="d-grid gap-2">
-            <Button
-              onClick={addCustomMenu}
-              type="button"
-              className="btn btn-primary"
-            >
-              Add Custom
-            </Button>
-          </div>
-        </Col>
-        <Col md={12}>
-          <div className="d-grid gap-2 mt-2">
-            <Button
-              onClick={saveButtonSetting}
-              type="button"
-              className="btn btn-success"
-            >
-              Save Button Setting
-            </Button>
-          </div>
-        </Col>
-      </Row>
-    </Container>
+                        {customMenuErrorsResult[index] && (
+                          <small className="text-danger">
+                            {customMenuErrorsResult[index].icon}
+                          </small>
+                        )}
+                      </Col>
+                      <Col md={2}>
+                        <Label>Text</Label>
+                        <Input
+                          className="form-control"
+                          placeholder="Text"
+                          value={customMenu.textContent}
+                          onChange={(e) =>
+                            handleCustomMenuTextContent(e, customMenu.id)
+                          }
+                        ></Input>
+                        {customMenuErrorsResult[index] && (
+                          <small className="text-danger">
+                            {customMenuErrorsResult[index].textContent}
+                          </small>
+                        )}
+                      </Col>
+                      <Col md={3}>
+                        <Label>Description</Label>
+                        <Input
+                          className="form-control"
+                          placeholder="Description"
+                          value={customMenu.description}
+                          onChange={(e) =>
+                            handleCustomMenuDescription(e, customMenu.id)
+                          }
+                        ></Input>
+                        {customMenuErrorsResult[index] && (
+                          <small className="text-danger">
+                            {customMenuErrorsResult[index].description}
+                          </small>
+                        )}
+                      </Col>
+                      <Col md={3}>
+                        <Label>Destination</Label>
+                        <Input
+                          className="form-control"
+                          placeholder="Destination"
+                          value={customMenu.destination}
+                          onChange={(e) =>
+                            handleCustomMenuDestination(e, customMenu.id)
+                          }
+                        ></Input>
+                        {customMenuErrorsResult[index] && (
+                          <small className="text-danger">
+                            {customMenuErrorsResult[index].destination}
+                          </small>
+                        )}
+                      </Col>
+                    </Row>
+                  </CardBody>
+                </Card>
+              </Col>
+            );
+          })}
+          <Col md={12}>
+            <div className="d-grid gap-2">
+              <Button
+                onClick={addCustomMenu}
+                type="button"
+                className="btn btn-primary"
+              >
+                Add Custom
+              </Button>
+            </div>
+          </Col>
+          <Col md={12}>
+            <div className="d-grid gap-2 mt-2">
+              <Button
+                onClick={saveButtonSetting}
+                type="button"
+                className="btn btn-success"
+              >
+                Save Button Setting
+              </Button>
+            </div>
+          </Col>
+        </Row>
+      </Container>
+    </>
   );
 };
 
