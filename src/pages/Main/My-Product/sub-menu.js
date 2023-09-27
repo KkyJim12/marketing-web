@@ -17,18 +17,96 @@ import axios from "axios";
 import icons from "../../../assets/icons/free-fontawesome-icons.json";
 import toast, { Toaster } from "react-hot-toast";
 import Select from "react-select";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const SubMenu = () => {
   const { id, productId } = useParams();
+
+  // Preview
+  const [buttonText, setButtonText] = useState("Minible");
+  const [backgroundColor, setBackgroundColor] = useState("#3b82f6");
+  const [bodyColor, setBodyColor] = useState("#ffffff");
+  const [textColor, setTextColor] = useState("#f5f5f5");
+  const [buttonSize, setButtonSize] = useState(75);
+
+  const [buttonPositionTop, setButtonPositionTop] = useState(null);
+  const [buttonPositionRight, setButtonPositionRight] = useState(20);
+  const [buttonPositionBottom, setButtonPositionBottom] = useState(20);
+  const [buttonPositionLeft, setButtonPositionLeft] = useState(null);
+  const [iconInput, setIconInput] = useState("font-awesome");
+  const [isPCChecked, setIsPCChecked] = useState(true);
+  const [isTabletChecked, setIsTabletChecked] = useState(true);
+  const [isMobileChecked, setIsMobileChecked] = useState(true);
+  const [floatingActionButton, setFloatingActionButton] = useState(false);
+
+  const [selectedIconPrefix, setSelectedIconPrefix] = useState("fas");
+  const [selectedIconValue, setSelectedIconValue] = useState("message");
+  const [selectedIcon, setSelectedIcon] = useState("fas message");
+  const [selectedButtonStyle, setSelectedButtonStyle] =
+    useState("Rounded Button");
+  const [uploadedIcon, setUploadedIcon] = useState("");
+  const [uploadedIconUrl, setUploadedIconUrl] = useState("");
+  const [previewUploadedIcon, setPreviewUploadedIcon] = useState("");
+
+  const closeFloatingActionButton = () => {
+    if (floatingActionButton) {
+      setFloatingActionButton(false);
+    }
+  };
+
+  // End Preview
 
   const [selectedMenuErrorsResult, setSelectedMenuErrorsResult] = useState([]);
   const [customMenuErrorsResult, setCustomMenuErrorsResult] = useState([]);
   const [iconOptions, setIconOptions] = useState([]);
 
+  const getButton = async () => {
+    try {
+      const headers = {
+        Authorization: localStorage.getItem("accessToken"),
+      };
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}/api/v1/user/my-products/${id}/button/${productId}`,
+        { headers }
+      );
+
+      const style = response.data.data;
+
+      setSelectedButtonStyle(style.buttonStyle);
+      setBackgroundColor(style.backgroundColor);
+      setBodyColor(style.bodyColor);
+      setTextColor(style.textColor);
+      setButtonText(style.textContent);
+      setButtonSize(style.size);
+      setButtonPositionTop(style.top);
+      setButtonPositionRight(style.right);
+      setButtonPositionBottom(style.bottom);
+      setButtonPositionLeft(style.left);
+      setIsPCChecked(style.visibleOnPC);
+      setIsTabletChecked(style.visibleOnTablet);
+      setIsMobileChecked(style.visibleOnMobile);
+
+      setIconInput(style.iconType);
+
+      if (style.iconType === "upload") {
+        setUploadedIconUrl(style.icon);
+        setPreviewUploadedIcon(style.icon);
+      } else {
+        setSelectedIcon(style.icon);
+        setSelectedIconPrefix(style.icon.split(" ")[0]);
+        setSelectedIconValue(style.icon.split(" ")[1]);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     const options = [];
     icons.data.map((icon) => options.push({ label: icon, value: icon }));
     setIconOptions(options);
+
+    getButton();
   }, []);
 
   const validateRequests = () => {
@@ -805,6 +883,317 @@ const SubMenu = () => {
               </Button>
             </div>
           </Col>
+        </Row>
+        <Row>
+          <div
+            style={{
+              top: buttonPositionTop,
+              right: buttonPositionRight,
+              bottom: buttonPositionBottom,
+              left: buttonPositionLeft,
+              position: "fixed",
+              width: buttonSize,
+              height: buttonSize,
+              zIndex: 99999,
+            }}
+          >
+            {selectedButtonStyle === "Rounded Button" ? (
+              <div
+                style={{ float: "right" }}
+                className="d-flex gap-2 align-items-center"
+              >
+                <button
+                  onClick={(e) =>
+                    setFloatingActionButton(!floatingActionButton)
+                  }
+                  type="button"
+                  style={{
+                    width: buttonSize,
+                    height: buttonSize,
+                    borderRadius: "50%",
+                    border: 0,
+                    boxShadow:
+                      "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
+                    backgroundColor: backgroundColor,
+                    color: textColor,
+                    fontSize:
+                      iconInput === "upload" && previewUploadedIcon ? "" : 32,
+                  }}
+                  className={
+                    iconInput === "upload" && previewUploadedIcon ? "p-3" : ""
+                  }
+                >
+                  {iconInput === "upload" && previewUploadedIcon ? (
+                    <img
+                      style={{
+                        width: 35,
+                        height: 35,
+                      }}
+                      src={previewUploadedIcon}
+                    />
+                  ) : (
+                    <FontAwesomeIcon
+                      icon={[selectedIconPrefix, selectedIconValue]}
+                    />
+                  )}
+                </button>
+              </div>
+            ) : selectedButtonStyle === "Long Rounded Button#1" ? (
+              <div
+                style={{
+                  float: buttonPositionRight === null ? "left" : "right",
+                }}
+                className="d-flex gap-2 align-items-center"
+              >
+                <button
+                  onClick={(e) =>
+                    setFloatingActionButton(!floatingActionButton)
+                  }
+                  type="button"
+                  className="d-flex justify-content-center align-items-center gap-3 px-4"
+                  style={{
+                    width: "100%",
+                    height: buttonSize,
+                    borderRadius: 9999,
+                    border: 0,
+                    boxShadow:
+                      "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
+                    backgroundColor: backgroundColor,
+                    color: textColor,
+                    fontSize: 32,
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {iconInput === "upload" && previewUploadedIcon ? (
+                    <img
+                      style={{
+                        width: 35,
+                        height: 35,
+                      }}
+                      src={previewUploadedIcon}
+                    />
+                  ) : (
+                    <FontAwesomeIcon
+                      icon={[selectedIconPrefix, selectedIconValue]}
+                    />
+                  )}
+                  <h5 style={{ color: textColor }}>{buttonText}</h5>
+                </button>
+              </div>
+            ) : selectedButtonStyle === "Rounded Button With Text" ? (
+              <div
+                style={{
+                  float: buttonPositionRight === null ? "left" : "right",
+                  whiteSpace: "nowrap",
+                }}
+                className="d-flex gap-2 align-items-center"
+              >
+                {buttonPositionRight && (
+                  <div
+                    className="px-3 py-2 d-flex justify-content-center align-items-center"
+                    style={{
+                      background: "white",
+                      borderRadius: 10,
+                      boxShadow:
+                        "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
+                    }}
+                  >
+                    <h5>{buttonText}</h5>
+                  </div>
+                )}
+                <button
+                  onClick={(e) =>
+                    setFloatingActionButton(!floatingActionButton)
+                  }
+                  type="button"
+                  style={{
+                    width: buttonSize,
+                    height: buttonSize,
+                    borderRadius: "50%",
+                    border: 0,
+                    boxShadow:
+                      "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
+                    backgroundColor: backgroundColor,
+                    color: textColor,
+                    fontSize: 32,
+                  }}
+                >
+                  {iconInput === "upload" && previewUploadedIcon ? (
+                    <img
+                      style={{
+                        width: 35,
+                        height: 35,
+                      }}
+                      src={previewUploadedIcon}
+                    />
+                  ) : (
+                    <FontAwesomeIcon
+                      icon={[selectedIconPrefix, selectedIconValue]}
+                    />
+                  )}
+                </button>
+                {buttonPositionLeft && <h5>{buttonText}</h5>}
+              </div>
+            ) : (
+              <div
+                style={{
+                  float: buttonPositionRight === null ? "left" : "right",
+                }}
+                className="d-flex gap-2 align-items-center"
+              >
+                <button
+                  onClick={(e) =>
+                    setFloatingActionButton(!floatingActionButton)
+                  }
+                  type="button"
+                  className="d-flex justify-content-center align-items-center gap-3 px-2"
+                  style={{
+                    width: "100%",
+                    height: buttonSize,
+                    borderRadius: 9999,
+                    border: 0,
+                    boxShadow:
+                      "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
+                    backgroundColor: "white",
+                    color: textColor,
+                    fontSize: 32,
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  <h5
+                    style={{
+                      color: "#374151",
+                    }}
+                  >
+                    {buttonText}
+                  </h5>
+                  <div
+                    className="d-flex align-items-center justify-content-center"
+                    style={{
+                      background: backgroundColor,
+                      width: buttonSize * 0.9,
+                      height: buttonSize * 0.9,
+                      borderRadius: "50%",
+                    }}
+                  >
+                    {iconInput === "upload" && previewUploadedIcon ? (
+                      <img
+                        style={{
+                          width: 35,
+                          height: 35,
+                        }}
+                        src={previewUploadedIcon}
+                      />
+                    ) : (
+                      <FontAwesomeIcon
+                        icon={[selectedIconPrefix, selectedIconValue]}
+                      />
+                    )}
+                  </div>
+                </button>
+              </div>
+            )}
+            {floatingActionButton && (
+              <div
+                style={{
+                  position: "relative",
+                  top: buttonPositionTop ? 90 : null,
+                  left: buttonPositionLeft ? 0 : null,
+                  bottom: buttonPositionBottom
+                    ? 75 + customMenues.concat(selectedMenues).length * 75
+                    : null,
+                  right: buttonPositionRight ? 300 : null,
+                }}
+              >
+                <div
+                  style={{
+                    position: "absolute",
+                  }}
+                >
+                  <div
+                    style={{
+                      backgroundColor: backgroundColor,
+                      paddingTop: 15,
+                      paddingBottom: 15,
+                      paddingRight: 20,
+                      paddingLeft: 20,
+                      color: textColor,
+                      borderTopLeftRadius: 15,
+                      borderTopRightRadius: 15,
+                      width: 350,
+                      fontWeight: 600,
+                      fontSize: 20,
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                    }}
+                  >
+                    {buttonText}
+                  </div>
+
+                  <ClickAwayListener onClickAway={closeFloatingActionButton}>
+                    <div
+                      style={{
+                        marginRight: buttonPositionRight
+                          ? buttonPositionRight
+                          : null,
+                        background: bodyColor,
+                        cursor: "pointer",
+                        height: customMenues.concat(selectedMenues).length * 75,
+                        width: "100%",
+                        borderBottomLeftRadius: 15,
+                        borderBottomRightRadius: 15,
+                        color: "rgb(75 85 99)",
+                        fontWeight: 500,
+                        boxShadow:
+                          "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
+                      }}
+                    >
+                      {customMenues.concat(selectedMenues).map((content) => {
+                        return (
+                          <div
+                            key={content.id}
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: 10,
+                              borderTop: "1px solid rgb(229 231 235)",
+                              color: content.textColor,
+                            }}
+                            className="py-3 px-4"
+                          >
+                            {content.icon && (
+                              <FontAwesomeIcon
+                                style={{ fontSize: 16 }}
+                                icon={[
+                                  content.icon.split(" ")[0],
+                                  content.icon.split(" ")[1],
+                                ]}
+                              />
+                            )}
+                            <span
+                              style={{
+                                fontSize: 20,
+                              }}
+                            >
+                              {content.textContent}
+                            </span>
+                            <i
+                              style={{
+                                fontSize: 24,
+                                marginLeft: "auto",
+                              }}
+                              className="uil-angle-right"
+                            ></i>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </ClickAwayListener>
+                </div>
+              </div>
+            )}
+          </div>
         </Row>
       </Container>
     </>
