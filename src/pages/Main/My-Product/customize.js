@@ -17,6 +17,7 @@ import {
 import ColorPicker from "@vtaits/react-color-picker";
 import "@vtaits/react-color-picker/dist/index.css";
 import toast, { Toaster } from "react-hot-toast";
+import Select from "react-select";
 
 const Customize = () => {
   document.title = " My Product | Marketing tool platform";
@@ -53,6 +54,10 @@ const Customize = () => {
   const [selectedIconPrefix, setSelectedIconPrefix] = useState("fas");
   const [selectedIconValue, setSelectedIconValue] = useState("message");
   const [selectedIcon, setSelectedIcon] = useState("fas message");
+  const [selectedIconShow, setSelectedIconShow] = useState({
+    label: "fas message",
+    value: "fas message",
+  });
 
   const [prebuiltButtons, setPrebuiltButtons] = useState([]);
 
@@ -64,6 +69,14 @@ const Customize = () => {
 
   const [selectedButtonStyle, setSelectedButtonStyle] =
     useState("Rounded Button");
+
+  const [iconOptions, setIconOptions] = useState([]);
+
+  useEffect(() => {
+    const options = [];
+    icons.data.map((icon) => options.push({ label: icon, value: icon }));
+    setIconOptions(options);
+  }, []);
 
   useEffect(() => {
     const getPrebuiltButtons = async () => {
@@ -116,6 +129,7 @@ const Customize = () => {
           setUploadedIconUrl(style.icon);
           setPreviewUploadedIcon(style.icon);
         } else {
+          setSelectedIconShow({ label: style.icon, value: style.icon });
           setSelectedIcon(style.icon);
           setSelectedIconPrefix(style.icon.split(" ")[0]);
           setSelectedIconValue(style.icon.split(" ")[1]);
@@ -250,7 +264,8 @@ const Customize = () => {
   };
 
   const handleSelectedIcon = (e) => {
-    const splitIcon = e.target.value.split(" ");
+    const splitIcon = e.value.split(" ");
+    setSelectedIconShow({ label: e.value, value: e.value });
     setSelectedIconPrefix(splitIcon[0]);
     setSelectedIconValue(splitIcon[1]);
   };
@@ -975,24 +990,11 @@ const Customize = () => {
                     <Col md={12}>
                       {iconInput === "font-awesome" ? (
                         <div className="form-floating mb-3">
-                          <select
-                            className="form-select"
-                            id="floatingSelectGrid"
-                            aria-label="Floating label select example"
-                            onChange={handleSelectedIcon}
-                          >
-                            {icons &&
-                              icons.data.map((icon, index) => {
-                                return (
-                                  <option key={index} value={icon}>
-                                    {icon}
-                                  </option>
-                                );
-                              })}
-                          </select>
-                          <label htmlFor="floatingSelectGrid">
-                            Select Icon ({icons.data.length})
-                          </label>
+                          <Select
+                            value={selectedIconShow}
+                            onChange={(e) => handleSelectedIcon(e)}
+                            options={iconOptions}
+                          />
                         </div>
                       ) : (
                         <div className="form-floating mb-3">

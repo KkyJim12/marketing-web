@@ -16,12 +16,20 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import icons from "../../../assets/icons/free-fontawesome-icons.json";
 import toast, { Toaster } from "react-hot-toast";
+import Select from "react-select";
 
 const SubMenu = () => {
   const { id, productId } = useParams();
 
   const [selectedMenuErrorsResult, setSelectedMenuErrorsResult] = useState([]);
   const [customMenuErrorsResult, setCustomMenuErrorsResult] = useState([]);
+  const [iconOptions, setIconOptions] = useState([]);
+
+  useEffect(() => {
+    const options = [];
+    icons.data.map((icon) => options.push({ label: icon, value: icon }));
+    setIconOptions(options);
+  }, []);
 
   const validateRequests = () => {
     const selectedMenuesError = [];
@@ -330,7 +338,8 @@ const SubMenu = () => {
     const clonedCustomMenues = [...customMenues];
     for (let i = 0; i < clonedCustomMenues.length; i++) {
       if (clonedCustomMenues[i].id === id) {
-        clonedCustomMenues[i].icon = e.target.value;
+        clonedCustomMenues[i].icon = e.value;
+        clonedCustomMenues[i].iconShow = { label: e.value, value: e.value };
         break;
       }
     }
@@ -385,6 +394,10 @@ const SubMenu = () => {
               id: uuidv4(),
               textColor: existContents[i].textColor,
               icon: existContents[i].icon,
+              iconShow: {
+                label: existContents[i].icon,
+                value: existContents[i].icon,
+              },
               textContent: existContents[i].textContent,
               description: existContents[i].description,
               destination: existContents[i].destination,
@@ -633,23 +646,14 @@ const SubMenu = () => {
                       </Col>
                       <Col md={2}>
                         <Label>Icon</Label>
-                        <select
+
+                        <Select
+                          value={customMenu.iconShow}
                           onChange={(e) =>
                             handleSelectedCustomMenuIcon(e, customMenu.id)
                           }
-                          className="form-control"
-                          value={customMenu.icon}
-                        >
-                          <option>Select Icon</option>
-                          {icons &&
-                            icons.data.map((icon, index) => {
-                              return (
-                                <option key={index} value={icon}>
-                                  {icon}
-                                </option>
-                              );
-                            })}
-                        </select>
+                          options={iconOptions}
+                        />
 
                         {customMenuErrorsResult[index] && (
                           <small className="text-danger">
