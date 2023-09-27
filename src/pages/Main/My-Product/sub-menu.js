@@ -143,6 +143,20 @@ const SubMenu = () => {
     setCustomMenues(newCustomMenues);
   };
 
+  const handleCustomMenuClass = (e, id) => {
+    let index;
+    for (let i = 0; i < customMenues.length; i++) {
+      if (customMenues[i].id === id) {
+        index = i;
+        break;
+      }
+    }
+
+    const newCustomMenues = [...customMenues];
+    newCustomMenues[index].class = e.target.value;
+    setCustomMenues(newCustomMenues);
+  };
+
   const handleSelectedMenuDescription = (e, id) => {
     let index;
     for (let i = 0; i < selectedMenues.length; i++) {
@@ -168,6 +182,20 @@ const SubMenu = () => {
 
     const newSelectedMenues = [...selectedMenues];
     newSelectedMenues[index].destination = e.target.value;
+    setSelectedMenues(newSelectedMenues);
+  };
+
+  const handleSelectedMenuClass = (e, id) => {
+    let index;
+    for (let i = 0; i < selectedMenues.length; i++) {
+      if (selectedMenues[i].id === id) {
+        index = i;
+        break;
+      }
+    }
+
+    const newSelectedMenues = [...selectedMenues];
+    newSelectedMenues[index].class = e.target.value;
     setSelectedMenues(newSelectedMenues);
   };
 
@@ -310,6 +338,7 @@ const SubMenu = () => {
       textContent: "",
       description: "",
       destination: "",
+      class: "",
       textColorPickerEnable: false,
     };
     setCustomMenues([...customMenues, newCustomMenu]);
@@ -387,6 +416,7 @@ const SubMenu = () => {
               textContent: existContents[i].textContent,
               description: existContents[i].description,
               destination: existContents[i].destination,
+              class: existContents[i].class,
               textColorPickerEnable: false,
             });
           } else {
@@ -401,6 +431,7 @@ const SubMenu = () => {
               textContent: existContents[i].textContent,
               description: existContents[i].description,
               destination: existContents[i].destination,
+              class: existContents[i].class,
               textColorPickerEnable: false,
               label: "Custom",
             });
@@ -431,15 +462,21 @@ const SubMenu = () => {
                 <Row>
                   {subMenues.map((subMenu) => {
                     return (
-                      <Col key={subMenu.id} md={1}>
-                        <div className="d-flex gap-2 align-items-center">
+                      <Col key={subMenu.id} md={2}>
+                        <div className="d-flex flex-column card p-4">
+                          <p>Text Color: {subMenu.textColor}</p>
+                          <p>Icon: {subMenu.icon}</p>
+                          <p>Text: {subMenu.textContent}</p>
+                          <p>Description: {subMenu.description}</p>
+                          <p>Destination: {subMenu.destination}</p>
+                          <p>Class: {subMenu.class}</p>
                           <Button
                             className={
                               selectedMenues.filter(
                                 (selectedMenu) => selectedMenu.id === subMenu.id
                               ).length > 0
-                                ? "btn btn-success"
-                                : "btn btn-info"
+                                ? "btn btn-success w-100"
+                                : "btn btn-info w-100"
                             }
                             onClick={() => selectMenu(subMenu.id)}
                           >
@@ -449,7 +486,6 @@ const SubMenu = () => {
                               ? "Selected"
                               : "Select"}
                           </Button>
-                          <p>{subMenu.textContent}</p>
                         </div>
                       </Col>
                     );
@@ -540,7 +576,7 @@ const SubMenu = () => {
                           </small>
                         )}
                       </Col>
-                      <Col md={3}>
+                      <Col md={2}>
                         <Label>Description</Label>
                         <Input
                           className="form-control"
@@ -556,7 +592,7 @@ const SubMenu = () => {
                           </small>
                         )}
                       </Col>
-                      <Col md={3}>
+                      <Col md={2}>
                         <Label>Destination</Label>
                         <Input
                           className="form-control"
@@ -569,6 +605,22 @@ const SubMenu = () => {
                         {selectedMenuErrorsResult[index] && (
                           <small className="text-danger">
                             {selectedMenuErrorsResult[index].destination}
+                          </small>
+                        )}
+                      </Col>
+                      <Col md={2}>
+                        <Label>Class</Label>
+                        <Input
+                          className="form-control"
+                          placeholder="Class"
+                          value={selectedMenu.destination}
+                          onChange={(e) =>
+                            handleSelectedMenuClass(e, selectedMenu.id)
+                          }
+                        ></Input>
+                        {selectedMenuErrorsResult[index] && (
+                          <small className="text-danger">
+                            {selectedMenuErrorsResult[index].class}
                           </small>
                         )}
                       </Col>
@@ -677,7 +729,7 @@ const SubMenu = () => {
                           </small>
                         )}
                       </Col>
-                      <Col md={3}>
+                      <Col md={2}>
                         <Label>Description</Label>
                         <Input
                           className="form-control"
@@ -693,7 +745,7 @@ const SubMenu = () => {
                           </small>
                         )}
                       </Col>
-                      <Col md={3}>
+                      <Col md={2}>
                         <Label>Destination</Label>
                         <Input
                           className="form-control"
@@ -706,6 +758,22 @@ const SubMenu = () => {
                         {customMenuErrorsResult[index] && (
                           <small className="text-danger">
                             {customMenuErrorsResult[index].destination}
+                          </small>
+                        )}
+                      </Col>
+                      <Col md={2}>
+                        <Label>Class</Label>
+                        <Input
+                          className="form-control"
+                          placeholder="Class"
+                          value={customMenu.class}
+                          onChange={(e) =>
+                            handleCustomMenuClass(e, customMenu.id)
+                          }
+                        ></Input>
+                        {customMenuErrorsResult[index] && (
+                          <small className="text-danger">
+                            {customMenuErrorsResult[index].class}
                           </small>
                         )}
                       </Col>
