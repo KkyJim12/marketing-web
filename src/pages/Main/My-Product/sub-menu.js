@@ -18,6 +18,7 @@ import icons from "../../../assets/icons/free-fontawesome-icons.json";
 import toast, { Toaster } from "react-hot-toast";
 import Select from "react-select";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Parser from "html-react-parser";
 
 const SubMenu = () => {
   const { id, productId } = useParams();
@@ -59,6 +60,27 @@ const SubMenu = () => {
   const [selectedMenuErrorsResult, setSelectedMenuErrorsResult] = useState([]);
   const [customMenuErrorsResult, setCustomMenuErrorsResult] = useState([]);
   const [iconOptions, setIconOptions] = useState([]);
+
+  const [setting, setSetting] = useState('');
+
+  useEffect(() => {
+    const getSetting = async () => {
+      try {
+        const headers = {
+          Authorization: localStorage.getItem("accessToken"),
+        };
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_URL}/api/v1/user/settings`,
+          { headers }
+        );
+        setSetting(response.data.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    getSetting();
+  }, []);
 
   const getButton = async () => {
     try {
@@ -882,6 +904,12 @@ const SubMenu = () => {
                 Save Button Setting
               </Button>
             </div>
+          </Col>
+        </Row>
+
+        <Row className="ql-editor">
+          <Col md={12}>
+            {setting.buttonSettingPage && Parser(setting.buttonSettingPage)}
           </Col>
         </Row>
         <Row>

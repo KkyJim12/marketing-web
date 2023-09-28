@@ -14,6 +14,7 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
+import Parser from "html-react-parser";
 
 const Domain = () => {
   const { id, productId } = useParams();
@@ -26,6 +27,7 @@ const Domain = () => {
   const [domains, setDomains] = useState([]);
   const [urlError, setUrlError] = useState("");
   const [maxDomain, setMaxDomain] = useState("");
+  const [setting, setSetting] = useState("");
 
   const toggleAddDomainModal = () => {
     setAddDomainModal(!addDomainModal);
@@ -38,6 +40,25 @@ const Domain = () => {
   const copySuccess = () => {
     toast.success("Copied");
   };
+
+  useEffect(() => {
+    const getSetting = async () => {
+      try {
+        const headers = {
+          Authorization: localStorage.getItem("accessToken"),
+        };
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_URL}/api/v1/user/settings`,
+          { headers }
+        );
+        setSetting(response.data.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    getSetting();
+  }, []);
 
   useEffect(() => {
     const getProductDetail = async () => {
@@ -339,6 +360,11 @@ const Domain = () => {
           </Row>
         </CardBody>
       </Card>
+      <Row className="ql-editor">
+        <Col md={12}>
+          {setting.websiteSetupPage && Parser(setting.websiteSetupPage)}
+        </Col>
+      </Row>
     </>
   );
 };
