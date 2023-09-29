@@ -28,7 +28,7 @@ const SubMenu = () => {
   const [backgroundColor, setBackgroundColor] = useState("#3b82f6");
   const [bodyColor, setBodyColor] = useState("#ffffff");
   const [textColor, setTextColor] = useState("#f5f5f5");
-  const [buttonSize, setButtonSize] = useState(75);
+  const [buttonSize, setButtonSize] = useState(70);
 
   const [buttonPositionTop, setButtonPositionTop] = useState(null);
   const [buttonPositionRight, setButtonPositionRight] = useState(20);
@@ -61,7 +61,7 @@ const SubMenu = () => {
   const [customMenuErrorsResult, setCustomMenuErrorsResult] = useState([]);
   const [iconOptions, setIconOptions] = useState([]);
 
-  const [setting, setSetting] = useState('');
+  const [setting, setSetting] = useState("");
 
   useEffect(() => {
     const getSetting = async () => {
@@ -946,6 +946,9 @@ const SubMenu = () => {
                     color: textColor,
                     fontSize:
                       iconInput === "upload" && previewUploadedIcon ? "" : 32,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
                   }}
                   className={
                     iconInput === "upload" && previewUploadedIcon ? "p-3" : ""
@@ -954,13 +957,17 @@ const SubMenu = () => {
                   {iconInput === "upload" && previewUploadedIcon ? (
                     <img
                       style={{
-                        width: 35,
-                        height: 35,
+                        width: buttonSize / 2,
+                        height: buttonSize / 2,
                       }}
                       src={previewUploadedIcon}
                     />
                   ) : (
                     <FontAwesomeIcon
+                      style={{
+                        width: buttonSize / 2.5,
+                        height: buttonSize / 2.5,
+                      }}
                       icon={[selectedIconPrefix, selectedIconValue]}
                     />
                   )}
@@ -978,10 +985,10 @@ const SubMenu = () => {
                     setFloatingActionButton(!floatingActionButton)
                   }
                   type="button"
-                  className="d-flex justify-content-center align-items-center gap-3 px-4"
+                  className="d-flex justify-content-center align-items-center gap-3"
                   style={{
                     width: "100%",
-                    height: buttonSize,
+                    height: buttonSize - 10,
                     borderRadius: 9999,
                     border: 0,
                     boxShadow:
@@ -990,22 +997,40 @@ const SubMenu = () => {
                     color: textColor,
                     fontSize: 32,
                     whiteSpace: "nowrap",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    paddingLeft: 30,
+                    paddingRight: 30,
                   }}
                 >
                   {iconInput === "upload" && previewUploadedIcon ? (
                     <img
                       style={{
-                        width: 35,
-                        height: 35,
+                        width: buttonSize / 2,
+                        height: buttonSize / 2,
                       }}
                       src={previewUploadedIcon}
                     />
                   ) : (
                     <FontAwesomeIcon
+                      style={{
+                        width: buttonSize / 2.5,
+                        height: buttonSize / 2.5,
+                      }}
                       icon={[selectedIconPrefix, selectedIconValue]}
                     />
                   )}
-                  <h5 style={{ color: textColor }}>{buttonText}</h5>
+                  <h5
+                    style={{
+                      fontSize: buttonSize / 3.5,
+                      color: textColor,
+                      marginTop: "auto",
+                      marginBottom: "auto",
+                    }}
+                  >
+                    {buttonText}
+                  </h5>
                 </button>
               </div>
             ) : selectedButtonStyle === "Rounded Button With Text" ? (
@@ -1018,7 +1043,7 @@ const SubMenu = () => {
               >
                 {buttonPositionRight && (
                   <div
-                    className="px-3 py-2 d-flex justify-content-center align-items-center"
+                    className="px-3 py-1 d-flex justify-content-center align-items-center"
                     style={{
                       background: "white",
                       borderRadius: 10,
@@ -1026,7 +1051,15 @@ const SubMenu = () => {
                         "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
                     }}
                   >
-                    <h5>{buttonText}</h5>
+                    <h5
+                      style={{
+                        fontSize: buttonSize / 3.5,
+                        marginTop: "auto",
+                        marginBottom: "auto",
+                      }}
+                    >
+                      {buttonText}
+                    </h5>
                   </div>
                 )}
                 <button
@@ -1044,23 +1077,40 @@ const SubMenu = () => {
                     backgroundColor: backgroundColor,
                     color: textColor,
                     fontSize: 32,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
                   }}
                 >
                   {iconInput === "upload" && previewUploadedIcon ? (
                     <img
                       style={{
-                        width: 35,
-                        height: 35,
+                        width: buttonSize / 2,
+                        height: buttonSize / 2,
                       }}
                       src={previewUploadedIcon}
                     />
                   ) : (
                     <FontAwesomeIcon
+                      style={{
+                        width: buttonSize / 2.5,
+                        height: buttonSize / 2.5,
+                      }}
                       icon={[selectedIconPrefix, selectedIconValue]}
                     />
                   )}
                 </button>
-                {buttonPositionLeft && <h5>{buttonText}</h5>}
+                {buttonPositionLeft && (
+                  <h5
+                    style={{
+                      fontSize: buttonSize / 3.5,
+                      marginTop: "auto",
+                      marginBottom: "auto",
+                    }}
+                  >
+                    {buttonText}
+                  </h5>
+                )}
               </div>
             ) : (
               <div
@@ -1074,10 +1124,10 @@ const SubMenu = () => {
                     setFloatingActionButton(!floatingActionButton)
                   }
                   type="button"
-                  className="d-flex justify-content-center align-items-center gap-3 px-2"
+                  className="d-flex justify-content-center align-items-center gap-2"
                   style={{
                     width: "100%",
-                    height: buttonSize,
+                    height: buttonSize - 10,
                     borderRadius: 9999,
                     border: 0,
                     boxShadow:
@@ -1086,11 +1136,18 @@ const SubMenu = () => {
                     color: textColor,
                     fontSize: 32,
                     whiteSpace: "nowrap",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
                   }}
                 >
                   <h5
                     style={{
                       color: "#374151",
+                      fontSize: buttonSize / 3.5,
+                      marginLeft: buttonSize / 4,
+                      marginTop: "auto",
+                      marginBottom: "auto",
                     }}
                   >
                     {buttonText}
@@ -1099,21 +1156,25 @@ const SubMenu = () => {
                     className="d-flex align-items-center justify-content-center"
                     style={{
                       background: backgroundColor,
-                      width: buttonSize * 0.9,
-                      height: buttonSize * 0.9,
+                      width: (buttonSize - 10) * 0.95,
+                      height: (buttonSize - 10) * 0.95,
                       borderRadius: "50%",
                     }}
                   >
                     {iconInput === "upload" && previewUploadedIcon ? (
                       <img
                         style={{
-                          width: 35,
-                          height: 35,
+                          width: buttonSize / 2,
+                          height: buttonSize / 2,
                         }}
                         src={previewUploadedIcon}
                       />
                     ) : (
                       <FontAwesomeIcon
+                        style={{
+                          width: buttonSize / 2.5,
+                          height: buttonSize / 2.5,
+                        }}
                         icon={[selectedIconPrefix, selectedIconValue]}
                       />
                     )}
@@ -1125,12 +1186,24 @@ const SubMenu = () => {
               <div
                 style={{
                   position: "relative",
-                  top: buttonPositionTop ? 90 : null,
+                  top: buttonPositionTop
+                    ? buttonSize === 50
+                      ? 60
+                      : buttonSize === 70
+                      ? 80
+                      : 100
+                    : null,
                   left: buttonPositionLeft ? 0 : null,
                   bottom: buttonPositionBottom
                     ? 75 + customMenues.concat(selectedMenues).length * 75
                     : null,
-                  right: buttonPositionRight ? 300 : null,
+                  right: buttonPositionRight
+                    ? buttonSize === 50
+                      ? 320
+                      : buttonSize === 70
+                      ? 300
+                      : 280
+                    : null,
                 }}
               >
                 <div
@@ -1149,7 +1222,7 @@ const SubMenu = () => {
                       borderTopLeftRadius: 15,
                       borderTopRightRadius: 15,
                       width: 350,
-                      fontWeight: 600,
+                      fontWeight: 500,
                       fontSize: 20,
                       whiteSpace: "nowrap",
                       overflow: "hidden",
@@ -1159,65 +1232,71 @@ const SubMenu = () => {
                     {buttonText}
                   </div>
 
-                  <ClickAwayListener onClickAway={closeFloatingActionButton}>
-                    <div
-                      style={{
-                        marginRight: buttonPositionRight
-                          ? buttonPositionRight
-                          : null,
-                        background: bodyColor,
-                        cursor: "pointer",
-                        height: customMenues.concat(selectedMenues).length * 75,
-                        width: "100%",
-                        borderBottomLeftRadius: 15,
-                        borderBottomRightRadius: 15,
-                        color: "rgb(75 85 99)",
-                        fontWeight: 500,
-                        boxShadow:
-                          "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
-                      }}
-                    >
-                      {customMenues.concat(selectedMenues).map((content) => {
-                        return (
-                          <div
-                            key={content.id}
+                  <div
+                    style={{
+                      marginRight: buttonPositionRight
+                        ? buttonPositionRight
+                        : null,
+                      background: bodyColor,
+                      cursor: "pointer",
+                      height: customMenues.concat(selectedMenues).length * 75,
+                      width: "100%",
+                      borderBottomLeftRadius: 15,
+                      borderBottomRightRadius: 15,
+                      color: "rgb(75 85 99)",
+                      fontWeight: 500,
+                      boxShadow:
+                        "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
+                    }}
+                  >
+                    {customMenues.concat(selectedMenues).map((content) => {
+                      return (
+                        <div
+                          key={content.id}
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 10,
+                            borderTop: "1px solid rgb(229 231 235)",
+                            height: 75,
+                          }}
+                          className="py-3 px-4"
+                        >
+                          {content.icon && (
+                            <FontAwesomeIcon
+                              style={{ fontSize: 24, color: content.textColor }}
+                              icon={[
+                                content.icon.split(" ")[0],
+                                content.icon.split(" ")[1],
+                              ]}
+                            />
+                          )}
+                          <span
                             style={{
+                              fontSize: 18,
                               display: "flex",
                               alignItems: "center",
+                              fontWeight: 500,
+                              marginLeft: 10,
                               gap: 10,
-                              borderTop: "1px solid rgb(229 231 235)",
-                              color: content.textColor,
                             }}
-                            className="py-3 px-4"
                           >
-                            {content.icon && (
-                              <FontAwesomeIcon
-                                style={{ fontSize: 16 }}
-                                icon={[
-                                  content.icon.split(" ")[0],
-                                  content.icon.split(" ")[1],
-                                ]}
-                              />
-                            )}
-                            <span
-                              style={{
-                                fontSize: 20,
-                              }}
-                            >
+                            <p style={{ marginTop: 10 }}>
                               {content.textContent}
-                            </span>
-                            <i
-                              style={{
-                                fontSize: 24,
-                                marginLeft: "auto",
-                              }}
-                              className="uil-angle-right"
-                            ></i>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </ClickAwayListener>
+                            </p>
+                            <p style={{ fontSize: 12, marginTop: 10 }}>
+                              {content.description}
+                            </p>
+                          </span>
+
+                          <FontAwesomeIcon
+                            style={{ fontSize: 24, marginLeft: "auto" }}
+                            icon={["fas", "angle-right"]}
+                          />
+                        </div>
+                      );
+                    })}
+                  </div>
                 </div>
               </div>
             )}
