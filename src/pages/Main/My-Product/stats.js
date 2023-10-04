@@ -283,7 +283,7 @@ const Stats = () => {
     legend: {
       orient: "vertical",
       x: "left",
-      data: ["Direct", "Search Engine", "Social Media", "Others"],
+      data: ["Direct", "Search Engine (Organic)", "Search Engine (Paid)", "Social Media", "Others"],
       textStyle: {
         color: ["#74788d"],
       },
@@ -325,10 +325,17 @@ const Stats = () => {
           },
           {
             value:
-              !isLoading && stats.sourceTypes.search_engine
-                ? stats.sourceTypes.search_engine.length
+              !isLoading && stats.sourceTypes.search_engine_organic
+                ? stats.sourceTypes.search_engine_organic.length
                 : null,
-            name: "Search Engine",
+            name: "Search Engine (Organic)",
+          },
+          {
+            value:
+              !isLoading && stats.sourceTypes.search_engine_paid
+                ? stats.sourceTypes.search_engine_paid.length
+                : null,
+            name: "Search Engine (Paid)",
           },
           {
             value:

@@ -144,10 +144,6 @@ const SubMenu = () => {
         selectedMenuError.textContent = "Please type content";
       }
 
-      if (selectedMenues[i].description === "") {
-        selectedMenuError.description = "Please type description";
-      }
-
       if (selectedMenues[i].destination === "") {
         selectedMenuError.destination = "Please type destination";
       }
@@ -166,10 +162,6 @@ const SubMenu = () => {
 
       if (customMenues[i].textContent === "") {
         customMenuError.textContent = "Please type content";
-      }
-
-      if (customMenues[i].description === "") {
-        customMenuError.description = "Please type description";
       }
 
       if (customMenues[i].destination === "") {
