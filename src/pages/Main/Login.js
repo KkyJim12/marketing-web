@@ -26,6 +26,7 @@ import logo from "../../assets/images/logo-full.png";
 import logolight from "../../assets/images/logo-full.png";
 
 const Login = () => {
+  document.title = " Login | Marketing tool platform";
   const navigate = useNavigate();
 
   useEffect(() => {
