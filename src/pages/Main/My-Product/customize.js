@@ -17,11 +17,12 @@ import {
 import ColorPicker from "@vtaits/react-color-picker";
 import "@vtaits/react-color-picker/dist/index.css";
 import toast, { Toaster } from "react-hot-toast";
-import Select from "react-select";
+import Select, { components } from "react-select";
 
 const Customize = () => {
   document.title = " My Product | Marketing tool platform";
 
+  const { Option } = components;
   const { id, productId } = useParams();
 
   const buttonStyles = [
@@ -71,6 +72,21 @@ const Customize = () => {
     useState("Rounded Button");
 
   const [iconOptions, setIconOptions] = useState([]);
+
+  const OptionWithIcon = (props) => {
+    const { onIconSelect } = props.selectProps;
+    return (
+      <Option {...props}>
+        <div
+          onMouseDown={() => onIconSelect(props.data.value)}
+          className="d-flex gap-2 align-items-center"
+        >
+          <FontAwesomeIcon icon={props.data.value} />
+          {props.data.value}
+        </div>
+      </Option>
+    );
+  };
 
   useEffect(() => {
     const options = [];
@@ -263,9 +279,9 @@ const Customize = () => {
     }
   };
 
-  const handleSelectedIcon = (e) => {
-    const splitIcon = e.value.split(" ");
-    setSelectedIconShow({ label: e.value, value: e.value });
+  const handleSelectedIcon = (value) => {
+    const splitIcon = value.split(" ");
+    setSelectedIconShow({ label: value, value: value });
     setSelectedIconPrefix(splitIcon[0]);
     setSelectedIconValue(splitIcon[1]);
   };
@@ -995,11 +1011,32 @@ const Customize = () => {
                     <Col md={12}>
                       {iconInput === "font-awesome" ? (
                         <div className="form-floating mb-3">
-                          <Select
-                            value={selectedIconShow}
-                            onChange={(e) => handleSelectedIcon(e)}
-                            options={iconOptions}
-                          />
+                          <div className="d-flex gap-1 align-items-center">
+                            <div
+                              style={{
+                                background: backgroundColor,
+                                color: textColor,
+                                width: 35,
+                                height: 35,
+                              }}
+                              className="rounded d-flex align-items-center justify-content-center"
+                            >
+                              <FontAwesomeIcon
+                                size="lg"
+                                icon={[selectedIconPrefix, selectedIconValue]}
+                              />
+                            </div>
+                            <div className="w-100">
+                              <Select
+                                value={selectedIconShow}
+                                onIconSelect={(value) => {
+                                  handleSelectedIcon(value);
+                                }}
+                                options={iconOptions}
+                                components={{ Option: OptionWithIcon }}
+                              />
+                            </div>
+                          </div>
                         </div>
                       ) : (
                         <div className="form-floating mb-3">
@@ -1204,8 +1241,8 @@ const Customize = () => {
                 {iconInput === "upload" && previewUploadedIcon ? (
                   <img
                     style={{
-                      width: buttonSize/2,
-                      height: buttonSize/2,
+                      width: buttonSize / 2,
+                      height: buttonSize / 2,
                     }}
                     src={previewUploadedIcon}
                   />
@@ -1280,8 +1317,8 @@ const Customize = () => {
                 {iconInput === "upload" && previewUploadedIcon ? (
                   <img
                     style={{
-                      width: buttonSize/2,
-                      height: buttonSize/2,
+                      width: buttonSize / 2,
+                      height: buttonSize / 2,
                     }}
                     src={previewUploadedIcon}
                   />
@@ -1357,8 +1394,8 @@ const Customize = () => {
                   {iconInput === "upload" && previewUploadedIcon ? (
                     <img
                       style={{
-                        width: buttonSize/2,
-                        height: buttonSize/2,
+                        width: buttonSize / 2,
+                        height: buttonSize / 2,
                       }}
                       src={previewUploadedIcon}
                     />

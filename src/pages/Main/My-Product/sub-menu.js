@@ -16,12 +16,13 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import icons from "../../../assets/icons/free-fontawesome-icons.json";
 import toast, { Toaster } from "react-hot-toast";
-import Select from "react-select";
+import Select, { components } from "react-select";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Parser from "html-react-parser";
 
 const SubMenu = () => {
   const { id, productId } = useParams();
+  const { Option } = components;
 
   // Preview
   const [buttonText, setButtonText] = useState("Minible");
@@ -62,6 +63,21 @@ const SubMenu = () => {
   const [iconOptions, setIconOptions] = useState([]);
 
   const [setting, setSetting] = useState("");
+
+  const OptionWithIcon = (props) => {
+    const { onIconSelect } = props.selectProps;
+    return (
+      <Option {...props}>
+        <div
+          onMouseDown={() => onIconSelect(props.data.value)}
+          className="d-flex gap-2 align-items-center"
+        >
+          <FontAwesomeIcon icon={props.data.value} />
+          {props.data.value}
+        </div>
+      </Option>
+    );
+  };
 
   useEffect(() => {
     const getSetting = async () => {
@@ -455,12 +471,12 @@ const SubMenu = () => {
     setCustomMenues(newCustomMenues);
   };
 
-  const handleSelectedCustomMenuIcon = (e, id) => {
+  const handleSelectedCustomMenuIcon = (value, id) => {
     const clonedCustomMenues = [...customMenues];
     for (let i = 0; i < clonedCustomMenues.length; i++) {
       if (clonedCustomMenues[i].id === id) {
-        clonedCustomMenues[i].icon = e.value;
-        clonedCustomMenues[i].iconShow = { label: e.value, value: e.value };
+        clonedCustomMenues[i].icon = value;
+        clonedCustomMenues[i].iconShow = { label: value, value: value };
         break;
       }
     }
@@ -791,13 +807,37 @@ const SubMenu = () => {
                       <Col md={2}>
                         <Label>Icon</Label>
 
-                        <Select
-                          value={customMenu.iconShow}
-                          onChange={(e) =>
-                            handleSelectedCustomMenuIcon(e, customMenu.id)
-                          }
-                          options={iconOptions}
-                        />
+                        <div className="form-floating mb-3">
+                          <div className="d-flex gap-1 align-items-center">
+                            <div
+                              style={{
+                                background: backgroundColor,
+                                color: textColor,
+                                width: 35,
+                                height: 35,
+                              }}
+                              className="rounded d-flex align-items-center justify-content-center"
+                            >
+                              <FontAwesomeIcon
+                                size="lg"
+                                icon={customMenu.iconShow}
+                              />
+                            </div>
+                            <div className="w-100">
+                              <Select
+                                value={customMenu.iconShow}
+                                onIconSelect={(value) => {
+                                  handleSelectedCustomMenuIcon(
+                                    value,
+                                    customMenu.id
+                                  );
+                                }}
+                                options={iconOptions}
+                                components={{ Option: OptionWithIcon }}
+                              />
+                            </div>
+                          </div>
+                        </div>
 
                         {customMenuErrorsResult[index] && (
                           <small className="text-danger">
