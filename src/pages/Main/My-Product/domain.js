@@ -18,6 +18,7 @@ import Parser from "html-react-parser";
 
 const Domain = () => {
   const { id, productId } = useParams();
+  const firstLine = `<link rel="stylesheet" href="https://unpkg.com/@jsweb/font-awesome-base64/fa-all.css"/>`;
   const secondLine = `<script src='${process.env.REACT_APP_API_URL}/js/floating-action-button.js'></script>`;
   const thirdLine = `<script>generateButton("${id}")</script>`;
   const fourthLine = `<link rel="stylesheet" href="${process.env.REACT_APP_API_URL}/css/floating-action-button.css" />`;
@@ -156,7 +157,9 @@ const Domain = () => {
                 <span>Attached Script</span>
               </Col>
               <Col md={1}>
-                <CopyToClipboard text={secondLine + thirdLine + fourthLine}>
+                <CopyToClipboard
+                  text={firstLine + secondLine + thirdLine + fourthLine}
+                >
                   <button
                     type="button"
                     onClick={copySuccess}
@@ -167,11 +170,37 @@ const Domain = () => {
                 </CopyToClipboard>
               </Col>
             </Row>
-          </CardTitle>
-          <Row className="mt-2">
+          </CardTitle><Row className="mt-2">
             <Col md={11}>
               <div className="d-flex gap-2 align-items-center">
                 1.
+                <input
+                  type="text"
+                  readOnly
+                  placeholder="Attach Script Tag"
+                  className="form-control"
+                  rows="5"
+                  style={{ resize: "none" }}
+                  value={firstLine}
+                />
+              </div>
+            </Col>
+            <Col className="d-flex gap-2" md={1}>
+              <CopyToClipboard text={firstLine}>
+                <button
+                  type="button"
+                  onClick={copySuccess}
+                  className="btn btn-primary w-100"
+                >
+                  Copy
+                </button>
+              </CopyToClipboard>
+            </Col>
+          </Row>
+          <Row className="mt-2">
+            <Col md={11}>
+              <div className="d-flex gap-2 align-items-center">
+                2.
                 <input
                   type="text"
                   readOnly
@@ -198,7 +227,7 @@ const Domain = () => {
           <Row className="mt-2">
             <Col md={11}>
               <div className="d-flex gap-2 align-items-center">
-                2.
+                3.
                 <input
                   type="text"
                   readOnly
@@ -226,7 +255,7 @@ const Domain = () => {
           <Row className="mt-2">
             <Col md={11}>
               <div className="d-flex gap-2 align-items-center">
-                3.
+                4.
                 <input
                   type="text"
                   readOnly

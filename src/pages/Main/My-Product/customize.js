@@ -1482,43 +1482,47 @@ const Customize = () => {
                       <div
                         key={content.id}
                         style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: 10,
                           borderTop: "1px solid rgb(229 231 235)",
                           height: 75,
                         }}
                         className="py-3 px-4"
                       >
-                        {content.icon && (
-                          <FontAwesomeIcon
-                            style={{ fontSize: 24, color: content.textColor }}
-                            icon={[
-                              content.icon.split(" ")[0],
-                              content.icon.split(" ")[1],
-                            ]}
-                          />
-                        )}
-                        <span
-                          style={{
-                            fontSize: 18,
-                            display: "flex",
-                            alignItems: "center",
-                            fontWeight: 500,
-                            marginLeft: 10,
-                            gap: 10,
-                          }}
-                        >
-                          <p style={{ marginTop: 10 }}>{content.textContent}</p>
-                          <p style={{ fontSize: 12, marginTop: 10 }}>
-                            {content.description}
-                          </p>
-                        </span>
-
-                        <FontAwesomeIcon
-                          style={{ fontSize: 24, marginLeft: "auto" }}
-                          icon={["fas", "angle-right"]}
-                        />
+                        <div className="row">
+                          <div className="col-md-2">
+                            <div className="d-flex justify-content-center align-items-center h-100">
+                              {content.icon && (
+                                <FontAwesomeIcon
+                                  style={{
+                                    fontSize: 24,
+                                    color: content.textColor,
+                                  }}
+                                  icon={[
+                                    content.icon.split(" ")[0],
+                                    content.icon.split(" ")[1],
+                                  ]}
+                                />
+                              )}
+                            </div>
+                          </div>
+                          <div className="col-md-8">
+                            <div className="d-flex flex-column mt-auto">
+                              <p style={{ fontSize: 16, marginBottom: 0 }}>
+                                {content.textContent}
+                              </p>
+                              <p style={{ fontSize: 12, marginBottom: 0 }}>
+                                {content.description}
+                              </p>
+                            </div>
+                          </div>
+                          <div className="col-md-2">
+                            <div className="d-flex justify-content-center align-items-center h-100">
+                              <FontAwesomeIcon
+                                style={{ fontSize: 24 }}
+                                icon={["fas", "angle-right"]}
+                              />
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     );
                   })}
