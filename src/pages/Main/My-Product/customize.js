@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import icons from "../../../assets/icons/free-fontawesome-icons.json";
@@ -31,6 +31,9 @@ const Customize = () => {
     "Long Rounded Button#1",
     "Long Rounded Button#2",
   ];
+
+  const [height, setHeight] = useState(null);
+  const [width, setWidth] = useState(null);
 
   const [buttonText, setButtonText] = useState("Minible");
   const [backgroundColorEnable, setBackgroundColorEnable] = useState(false);
@@ -72,6 +75,16 @@ const Customize = () => {
     useState("Rounded Button");
 
   const [iconOptions, setIconOptions] = useState([]);
+
+  const previewButton = useCallback(
+    (node) => {
+      if (node !== null) {
+        setHeight(node.getBoundingClientRect().height);
+        setWidth(node.getBoundingClientRect().width);
+      }
+    },
+    [buttonText, buttonSize, buttonStyles]
+  );
 
   const OptionWithIcon = (props) => {
     const { onIconSelect } = props.selectProps;
@@ -1168,10 +1181,20 @@ const Customize = () => {
               style={{ float: "right" }}
               className="d-flex gap-2 align-items-center"
             >
+              <div
+                style={{
+                  width: buttonSize,
+                  height: buttonSize,
+                  background: backgroundColor,
+                  zIndex: 99998,
+                }}
+                id="fab-button-cover"
+              ></div>
               <button
                 onClick={(e) => setFloatingActionButton(!floatingActionButton)}
                 type="button"
                 style={{
+                  zIndex: 99999,
                   width: buttonSize,
                   height: buttonSize,
                   borderRadius: "50%",
@@ -1216,11 +1239,23 @@ const Customize = () => {
               }}
               className="d-flex gap-2 align-items-center"
             >
+              <div
+                style={{
+                  width: width,
+                  height: buttonSize,
+                  background: backgroundColor,
+                  zIndex: 99998,
+                  opacity: 0.4,
+                }}
+                id="fab-button-cover"
+              ></div>
               <button
+                ref={previewButton}
                 onClick={(e) => setFloatingActionButton(!floatingActionButton)}
                 type="button"
                 className="d-flex justify-content-center align-items-center gap-3"
                 style={{
+                  zIndex: 99999,
                   width: "100%",
                   height: buttonSize - 10,
                   borderRadius: 9999,
@@ -1296,6 +1331,17 @@ const Customize = () => {
                   </h5>
                 </div>
               )}
+              <div
+                style={{
+                  width: buttonSize,
+                  height: buttonSize,
+                  background: backgroundColor,
+                  zIndex: 99998,
+                  right: buttonPositionLeft === null && 10,
+                  left: buttonPositionRight === null && 10,
+                }}
+                id="fab-button-cover"
+              ></div>
               <button
                 onClick={(e) => setFloatingActionButton(!floatingActionButton)}
                 type="button"
@@ -1351,11 +1397,23 @@ const Customize = () => {
               }}
               className="d-flex gap-2 align-items-center"
             >
+              <div
+                style={{
+                  width: width,
+                  height: buttonSize,
+                  background: backgroundColor,
+                  opacity: 0.15,
+                  zIndex: 99998,
+                }}
+                id="fab-button-cover"
+              ></div>
               <button
+                ref={previewButton}
                 onClick={(e) => setFloatingActionButton(!floatingActionButton)}
                 type="button"
                 className="d-flex justify-content-center align-items-center gap-2"
                 style={{
+                  zIndex:99999,
                   width: "100%",
                   height: buttonSize - 10,
                   borderRadius: 9999,
@@ -1369,13 +1427,14 @@ const Customize = () => {
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
+                  paddingRight: buttonSize,
+                  paddingLeft: 20,
                 }}
               >
                 <h5
                   style={{
                     color: "#374151",
                     fontSize: buttonSize / 3.5,
-                    marginLeft: buttonSize / 4,
                     marginTop: "auto",
                     marginBottom: "auto",
                   }}
@@ -1385,6 +1444,8 @@ const Customize = () => {
                 <div
                   className="d-flex align-items-center justify-content-center"
                   style={{
+                    right: 13,
+                    position: "absolute",
                     background: backgroundColor,
                     width: (buttonSize - 10) * 0.95,
                     height: (buttonSize - 10) * 0.95,

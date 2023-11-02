@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import {
   Container,
   Row,
@@ -23,6 +23,9 @@ import Parser from "html-react-parser";
 const SubMenu = () => {
   const { id, productId } = useParams();
   const { Option } = components;
+
+  const [height, setHeight] = useState(null);
+  const [width, setWidth] = useState(null);
 
   // Preview
   const [buttonText, setButtonText] = useState("Minible");
@@ -49,6 +52,13 @@ const SubMenu = () => {
   const [uploadedIcon, setUploadedIcon] = useState("");
   const [uploadedIconUrl, setUploadedIconUrl] = useState("");
   const [previewUploadedIcon, setPreviewUploadedIcon] = useState("");
+
+  const previewButton = useCallback((node) => {
+    if (node !== null) {
+      setHeight(node.getBoundingClientRect().height);
+      setWidth(node.getBoundingClientRect().width);
+    }
+  }, []);
 
   const closeFloatingActionButton = () => {
     if (floatingActionButton) {
@@ -962,12 +972,22 @@ const SubMenu = () => {
                 style={{ float: "right" }}
                 className="d-flex gap-2 align-items-center"
               >
+                <div
+                  style={{
+                    width: buttonSize,
+                    height: buttonSize,
+                    background: backgroundColor,
+                    zIndex: 99998,
+                  }}
+                  id="fab-button-cover"
+                ></div>
                 <button
                   onClick={(e) =>
                     setFloatingActionButton(!floatingActionButton)
                   }
                   type="button"
                   style={{
+                    zIndex: 99999,
                     width: buttonSize,
                     height: buttonSize,
                     borderRadius: "50%",
@@ -1012,13 +1032,25 @@ const SubMenu = () => {
                 }}
                 className="d-flex gap-2 align-items-center"
               >
+                <div
+                  style={{
+                    width: width,
+                    height: buttonSize,
+                    background: backgroundColor,
+                    zIndex: 99998,
+                    opacity: 0.4,
+                  }}
+                  id="fab-button-cover"
+                ></div>
                 <button
+                  ref={previewButton}
                   onClick={(e) =>
                     setFloatingActionButton(!floatingActionButton)
                   }
                   type="button"
                   className="d-flex justify-content-center align-items-center gap-3"
                   style={{
+                    zIndex: 99999,
                     width: "100%",
                     height: buttonSize - 10,
                     borderRadius: 9999,
@@ -1094,12 +1126,24 @@ const SubMenu = () => {
                     </h5>
                   </div>
                 )}
+                <div
+                  style={{
+                    width: buttonSize,
+                    height: buttonSize,
+                    background: backgroundColor,
+                    zIndex: 99998,
+                    right: buttonPositionLeft === null && 10,
+                    left: buttonPositionRight === null && 10,
+                  }}
+                  id="fab-button-cover"
+                ></div>
                 <button
                   onClick={(e) =>
                     setFloatingActionButton(!floatingActionButton)
                   }
                   type="button"
                   style={{
+                    zIndex: 99999,
                     width: buttonSize,
                     height: buttonSize,
                     borderRadius: "50%",
@@ -1151,13 +1195,25 @@ const SubMenu = () => {
                 }}
                 className="d-flex gap-2 align-items-center"
               >
+                <div
+                  style={{
+                    width: width,
+                    height: buttonSize,
+                    background: backgroundColor,
+                    opacity: 0.15,
+                    zIndex: 99998,
+                  }}
+                  id="fab-button-cover"
+                ></div>
                 <button
+                  ref={previewButton}
                   onClick={(e) =>
                     setFloatingActionButton(!floatingActionButton)
                   }
                   type="button"
                   className="d-flex justify-content-center align-items-center gap-2"
                   style={{
+                    zIndex: 99999,
                     width: "100%",
                     height: buttonSize - 10,
                     borderRadius: 9999,
@@ -1171,13 +1227,14 @@ const SubMenu = () => {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
+                    paddingRight: buttonSize,
+                    paddingLeft: 20,
                   }}
                 >
                   <h5
                     style={{
                       color: "#374151",
                       fontSize: buttonSize / 3.5,
-                      marginLeft: buttonSize / 4,
                       marginTop: "auto",
                       marginBottom: "auto",
                     }}
@@ -1187,6 +1244,8 @@ const SubMenu = () => {
                   <div
                     className="d-flex align-items-center justify-content-center"
                     style={{
+                      right: 13,
+                      position: "absolute",
                       background: backgroundColor,
                       width: (buttonSize - 10) * 0.95,
                       height: (buttonSize - 10) * 0.95,
