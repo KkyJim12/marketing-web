@@ -1178,7 +1178,9 @@ const Customize = () => {
         >
           {selectedButtonStyle === "Rounded Button" ? (
             <div
-              style={{ float: "right" }}
+              style={{
+                float: buttonPositionRight === null ? "left" : "right",
+              }}
               className="d-flex gap-2 align-items-center"
             >
               <div
@@ -1380,15 +1382,25 @@ const Customize = () => {
                 )}
               </button>
               {buttonPositionLeft && (
-                <h5
+                <div
+                  className="px-3 py-1 d-flex justify-content-center align-items-center"
                   style={{
-                    fontSize: buttonSize / 3.5,
-                    marginTop: "auto",
-                    marginBottom: "auto",
+                    background: "white",
+                    borderRadius: 10,
+                    boxShadow:
+                      "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
                   }}
                 >
-                  {buttonText}
-                </h5>
+                  <h5
+                    style={{
+                      fontSize: buttonSize / 3.5,
+                      marginTop: "auto",
+                      marginBottom: "auto",
+                    }}
+                  >
+                    {buttonText}
+                  </h5>
+                </div>
               )}
             </div>
           ) : (

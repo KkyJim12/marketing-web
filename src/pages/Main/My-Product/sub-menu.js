@@ -1213,6 +1213,7 @@ const SubMenu = () => {
                   type="button"
                   className="d-flex justify-content-center align-items-center gap-2"
                   style={{
+                    position: "relative",
                     zIndex: 99999,
                     width: "100%",
                     height: buttonSize - 10,
@@ -1244,7 +1245,7 @@ const SubMenu = () => {
                   <div
                     className="d-flex align-items-center justify-content-center"
                     style={{
-                      right: 13,
+                      right: 3,
                       position: "absolute",
                       background: backgroundColor,
                       width: (buttonSize - 10) * 0.95,
