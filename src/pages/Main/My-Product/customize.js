@@ -57,10 +57,10 @@ const Customize = () => {
 
   const [selectedIconPrefix, setSelectedIconPrefix] = useState("fas");
   const [selectedIconValue, setSelectedIconValue] = useState("message");
-  const [selectedIcon, setSelectedIcon] = useState("fas message");
+  const [selectedIcon, setSelectedIcon] = useState("fab facebook");
   const [selectedIconShow, setSelectedIconShow] = useState({
-    label: "fas message",
-    value: "fas message",
+    label: "fab facebook",
+    value: "fab facebook",
   });
 
   const [prebuiltButtons, setPrebuiltButtons] = useState([]);
@@ -1414,6 +1414,7 @@ const Customize = () => {
                 type="button"
                 className="d-flex justify-content-center align-items-center gap-2"
                 style={{
+                  position: "relative",
                   zIndex: 99999,
                   width: "100%",
                   height: buttonSize - 10,
@@ -1429,11 +1430,12 @@ const Customize = () => {
                   alignItems: "center",
                   justifyContent: "center",
                   paddingRight: buttonSize,
-                  paddingLeft: 20,
+                  paddingLeft: 10,
                 }}
               >
                 <h5
                   style={{
+                    marginLeft: buttonSize / 4,
                     color: "#374151",
                     fontSize: buttonSize / 3.5,
                     marginTop: "auto",
@@ -1445,7 +1447,7 @@ const Customize = () => {
                 <div
                   className="d-flex align-items-center justify-content-center"
                   style={{
-                    right: 13,
+                    right: 3,
                     position: "absolute",
                     background: backgroundColor,
                     width: (buttonSize - 10) * 0.95,
