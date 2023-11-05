@@ -1346,6 +1346,7 @@ const Customize = () => {
                 onClick={(e) => setFloatingActionButton(!floatingActionButton)}
                 type="button"
                 style={{
+                  zIndex: 99999,
                   width: buttonSize,
                   height: buttonSize,
                   borderRadius: "50%",
@@ -1413,7 +1414,7 @@ const Customize = () => {
                 type="button"
                 className="d-flex justify-content-center align-items-center gap-2"
                 style={{
-                  zIndex:99999,
+                  zIndex: 99999,
                   width: "100%",
                   height: buttonSize - 10,
                   borderRadius: 9999,
