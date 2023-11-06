@@ -1351,7 +1351,7 @@ const SubMenu = () => {
                           }}
                           className="py-3 px-4"
                         >
-                          <div className="row">
+                          <div className="row h-100">
                             <div className="col-md-2">
                               <div className="d-flex justify-content-center align-items-center h-100">
                                 {content.icon && (
@@ -1369,11 +1369,16 @@ const SubMenu = () => {
                               </div>
                             </div>
                             <div className="col-md-8">
-                              <div className="d-flex flex-column mt-auto">
+                              <div className="d-flex flex-column mt-auto h-100 justify-content-center">
                                 <p style={{ fontSize: 16, marginBottom: 0 }}>
                                   {content.textContent}
                                 </p>
-                                <p style={{ fontSize: 12, marginBottom: 0 }}>
+                                <p
+                                  style={{
+                                    fontSize: 12,
+                                    marginBottom: 0,
+                                  }}
+                                >
                                   {content.description}
                                 </p>
                               </div>
