@@ -7,12 +7,14 @@ import { Link } from "react-router-dom";
 import "./datatables.scss";
 import { useTranslation } from "react-i18next";
 import Parser from "html-react-parser";
+import { useNavigate } from "react-router-dom";
 
 //Import Breadcrumb
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
 
 const MyProduct = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   document.title = " My Product | Marketing tool platform";
 
   const [setting, setSetting] = useState([]);
@@ -32,25 +34,22 @@ const MyProduct = () => {
 
       console.log(response.data.data);
       setIsLoading(true);
+      navigate("/order-history");
     } catch (error) {
       console.log(error);
     }
   };
 
   const ReNewButton = (props) => {
-    if (props.status === "Expired") {
-      return (
-        <button
-          onClick={() => reNewProduct(props.product)}
-          className="btn btn-success waves-effect waves-light btn-sm"
-          type="button"
-        >
-          {t("Re new")}
-        </button>
-      );
-    } else {
-      return <>-</>;
-    }
+    return (
+      <button
+        onClick={() => reNewProduct(props.product)}
+        className="btn btn-success waves-effect waves-light btn-sm"
+        type="button"
+      >
+        {t("Extend")}
+      </button>
+    );
   };
 
   const ManageButton = (props) => {
@@ -121,7 +120,7 @@ const MyProduct = () => {
         width: 270,
       },
       {
-        label: "Re New",
+        label: "Extend",
         field: "reNew",
         sort: "asc",
         width: 270,
