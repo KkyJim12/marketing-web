@@ -72,6 +72,12 @@ const MyProduct = () => {
   const initData = {
     columns: [
       {
+        label: "ID",
+        field: "id",
+        sort: "asc",
+        width: 150,
+      },
+      {
         label: "Package Name",
         field: "name",
         sort: "asc",
@@ -153,6 +159,13 @@ const MyProduct = () => {
 
       for (let i = 0; i < fetchData.length; i++) {
         const newData = {
+          id:
+            fetchData[i].id.substring(0, 4) +
+            "..." +
+            fetchData[i].id.substring(
+              fetchData[i].id.length - 5,
+              fetchData[i].id.length - 1
+            ),
           name: fetchData[i].name,
           type: fetchData[i].type,
           domains: fetchData[i].domains,
