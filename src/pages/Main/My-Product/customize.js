@@ -55,8 +55,8 @@ const Customize = () => {
   const [isMobileChecked, setIsMobileChecked] = useState(true);
   const [floatingActionButton, setFloatingActionButton] = useState(false);
 
-  const [selectedIconPrefix, setSelectedIconPrefix] = useState("fas");
-  const [selectedIconValue, setSelectedIconValue] = useState("message");
+  const [selectedIconPrefix, setSelectedIconPrefix] = useState("fab");
+  const [selectedIconValue, setSelectedIconValue] = useState("facebook");
   const [selectedIcon, setSelectedIcon] = useState("fab facebook");
   const [selectedIconShow, setSelectedIconShow] = useState({
     label: "fab facebook",
@@ -813,7 +813,7 @@ const Customize = () => {
                       aria-label="Basic example"
                     >
                       <button
-                        onClick={() => handleButtonSize(50)}
+                        onClick={() => handleButtonSize(60)}
                         className="btn btn-light"
                       >
                         Small
@@ -825,7 +825,7 @@ const Customize = () => {
                         Medium
                       </button>
                       <button
-                        onClick={() => handleButtonSize(90)}
+                        onClick={() => handleButtonSize(80)}
                         className="btn btn-light"
                       >
                         Large
@@ -1493,7 +1493,7 @@ const Customize = () => {
               style={{
                 position: "relative",
                 top: buttonPositionTop
-                  ? buttonSize === 50
+                  ? buttonSize === 60
                     ? 60
                     : buttonSize === 70
                     ? 80
@@ -1502,11 +1502,11 @@ const Customize = () => {
                 left: buttonPositionLeft ? 0 : null,
                 bottom: buttonPositionBottom ? 75 + contents.length * 75 : null,
                 right: buttonPositionRight
-                  ? buttonSize === 50
-                    ? 320
+                  ? buttonSize === 60
+                    ? 310
                     : buttonSize === 70
                     ? 300
-                    : 280
+                    : 290
                   : null,
               }}
             >
@@ -1581,7 +1581,15 @@ const Customize = () => {
                             </div>
                           </div>
                           <div className="col-md-8">
-                            <div className="d-flex flex-column mt-auto h-100 justify-content-center">
+                            <div
+                              style={{
+                                width: 200,
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                              }}
+                              className="d-flex flex-column mt-auto h-100 justify-content-center"
+                            >
                               <p
                                 style={{
                                   fontSize: 16,

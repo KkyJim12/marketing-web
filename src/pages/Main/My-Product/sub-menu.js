@@ -1290,11 +1290,11 @@ const SubMenu = () => {
                     ? 75 + customMenues.concat(selectedMenues).length * 75
                     : null,
                   right: buttonPositionRight
-                    ? buttonSize === 50
-                      ? 320
+                    ? buttonSize === 60
+                      ? 310
                       : buttonSize === 70
                       ? 300
-                      : 280
+                      : 290
                     : null,
                 }}
               >
@@ -1369,7 +1369,15 @@ const SubMenu = () => {
                               </div>
                             </div>
                             <div className="col-md-8">
-                              <div className="d-flex flex-column mt-auto h-100 justify-content-center">
+                              <div
+                                style={{
+                                  width: 200,
+                                  whiteSpace: "nowrap",
+                                  overflow: "hidden",
+                                  textOverflow: "ellipsis",
+                                }}
+                                className="d-flex flex-column mt-auto h-100 justify-content-center"
+                              >
                                 <p style={{ fontSize: 16, marginBottom: 0 }}>
                                   {content.textContent}
                                 </p>
