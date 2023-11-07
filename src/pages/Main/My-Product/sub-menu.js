@@ -1279,11 +1279,11 @@ const SubMenu = () => {
                 style={{
                   position: "relative",
                   top: buttonPositionTop
-                    ? buttonSize === 50
-                      ? 60
+                    ? buttonSize === 60
+                      ? 70
                       : buttonSize === 70
                       ? 80
-                      : 100
+                      : 90
                     : null,
                   left: buttonPositionLeft ? 0 : null,
                   bottom: buttonPositionBottom
