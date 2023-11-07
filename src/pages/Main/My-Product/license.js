@@ -1,18 +1,40 @@
 import { useEffect, useState } from "react";
 import { Card, CardBody, CardTitle, Row, Col, Button } from "reactstrap";
-import { useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import moment from "moment";
 
 const License = () => {
+  const navigate = useNavigate();
   const { id, productId } = useParams();
 
+  const [thisProduct, setThisProduct] = useState("");
   const [domains, setDomains] = useState("");
   const [type, setType] = useState("");
   const [duration, setDuration] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [status, setStatus] = useState("");
+
+  const reNewProduct = async (product) => {
+    try {
+      const headers = {
+        Authorization: localStorage.getItem("accessToken"),
+      };
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/api/v1/user/my-products/renew-product`,
+        {
+          product: thisProduct,
+        },
+        { headers }
+      );
+
+      console.log(response.data.data);
+      navigate("/order-history");
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     const getProductDetail = async () => {
@@ -27,6 +49,7 @@ const License = () => {
 
         console.log(response.data.data);
         const product = response.data.data;
+        setThisProduct(product);
         setDomains(product.domains);
         setType(product.type);
         setDuration(product.duration);
@@ -47,7 +70,22 @@ const License = () => {
         <CardBody>
           <CardTitle>
             <div className="d-flex justify-content-between">
-              <span>Detail</span>
+              <h3>Detail</h3>
+              <div className="d-flex gap-2 align-items-center">
+                <button
+                  onClick={() => reNewProduct()}
+                  className="btn btn-success text-white rounded"
+                  type="button"
+                >
+                  Extends
+                </button>
+                <Link
+                  className="btn btn-primary text-white rounded"
+                  to="/e-commerce"
+                >
+                  Buy Product
+                </Link>
+              </div>
             </div>
           </CardTitle>
           <Row className="gap-2 mt-2">
