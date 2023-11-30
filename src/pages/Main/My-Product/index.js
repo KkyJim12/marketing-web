@@ -159,13 +159,7 @@ const MyProduct = () => {
 
       for (let i = 0; i < fetchData.length; i++) {
         const newData = {
-          id:
-            fetchData[i].id.substring(0, 4) +
-            "..." +
-            fetchData[i].id.substring(
-              fetchData[i].id.length - 5,
-              fetchData[i].id.length - 1
-            ),
+          id: fetchData[i].id,
           name: fetchData[i].name,
           type: fetchData[i].type,
           domains: fetchData[i].domains,

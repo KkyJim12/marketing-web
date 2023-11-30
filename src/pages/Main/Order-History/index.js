@@ -126,6 +126,12 @@ const OrderHistory = () => {
         width: 270,
       },
       {
+        label: "Extends From",
+        field: "extendsFrom",
+        sort: "asc",
+        width: 270,
+      },
+      {
         label: "Price",
         field: "price",
         sort: "asc",
@@ -200,16 +206,17 @@ const OrderHistory = () => {
       const fetchData = response.data.data;
       const clonedData = initData;
 
+      console.log(fetchData);
+
       for (let i = 0; i < fetchData.length; i++) {
         const newData = {
-          invoiceId:
-            fetchData[i].id.substring(0, 4) +
-            "..." +
-            fetchData[i].id.substring(
-              fetchData[i].id.length - 5,
-              fetchData[i].id.length - 1
-            ),
-          name: fetchData[i].name,
+          invoiceId: fetchData[i].id,
+          name:
+            fetchData[i].type === "Extends"
+              ? fetchData[i].product.name
+              : fetchData[i].name,
+          extendsFrom:
+            fetchData[i].type === "Extends" ? fetchData[i].name : "-",
           type: fetchData[i].type,
           price: fetchData[i].price,
           domains: fetchData[i].domains,
