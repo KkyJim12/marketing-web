@@ -765,7 +765,7 @@ const SubMenu = () => {
                         <Input
                           className="form-control"
                           placeholder="Class"
-                          value={selectedMenu.destination}
+                          value={selectedMenu.class}
                           onChange={(e) =>
                             handleSelectedMenuClass(e, selectedMenu.id)
                           }
