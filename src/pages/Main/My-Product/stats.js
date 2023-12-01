@@ -244,7 +244,7 @@ const Stats = () => {
       title: "Conversion Rate",
       value: stats ? stats.conversionRate : 0,
       prefix: "",
-      suffix: "",
+      suffix: "%",
       badgeValue: "4%",
       decimal: 2,
       charttype: "bar",

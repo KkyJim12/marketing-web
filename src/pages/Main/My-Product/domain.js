@@ -325,7 +325,7 @@ const Domain = () => {
                     <Input
                       type="text"
                       className="form-control"
-                      placeholder="Website URL"
+                      placeholder="Domain"
                       value={url}
                       onChange={(e) => setUrl(e.target.value)}
                     />

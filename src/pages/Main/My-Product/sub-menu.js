@@ -380,6 +380,7 @@ const SubMenu = () => {
         ...selectedMenues,
         {
           id: thisMenu.id,
+          name: thisMenu.name,
           textColor: thisMenu.textColor,
           icon: thisMenu.icon,
           textContent: thisMenu.textContent,
@@ -452,7 +453,8 @@ const SubMenu = () => {
       id: uuidv4(),
       label: "Custom",
       textColor: "#343a40",
-      icon: "",
+      icon: "fab facebook",
+      iconShow: { label: "fab facebook", value: "fab facebook" },
       textContent: "",
       description: "",
       destination: "",
@@ -460,6 +462,25 @@ const SubMenu = () => {
       textColorPickerEnable: false,
     };
     setCustomMenues([...customMenues, newCustomMenu]);
+  };
+
+  const removeSelectedMenu = (id) => {
+    let index;
+    for (let i = 0; i < selectedMenues.length; i++) {
+      if (selectedMenues[i].id === id) {
+        index = i;
+        break;
+      }
+    }
+
+    const newSelectedMenues = [...selectedMenues];
+    newSelectedMenues.splice(index, 1);
+
+    const selectedMenuErrors = [...selectedMenuErrorsResult];
+    selectedMenuErrors.splice(index, 1);
+    setSelectedMenuErrorsResult(selectedMenuErrors);
+
+    setSelectedMenues(newSelectedMenues);
   };
 
   const removeCustomMenu = (id) => {
@@ -487,6 +508,7 @@ const SubMenu = () => {
       if (clonedCustomMenues[i].id === id) {
         clonedCustomMenues[i].icon = value;
         clonedCustomMenues[i].iconShow = { label: value, value: value };
+        console.log(clonedCustomMenues[i]);
         break;
       }
     }
@@ -582,6 +604,7 @@ const SubMenu = () => {
                     return (
                       <Col key={subMenu.id} md={2}>
                         <div className="d-flex flex-column card p-4">
+                          <p>{subMenu.name}</p>
                           <p>Text Color: {subMenu.textColor}</p>
                           <p>Icon: {subMenu.icon}</p>
                           <p>Text: {subMenu.textContent}</p>
@@ -593,7 +616,7 @@ const SubMenu = () => {
                               selectedMenues.filter(
                                 (selectedMenu) => selectedMenu.id === subMenu.id
                               ).length > 0
-                                ? "btn btn-success w-100"
+                                ? "btn btn-danger w-100"
                                 : "btn btn-info w-100"
                             }
                             onClick={() => selectMenu(subMenu.id)}
@@ -601,7 +624,7 @@ const SubMenu = () => {
                             {selectedMenues.filter(
                               (selectedMenu) => selectedMenu.id === subMenu.id
                             ).length > 0
-                              ? "Selected"
+                              ? "Remove"
                               : "Select"}
                           </Button>
                         </div>
@@ -617,7 +640,18 @@ const SubMenu = () => {
               <Col key={index} md={12}>
                 <Card>
                   <CardBody>
-                    <CardTitle>{selectedMenu.textContent}</CardTitle>
+                    <CardTitle>
+                      <div className="d-flex align-items-center justify-content-between">
+                        <span>{selectedMenu.name}</span>
+                        <Button
+                          onClick={() => removeSelectedMenu(selectedMenu.id)}
+                          type="button"
+                          className="btn btn-danger btn-sm"
+                        >
+                          Remove
+                        </Button>
+                      </div>
+                    </CardTitle>
                     <Row>
                       <Col md={2}>
                         <Label>Text color</Label>
@@ -830,7 +864,10 @@ const SubMenu = () => {
                             >
                               <FontAwesomeIcon
                                 size="lg"
-                                icon={customMenu.iconShow}
+                                icon={[
+                                  customMenu.iconShow.value.split(" ")[0],
+                                  customMenu.iconShow.value.split(" ")[1],
+                                ]}
                               />
                             </div>
                             <div className="w-100">

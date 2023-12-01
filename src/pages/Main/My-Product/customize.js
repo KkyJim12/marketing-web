@@ -627,6 +627,7 @@ const Customize = () => {
                       </CardTitle>
                       <Row>
                         <Col className="mt-2" md={12}>
+                          <p className="text-center">{button.name}</p>
                           <p>Background Color: {button.backgroundColor}</p>
                           <p>Text Color: {button.textColor}</p>
                           <p>
