@@ -174,6 +174,10 @@ const SubMenu = () => {
         selectedMenuError.destination = "Please type destination";
       }
 
+      if (selectedMenues[i].sortValue === "") {
+        selectedMenuError.sortValue = "Please type sort value";
+      }
+
       selectedMenuesError.push(selectedMenuError);
     }
     setSelectedMenuErrorsResult(selectedMenuesError);
@@ -192,6 +196,10 @@ const SubMenu = () => {
 
       if (customMenues[i].destination === "") {
         customMenuError.destination = "Please type destination";
+      }
+
+      if (customMenues[i].sortValue === "") {
+        customMenuError.sortValue = "Please type sort value";
       }
 
       customMenuesError.push(customMenuError);
@@ -275,6 +283,20 @@ const SubMenu = () => {
     setCustomMenues(newCustomMenues);
   };
 
+  const handleCustomMenuSortValue = (e, id) => {
+    let index;
+    for (let i = 0; i < customMenues.length; i++) {
+      if (customMenues[i].id === id) {
+        index = i;
+        break;
+      }
+    }
+
+    const newCustomMenues = [...customMenues];
+    newCustomMenues[index].sortValue = e.target.value;
+    setCustomMenues(newCustomMenues);
+  };
+
   const handleSelectedMenuDescription = (e, id) => {
     let index;
     for (let i = 0; i < selectedMenues.length; i++) {
@@ -286,6 +308,20 @@ const SubMenu = () => {
 
     const newSelectedMenues = [...selectedMenues];
     newSelectedMenues[index].description = e.target.value;
+    setSelectedMenues(newSelectedMenues);
+  };
+
+  const setSelectedMenuTextColor = (e, id) => {
+    let index;
+    for (let i = 0; i < selectedMenues.length; i++) {
+      if (selectedMenues[i].id === id) {
+        index = i;
+        break;
+      }
+    }
+
+    const newSelectedMenues = [...selectedMenues];
+    newSelectedMenues[index].textColor = e.target.value;
     setSelectedMenues(newSelectedMenues);
   };
 
@@ -314,6 +350,20 @@ const SubMenu = () => {
 
     const newSelectedMenues = [...selectedMenues];
     newSelectedMenues[index].class = e.target.value;
+    setSelectedMenues(newSelectedMenues);
+  };
+
+  const handleSelectedMenuSortValue = (e, id) => {
+    let index;
+    for (let i = 0; i < selectedMenues.length; i++) {
+      if (selectedMenues[i].id === id) {
+        index = i;
+        break;
+      }
+    }
+
+    const newSelectedMenues = [...selectedMenues];
+    newSelectedMenues[index].sortValue = e.target.value;
     setSelectedMenues(newSelectedMenues);
   };
 
@@ -448,6 +498,20 @@ const SubMenu = () => {
     setCustomMenues(newCustomMenues);
   };
 
+  const setCustomMenuTextColor = (e, id) => {
+    let index;
+    for (let i = 0; i < customMenues.length; i++) {
+      if (customMenues[i].id === id) {
+        index = i;
+        break;
+      }
+    }
+
+    const newCustomMenues = [...customMenues];
+    newCustomMenues[index].textColor = e.target.value;
+    setCustomMenues(newCustomMenues);
+  };
+
   const addCustomMenu = () => {
     const newCustomMenu = {
       id: uuidv4(),
@@ -459,6 +523,7 @@ const SubMenu = () => {
       description: "",
       destination: "",
       class: "",
+      sortValue: "",
       textColorPickerEnable: false,
     };
     setCustomMenues([...customMenues, newCustomMenu]);
@@ -551,11 +616,13 @@ const SubMenu = () => {
           if (existContents[i].prebuiltContentId) {
             newSelectedMenues.push({
               id: existContents[i].prebuiltContentId,
+              name: existContents[i].name,
               textColor: existContents[i].textColor,
               icon: existContents[i].icon,
               textContent: existContents[i].textContent,
               description: existContents[i].description,
               destination: existContents[i].destination,
+              sortValue: existContents[i].sortValue,
               class: existContents[i].class,
               textColorPickerEnable: false,
             });
@@ -572,6 +639,7 @@ const SubMenu = () => {
               description: existContents[i].description,
               destination: existContents[i].destination,
               class: existContents[i].class,
+              sortValue: existContents[i].sortValue,
               textColorPickerEnable: false,
               label: "Custom",
             });
@@ -604,7 +672,7 @@ const SubMenu = () => {
                     return (
                       <Col key={subMenu.id} md={2}>
                         <div className="d-flex flex-column card p-4">
-                          <p>{subMenu.name}</p>
+                          <p className="text-center">{subMenu.name}</p>
                           <p>Text Color: {subMenu.textColor}</p>
                           <p>Icon: {subMenu.icon}</p>
                           <p>Text: {subMenu.textContent}</p>
@@ -635,6 +703,9 @@ const SubMenu = () => {
               </CardBody>
             </Card>
           </Col>
+          <Col md={12}>
+            <h5>Pre-built Menues</h5>
+          </Col>
           {selectedMenues.map((selectedMenu, index) => {
             return (
               <Col key={index} md={12}>
@@ -660,7 +731,10 @@ const SubMenu = () => {
                             type="text"
                             className="colorpicker-default"
                             value={selectedMenu.textColor}
-                            readOnly
+                            onChange={(e) =>
+                              setSelectedMenuTextColor(e, selectedMenu.id)
+                            }
+                            maxLength={7}
                           />
                           <div
                             onClick={() => openTextColorPicker(selectedMenu.id)}
@@ -669,6 +743,7 @@ const SubMenu = () => {
                               backgroundColor: selectedMenu.textColor,
                               width: 40,
                               height: 40,
+                              border: "1px rgb(206, 212, 218) solid",
                             }}
                           ></div>
                           {selectedMenu.textColorPickerEnable ? (
@@ -760,7 +835,7 @@ const SubMenu = () => {
                           </small>
                         )}
                       </Col>
-                      <Col md={2}>
+                      <Col md={1}>
                         <Label>Class</Label>
                         <Input
                           className="form-control"
@@ -776,6 +851,23 @@ const SubMenu = () => {
                           </small>
                         )}
                       </Col>
+                      <Col md={1}>
+                        <Label>Sort</Label>
+                        <Input
+                          type="number"
+                          className="form-control"
+                          placeholder="Sort"
+                          value={selectedMenu.sortValue}
+                          onChange={(e) =>
+                            handleSelectedMenuSortValue(e, selectedMenu.id)
+                          }
+                        ></Input>
+                        {selectedMenuErrorsResult[index] && (
+                          <small className="text-danger">
+                            {selectedMenuErrorsResult[index].sortValue}
+                          </small>
+                        )}
+                      </Col>
                     </Row>
                   </CardBody>
                 </Card>
@@ -784,6 +876,9 @@ const SubMenu = () => {
           })}
         </Row>
         <Row>
+          <Col md={12}>
+            <h5>Custom Menues</h5>
+          </Col>
           {customMenues.map((customMenu, index) => {
             return (
               <Col md={12} key={index}>
@@ -809,7 +904,10 @@ const SubMenu = () => {
                             type="text"
                             className="colorpicker-default"
                             value={customMenu.textColor}
-                            readOnly
+                            onChange={(e) =>
+                              setCustomMenuTextColor(e, customMenu.id)
+                            }
+                            maxLength={7}
                           />
                           <div
                             onClick={() =>
@@ -820,6 +918,7 @@ const SubMenu = () => {
                               backgroundColor: customMenu.textColor,
                               width: 40,
                               height: 40,
+                              border: "1px rgb(206, 212, 218) solid",
                             }}
                           ></div>
                           {customMenu.textColorPickerEnable ? (
@@ -940,7 +1039,7 @@ const SubMenu = () => {
                           </small>
                         )}
                       </Col>
-                      <Col md={2}>
+                      <Col md={1}>
                         <Label>Class</Label>
                         <Input
                           className="form-control"
@@ -953,6 +1052,23 @@ const SubMenu = () => {
                         {customMenuErrorsResult[index] && (
                           <small className="text-danger">
                             {customMenuErrorsResult[index].class}
+                          </small>
+                        )}
+                      </Col>
+                      <Col md={1}>
+                        <Label>Sort</Label>
+                        <Input
+                          type="number"
+                          className="form-control"
+                          placeholder="Sort"
+                          value={customMenu.sortValue}
+                          onChange={(e) =>
+                            handleCustomMenuSortValue(e, customMenu.id)
+                          }
+                        ></Input>
+                        {customMenuErrorsResult[index] && (
+                          <small className="text-danger">
+                            {customMenuErrorsResult[index].sortValue}
                           </small>
                         )}
                       </Col>
@@ -1378,68 +1494,71 @@ const SubMenu = () => {
                         "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
                     }}
                   >
-                    {customMenues.concat(selectedMenues).map((content) => {
-                      return (
-                        <div
-                          key={content.id}
-                          style={{
-                            borderTop: "1px solid rgb(229 231 235)",
-                            height: 75,
-                          }}
-                          className="py-3 px-4"
-                        >
-                          <div className="row h-100">
-                            <div className="col-md-2">
-                              <div className="d-flex justify-content-center align-items-center h-100">
-                                {content.icon && (
-                                  <FontAwesomeIcon
-                                    style={{
-                                      fontSize: 24,
-                                      color: content.textColor,
-                                    }}
-                                    icon={[
-                                      content.icon.split(" ")[0],
-                                      content.icon.split(" ")[1],
-                                    ]}
-                                  />
-                                )}
+                    {customMenues
+                      .concat(selectedMenues)
+                      .sort((a, b) => a.sortValue - b.sortValue)
+                      .map((content) => {
+                        return (
+                          <div
+                            key={content.id}
+                            style={{
+                              borderTop: "1px solid rgb(229 231 235)",
+                              height: 75,
+                            }}
+                            className="py-3 px-4"
+                          >
+                            <div className="row h-100">
+                              <div className="col-md-2">
+                                <div className="d-flex justify-content-center align-items-center h-100">
+                                  {content.icon && (
+                                    <FontAwesomeIcon
+                                      style={{
+                                        fontSize: 24,
+                                        color: content.textColor,
+                                      }}
+                                      icon={[
+                                        content.icon.split(" ")[0],
+                                        content.icon.split(" ")[1],
+                                      ]}
+                                    />
+                                  )}
+                                </div>
                               </div>
-                            </div>
-                            <div className="col-md-8">
-                              <div
-                                style={{
-                                  width: 200,
-                                  whiteSpace: "nowrap",
-                                  overflow: "hidden",
-                                  textOverflow: "ellipsis",
-                                }}
-                                className="d-flex flex-column mt-auto h-100 justify-content-center"
-                              >
-                                <p style={{ fontSize: 16, marginBottom: 0 }}>
-                                  {content.textContent}
-                                </p>
-                                <p
+                              <div className="col-md-8">
+                                <div
                                   style={{
-                                    fontSize: 12,
-                                    marginBottom: 0,
+                                    width: 200,
+                                    whiteSpace: "nowrap",
+                                    overflow: "hidden",
+                                    textOverflow: "ellipsis",
                                   }}
+                                  className="d-flex flex-column mt-auto h-100 justify-content-center"
                                 >
-                                  {content.description}
-                                </p>
+                                  <p style={{ fontSize: 16, marginBottom: 0 }}>
+                                    {content.textContent}
+                                  </p>
+                                  <p
+                                    style={{
+                                      fontSize: 12,
+                                      marginBottom: 0,
+                                    }}
+                                  >
+                                    {content.description}
+                                  </p>
+                                </div>
                               </div>
-                            </div>
-                            <div className="col-md-2">
-                              <div className="d-flex justify-content-center align-items-center h-100">
-                                <FontAwesomeIcon
-                                  style={{ fontSize: 24 }}
-                                  icon={["fas", "angle-right"]}
-                                />
+                              <div className="col-md-2">
+                                <div className="d-flex justify-content-center align-items-center h-100">
+                                  <FontAwesomeIcon
+                                    style={{ fontSize: 24 }}
+                                    icon={["fas", "angle-right"]}
+                                  />
+                                </div>
                               </div>
                             </div>
                           </div>
-                        </div>
-                      );
-                    })}
+                        );
+                      })}
                   </div>
                 </div>
               </div>

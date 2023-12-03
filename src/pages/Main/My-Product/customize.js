@@ -671,7 +671,8 @@ const Customize = () => {
                         type="text"
                         className="colorpicker-default"
                         value={backgroundColor}
-                        readOnly
+                        onChange={(e) => setBackgroundColor(e.target.value)}
+                        maxLength={7}
                       />
                       <div
                         onClick={() => {
@@ -679,6 +680,7 @@ const Customize = () => {
                         }}
                         className="btn"
                         style={{
+                          border: "1px rgb(206, 212, 218) solid",
                           backgroundColor: backgroundColor,
                           width: 40,
                           height: 40,
@@ -715,7 +717,8 @@ const Customize = () => {
                         type="text"
                         className="colorpicker-default"
                         value={bodyColor}
-                        readOnly
+                        onChange={(e) => setBodyColor(e.target.value)}
+                        maxLength={7}
                       />
                       <div
                         onClick={() => {
@@ -723,6 +726,7 @@ const Customize = () => {
                         }}
                         className="btn"
                         style={{
+                          border: "1px rgb(206, 212, 218) solid",
                           backgroundColor: bodyColor,
                           width: 40,
                           height: 40,
@@ -757,7 +761,8 @@ const Customize = () => {
                         type="text"
                         className="colorpicker-default"
                         value={textColor}
-                        readOnly
+                        onChange={(e) => setTextColor(e.target.value)}
+                        maxLength={7}
                       />
                       <div
                         onClick={() => {
@@ -765,6 +770,7 @@ const Customize = () => {
                         }}
                         className="btn"
                         style={{
+                          border: "1px rgb(206, 212, 218) solid",
                           backgroundColor: textColor,
                           width: 40,
                           height: 40,
