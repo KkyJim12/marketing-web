@@ -108,6 +108,7 @@ const ECommerce = () => {
                     <CardBody>
                       <CardTitle className="h4 mt-0">{product.title}</CardTitle>
                       <CardText>
+                        <h5 style={{ fontWeight: 600 }}>{product.name}</h5>
                         <span>Price: {product.price} thb/month</span>
                         <br />
                         <span>Domains: {product.domains} sites</span>

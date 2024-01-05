@@ -56,11 +56,11 @@ const Customize = () => {
   const [floatingActionButton, setFloatingActionButton] = useState(false);
 
   const [selectedIconPrefix, setSelectedIconPrefix] = useState("fab");
-  const [selectedIconValue, setSelectedIconValue] = useState("facebook");
-  const [selectedIcon, setSelectedIcon] = useState("fab facebook");
+  const [selectedIconValue, setSelectedIconValue] = useState("fa-facebook");
+  const [selectedIcon, setSelectedIcon] = useState("fab fa-facebook");
   const [selectedIconShow, setSelectedIconShow] = useState({
-    label: "fab facebook",
-    value: "fab facebook",
+    label: "fab fa-facebook",
+    value: "fab fa-facebook",
   });
 
   const [prebuiltButtons, setPrebuiltButtons] = useState([]);
@@ -270,6 +270,7 @@ const Customize = () => {
     setBackgroundColor(style.backgroundColor);
     setBodyColor(style.bodyColor);
     setTextColor(style.textColor);
+    setButtonText(style.textContent);
     setButtonSize(style.size);
     setButtonPositionTop(style.top);
     setButtonPositionRight(style.right);

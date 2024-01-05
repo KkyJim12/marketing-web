@@ -223,7 +223,7 @@ const SubMenu = () => {
 
       toast.success("Saved");
     } catch (error) {
-      console.log(error.response);
+      console.log(error);
     }
   };
 
@@ -295,6 +295,20 @@ const SubMenu = () => {
     const newCustomMenues = [...customMenues];
     newCustomMenues[index].sortValue = e.target.value;
     setCustomMenues(newCustomMenues);
+  };
+
+  const handleSelectedMenuTextContent = (e, id) => {
+    let index;
+    for (let i = 0; i < selectedMenues.length; i++) {
+      if (selectedMenues[i].id === id) {
+        index = i;
+        break;
+      }
+    }
+
+    const newSelectedMenues = [...selectedMenues];
+    newSelectedMenues[index].textContent = e.target.value;
+    setSelectedMenues(newSelectedMenues);
   };
 
   const handleSelectedMenuDescription = (e, id) => {
@@ -426,6 +440,8 @@ const SubMenu = () => {
         return subMenu.id === id;
       })[0];
 
+      console.log(thisMenu);
+
       setSelectedMenues([
         ...selectedMenues,
         {
@@ -437,6 +453,7 @@ const SubMenu = () => {
           description: thisMenu.description,
           destination: thisMenu.destination,
           textColorPickerEnable: false,
+          sortValue: "",
         },
       ]);
     }
@@ -517,8 +534,8 @@ const SubMenu = () => {
       id: uuidv4(),
       label: "Custom",
       textColor: "#343a40",
-      icon: "fab facebook",
-      iconShow: { label: "fab facebook", value: "fab facebook" },
+      icon: "fab fa-facebook",
+      iconShow: { label: "fab fa-facebook", value: "fab fa-facebook" },
       textContent: "",
       description: "",
       destination: "",
@@ -791,11 +808,12 @@ const SubMenu = () => {
                       <Col md={2}>
                         <Label>Text</Label>
                         <Input
-                          style={{ background: "#f5f5f5" }}
                           className="form-control"
                           placeholder="Text"
                           value={selectedMenu.textContent}
-                          readOnly
+                          onChange={(e) =>
+                            handleSelectedMenuTextContent(e, selectedMenu.id)
+                          }
                         ></Input>
                         {selectedMenuErrorsResult[index] && (
                           <small className="text-danger">
