@@ -1,6 +1,5 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import moment from "moment";
 
 // import { Navigate } from "react-router-dom";
 const Authmiddleware = (props) => {
@@ -8,8 +7,7 @@ const Authmiddleware = (props) => {
 
   if (
     !localStorage.getItem("authUser") ||
-    !localStorage.getItem("accessToken") ||
-    moment(localStorage.getItem("expiresIn")).unix() < moment.unix()
+    !localStorage.getItem("accessToken")
   ) {
     navigate("/login");
   }
