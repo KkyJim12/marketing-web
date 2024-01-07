@@ -7,7 +7,7 @@ const Authmiddleware = (props) => {
   if (
     !localStorage.getItem("authUser") ||
     !localStorage.getItem("accessToken") ||
-    localStorage.getItem("expiresIn") < new Date()
+    moment(localStorage.getItem("expiresIn")).unix() < moment.unix()
   ) {
     navigate("/login");
   }
