@@ -6,20 +6,10 @@ const Authmiddleware = (props) => {
 
   if (
     !localStorage.getItem("authUser") ||
-    !localStorage.getItem("accessToken")
+    !localStorage.getItem("accessToken") ||
+    localStorage.getItem("expireIn") < new Date()
   ) {
     navigate("/login");
-  }
-
-  if (localStorage.getItem("accessToken")) {
-    const payload = localStorage.getItem("accessToken").split(".")[1];
-    const decoded = atob(payload);
-    const expTime = JSON.parse(decoded).exp;
-    const now = new Date();
-
-    if (now > expTime) {
-      navigate("/login");
-    }
   }
 
   return <React.Fragment>{props.children}</React.Fragment>;
