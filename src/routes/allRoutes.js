@@ -20,16 +20,11 @@ const userRoutes = [
   { path: "/my-product/:id/manage/:productId", component: <Manage /> },
   { path: "/order-history", component: <OrderHistory /> },
   { path: "/info/:name/:id", component: <Info /> },
-  {
-    path: "/",
-    exact: true,
-    component: <Navigate to="/dashboard" />,
-  },
   { path: "*", component: <Navigate to="/login" /> },
 ];
 
 const authRoutes = [
-  { path: "/login", component: <Login /> },
+  { path: "/", component: <Login /> },
   { path: "/forgot-password", component: <ForgetPwd /> },
   {
     path: "/floating-action-button/:id/:productId",

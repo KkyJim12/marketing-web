@@ -19,7 +19,7 @@ const ProfileMenu = props => {
     localStorage.removeItem("authUser");
     localStorage.removeItem("accessToken");
     localStorage.removeItem("expiresIn");
-    navigate("/login");
+    navigate("/");
   };
 
   useEffect(() => {
