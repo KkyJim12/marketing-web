@@ -35,7 +35,7 @@ const Customize = () => {
   const [height, setHeight] = useState(null);
   const [width, setWidth] = useState(null);
 
-  const [buttonText, setButtonText] = useState("Minible");
+  const [buttonText, setButtonText] = useState("ติดต่อเรา");
   const [backgroundColorEnable, setBackgroundColorEnable] = useState(false);
   const [bodyColorEnable, setBodyColorEnable] = useState(false);
   const [textColorEnable, setTextColorEnable] = useState(false);
