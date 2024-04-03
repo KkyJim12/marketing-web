@@ -644,8 +644,9 @@ const SubMenu = () => {
               textColorPickerEnable: false,
             });
           } else {
+            console.log(existContents[i]);
             newCustomMenues.push({
-              id: uuidv4(),
+              id: existContents[i].id,
               textColor: existContents[i].textColor,
               icon: existContents[i].icon,
               iconShow: {
