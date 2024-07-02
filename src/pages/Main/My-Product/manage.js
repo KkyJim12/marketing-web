@@ -19,7 +19,6 @@ import License from "./license";
 
 const Manage = () => {
   const [activeTab, setActiveTab] = useState("Statistic");
-  document.title = " Manage | Marketing tool platform";
 
   function toggleCustomJustified(tab) {
     if (activeTab !== tab) {

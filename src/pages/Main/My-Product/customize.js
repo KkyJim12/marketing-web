@@ -20,7 +20,6 @@ import toast, { Toaster } from "react-hot-toast";
 import Select, { components } from "react-select";
 
 const Customize = () => {
-  document.title = " My Product | Marketing tool platform";
 
   const { Option } = components;
   const { id, productId } = useParams();

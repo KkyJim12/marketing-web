@@ -18,7 +18,6 @@ import { useNavigate } from "react-router-dom";
 
 const ECommerce = () => {
   const { t } = useTranslation();
-  document.title = " E-Commerce | Marketing tool platform";
   const navigate = useNavigate();
   const [products, setProducts] = useState([]);
   const [setting, setSetting] = useState([]);

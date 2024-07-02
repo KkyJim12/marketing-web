@@ -15,7 +15,6 @@ import Breadcrumbs from "../../../components/Common/Breadcrumb";
 const MyProduct = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  document.title = " My Product | Marketing tool platform";
 
   const [setting, setSetting] = useState([]);
 

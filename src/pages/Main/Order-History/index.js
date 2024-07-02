@@ -16,7 +16,6 @@ import axios from "axios";
 import Parser from "html-react-parser";
 
 const OrderHistory = () => {
-  document.title = " Order History | Marketing tool platform";
   const { t } = useTranslation();
   const [setting, setSetting] = useState([]);
 
