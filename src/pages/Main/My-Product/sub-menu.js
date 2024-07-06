@@ -1101,6 +1101,9 @@ const SubMenu = () => {
             <div className="d-grid gap-2">
               <Button
                 onClick={addCustomMenu}
+                style={{
+                  backgroundColor: "#4C5F7B"
+                }}
                 type="button"
                 className="btn btn-primary"
               >
@@ -1113,7 +1116,7 @@ const SubMenu = () => {
               <Button
                 onClick={saveButtonSetting}
                 type="button"
-                className="btn btn-success"
+                className="btn btn-primary"
               >
                 Save Button Setting
               </Button>

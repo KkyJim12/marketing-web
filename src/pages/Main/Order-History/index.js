@@ -29,7 +29,7 @@ const OrderHistory = () => {
           onClick={() => {
             toggleMakePaymentModal(props.order);
           }}
-          className="btn btn-success waves-effect waves-light btn-sm "
+          className="btn btn-primary waves-effect waves-light btn-sm "
           type="button"
         >
           {t("Pay")}
@@ -400,9 +400,9 @@ const OrderHistory = () => {
                 </button>
               </div>
               <div className="modal-body">
-                <p>Bank: Kasikorn Bank</p>
-                <p>Account Number: 0561768552</p>
-                <p>Account Name: Piyakarn Nimmakulvirut</p>
+                <p>Bank: Siam Commercial Bank (SCB)</p>
+                <p>Account Number: 406-792838-2</p>
+                <p>Account Name: Pacy Media Co., Ltd.</p>
                 <p>Amount: {toggleOrder.price}</p>
                 <div className="d-grid gap-2">
                   {preview ? (
@@ -458,7 +458,7 @@ const OrderHistory = () => {
                 <button
                   onClick={confirmMakePayment}
                   type="button"
-                  className="btn btn-success waves-effect waves-light"
+                  className="btn btn-primary waves-effect waves-light"
                 >
                   Confirm
                 </button>

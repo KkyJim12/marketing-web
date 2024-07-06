@@ -23,7 +23,7 @@ const DeleteModal = ({ show, onDeleteClick, onCloseClick }) => {
             <div className="text-center mt-3">
               <button
                 type="button"
-                className="btn btn-success btn-lg ms-2"
+                className="btn btn-primary btn-lg ms-2"
                 onClick={onDeleteClick}
               >
                 Yes, delete it!

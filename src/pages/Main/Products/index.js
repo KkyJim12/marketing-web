@@ -159,7 +159,7 @@ const ECommerce = () => {
                             <button
                               onClick={confirmPurchase}
                               type="button"
-                              className="btn btn-success waves-effect waves-light"
+                              className="btn btn-primary waves-effect waves-light"
                             >
                               Confirm
                             </button>

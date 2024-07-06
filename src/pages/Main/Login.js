@@ -100,7 +100,7 @@ const Login = () => {
               <Card>
                 <CardBody className="p-4">
                   <div className="text-center mt-2">
-                    <h5 className="text-primary">Sign In</h5>
+                    <h5 style={{ color: "#0D1727" }}>Sign In</h5>
                     <p className="text-muted">
                       Start boosting your campaign performance!
                     </p>
@@ -154,18 +154,34 @@ const Login = () => {
                           Contact our team to create a new account{" "}
                         </p>
                       </div>
+
+                      <div className="mt-2 text-center">
+                        <p className="mb-0">
+                          By signing in, you agree to our{" "}
+                          <a
+                            href="https://pacymedia.com/terms-pacy-pilot"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            Term & Conditions.
+                          </a>
+                        </p>
+                      </div>
                     </Form>
                   </div>
                 </CardBody>
               </Card>
               <div className="mt-5 text-center">
                 <p>
-                  By signing in, you agree to our <a href="https://pacymedia.com/terms-pacy-pilot">Term & Conditions.</a>
-                </p>
-              </div>
-              <div className=" text-center">
-                <p>
-                  © {new Date().getFullYear()} pacypilot.com by <a href="https://pacymedia.com">Pacy Media.</a> All rights reserved
+                  © {new Date().getFullYear()} pacypilot.com by{" "}
+                  <a
+                    href="https://pacymedia.com" 
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Pacy Media.
+                  </a>{" "}
+                  All rights reserved
                 </p>
               </div>
             </Col>

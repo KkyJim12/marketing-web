@@ -20,7 +20,6 @@ import toast, { Toaster } from "react-hot-toast";
 import Select, { components } from "react-select";
 
 const Customize = () => {
-
   const { Option } = components;
   const { id, productId } = useParams();
 
@@ -187,6 +186,40 @@ const Customize = () => {
     getPrebuiltButtons();
     getButton();
     getContents();
+
+
+    const checkbox1 = document.getElementById('defaultCheck1')
+    if (checkbox1) {
+      if (isPCChecked) {
+        checkbox1.style.backgroundColor = '#1bc9f5';
+        checkbox1.style.borderColor = '#1bc9f5'
+      } else {
+        checkbox1.style.backgroundColor = '';
+        checkbox1.style.borderColor = ''
+      }
+    }
+
+    const checkbox2 = document.getElementById('defaultCheck2')
+    if (checkbox2) {
+      if (isTabletChecked) {
+        checkbox2.style.backgroundColor = '#1bc9f5';
+        checkbox2.style.borderColor = '#1bc9f5'
+      } else {
+        checkbox2.style.backgroundColor = '';
+        checkbox2.style.borderColor = ''
+      }
+    }
+
+    const checkbox3 = document.getElementById('defaultCheck3')
+    if (checkbox3) {
+      if (isMobileChecked) {
+        checkbox3.style.backgroundColor = '#1bc9f5';
+        checkbox3.style.borderColor = '#1bc9f5'
+      } else {
+        checkbox3.style.backgroundColor = '';
+        checkbox3.style.borderColor = ''
+      }
+    }
   }, []);
 
   useEffect(() => {
@@ -381,6 +414,13 @@ const Customize = () => {
                 <span>Button Styles</span>
               </CardTitle>
               <Row>
+                {/* {buttonStyles.map((buttonStyle) => {
+                  return (buttonStyle === 'Long Rounded Button#2' ? (
+                    <div>true</div>
+                  ) : (
+                  <div>false</div>
+                  ))
+                })} */}
                 {buttonStyles.map((buttonStyle) => {
                   return (
                     <Col md={2}>
@@ -389,9 +429,19 @@ const Customize = () => {
                         <Button
                           onClick={() => selectButtonStyle(buttonStyle)}
                           type="button"
+                          style={{
+                            backgroundColor:
+                              buttonStyle === "Long Rounded Button#2"
+                                ? "#FFD700"
+                                : null,
+                            borderColor:
+                              buttonStyle === "Long Rounded Button#2"
+                                ? "#FFD700"
+                                : null,
+                          }}
                           className={
                             buttonStyle === selectedButtonStyle
-                              ? "btn btn-success"
+                              ? "btn btn-primary"
                               : "btn btn-info"
                           }
                         >
@@ -643,7 +693,7 @@ const Customize = () => {
                         <Button
                           onClick={() => selectPrebuiltButton(button)}
                           type="button"
-                          className="btn btn-success"
+                          className="btn btn-primary"
                         >
                           Select
                         </Button>
@@ -1105,7 +1155,19 @@ const Customize = () => {
                           type="checkbox"
                           id="defaultCheck1"
                           checked={isPCChecked}
-                          onClick={(e) => setIsPCChecked(!isPCChecked)}
+                          onClick={(e) => {
+                            const checkbox = document.getElementById('defaultCheck1')
+                            setIsPCChecked(!isPCChecked)
+                            if (checkbox) {
+                              if (isPCChecked) {
+                                checkbox.style.backgroundColor = '';
+                                checkbox.style.borderColor = ''
+                              } else {
+                                checkbox.style.backgroundColor = '#1bc9f5';
+                                checkbox.style.borderColor = '#1bc9f5'
+                              }
+                            }
+                          }}
                         />
                         <label
                           className="form-check-label"
@@ -1123,7 +1185,19 @@ const Customize = () => {
                           id="defaultCheck2"
                           value=""
                           checked={isTabletChecked}
-                          onClick={(e) => setIsTabletChecked(!isTabletChecked)}
+                          onClick={(e) => {
+                            const checkbox = document.getElementById('defaultCheck2')
+                            setIsTabletChecked(!isTabletChecked)
+                            if (checkbox) {
+                              if (isTabletChecked) {
+                                checkbox.style.backgroundColor = '';
+                                checkbox.style.borderColor = ''
+                              } else {
+                                checkbox.style.backgroundColor = '#1bc9f5';
+                                checkbox.style.borderColor = '#1bc9f5'
+                              }
+                            }
+                          }}
                         />
                         <label
                           className="form-check-label"
@@ -1138,14 +1212,26 @@ const Customize = () => {
                         <Input
                           className="form-check-input"
                           type="checkbox"
-                          id="defaultCheck2"
+                          id="defaultCheck3"
                           value=""
                           checked={isMobileChecked}
-                          onClick={(e) => setIsMobileChecked(!isMobileChecked)}
+                          onClick={(e) => {
+                            const checkbox = document.getElementById('defaultCheck3')
+                            setIsMobileChecked(!isMobileChecked)
+                            if (checkbox) {
+                              if (isMobileChecked) {
+                                checkbox.style.backgroundColor = '';
+                                checkbox.style.borderColor = ''
+                              } else {
+                                checkbox.style.backgroundColor = '#1bc9f5';
+                                checkbox.style.borderColor = '#1bc9f5'
+                              }
+                            }
+                          }}
                         />
                         <label
                           className="form-check-label"
-                          htmlFor="defaultCheck2"
+                          htmlFor="defaultCheck3"
                         >
                           Mobile
                         </label>
@@ -1163,7 +1249,7 @@ const Customize = () => {
                 <Button
                   onClick={saveButtonStyle}
                   type="button"
-                  className="btn btn-success"
+                  className="btn btn-primary"
                 >
                   Save Button Style
                 </Button>

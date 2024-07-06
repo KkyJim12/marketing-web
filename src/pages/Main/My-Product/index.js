@@ -43,7 +43,7 @@ const MyProduct = () => {
     return (
       <button
         onClick={() => reNewProduct(props.product)}
-        className="btn btn-success waves-effect waves-light btn-sm"
+        className="btn btn-primary waves-effect waves-light btn-sm"
         type="button"
       >
         {t("Extend")}

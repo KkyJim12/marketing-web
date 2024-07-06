@@ -294,7 +294,7 @@ const Domain = () => {
                   onClick={() => {
                     toggleAddDomainModal();
                   }}
-                  className="btn btn-success waves-effect waves-light"
+                  className="btn btn-primary waves-effect waves-light"
                   data-toggle="modal"
                   data-target="#myModal"
                 >
@@ -337,7 +337,7 @@ const Domain = () => {
                     <button
                       onClick={addDomain}
                       type="button"
-                      className="btn btn-success waves-effect waves-light"
+                      className="btn btn-primary waves-effect waves-light"
                     >
                       Add Domain
                     </button>

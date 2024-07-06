@@ -2,7 +2,7 @@ import React from "react";
 import { Navigate } from "react-router-dom";
 
 // Main
-import ECommerce from "../pages/Main/E-Commerce/index";
+import ECommerce from "../pages/Main/Products/index";
 import MyProduct from "../pages/Main/My-Product/index";
 import Manage from "../pages/Main/My-Product/manage";
 import OrderHistory from "../pages/Main/Order-History/index";
