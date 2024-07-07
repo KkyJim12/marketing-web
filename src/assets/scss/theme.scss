@@ -157,6 +157,24 @@ a {
   color: #009CFF;
 }
 
+.page-link.active, .active > .page-link {
+  background-color: #778497;
+  border-color: #778497;
+}
+
+.mm-active .active {
+  color: #0746e4 !important
+}
+
+.mm-active .active i {
+  color: #0746e4 !important
+}
+
+.btn-primary:hover {
+  background-color: #043AC0;
+  border-color: #043AC0;
+}
+
 //cursor-pointer
 .cursor-pointer {
   cursor: pointer;

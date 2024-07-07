@@ -363,7 +363,7 @@ const OrderHistory = () => {
               <Card>
                 <CardBody>
                   <CardSubtitle className="mb-3">
-                    List of ordered products.
+                    Manage payments and purchase history.
                   </CardSubtitle>
 
                   {isLoading === false && (

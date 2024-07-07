@@ -29,6 +29,7 @@ import { utils, writeFile } from "xlsx";
 
 import { Page, Text, View, Document, Image } from "@react-pdf/renderer";
 
+
 const Stats = () => {
   const periods = [
     { title: "Today", range: 0 },
@@ -647,7 +648,7 @@ const Stats = () => {
             <div className="d-flex flex-column justify-content-center">
               <h5>Websites</h5>
               <div className="d-flex align-items-center gap-3">
-                <button
+                <btn
                   onClick={() => setActiveWebsite("All")}
                   className={
                     activeWebsite === "All"
@@ -656,7 +657,7 @@ const Stats = () => {
                   }
                 >
                   All
-                </button>
+                </btn>
                 {websites &&
                   websites.map((website) => {
                     return (

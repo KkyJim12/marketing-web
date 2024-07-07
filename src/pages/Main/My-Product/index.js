@@ -230,7 +230,7 @@ const MyProduct = () => {
               <Card>
                 <CardBody>
                   <CardSubtitle className="mb-3">
-                    List of purchased products.
+                    List of purchased items.
                   </CardSubtitle>
                   {isLoading === false && (
                     <MDBDataTable
