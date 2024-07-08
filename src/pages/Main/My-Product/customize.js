@@ -186,40 +186,6 @@ const Customize = () => {
     getPrebuiltButtons();
     getButton();
     getContents();
-
-
-    const checkbox1 = document.getElementById('defaultCheck1')
-    if (checkbox1) {
-      if (isPCChecked) {
-        checkbox1.style.backgroundColor = '#1bc9f5';
-        checkbox1.style.borderColor = '#1bc9f5'
-      } else {
-        checkbox1.style.backgroundColor = '';
-        checkbox1.style.borderColor = ''
-      }
-    }
-
-    const checkbox2 = document.getElementById('defaultCheck2')
-    if (checkbox2) {
-      if (isTabletChecked) {
-        checkbox2.style.backgroundColor = '#1bc9f5';
-        checkbox2.style.borderColor = '#1bc9f5'
-      } else {
-        checkbox2.style.backgroundColor = '';
-        checkbox2.style.borderColor = ''
-      }
-    }
-
-    const checkbox3 = document.getElementById('defaultCheck3')
-    if (checkbox3) {
-      if (isMobileChecked) {
-        checkbox3.style.backgroundColor = '#1bc9f5';
-        checkbox3.style.borderColor = '#1bc9f5'
-      } else {
-        checkbox3.style.backgroundColor = '';
-        checkbox3.style.borderColor = ''
-      }
-    }
   }, []);
 
   useEffect(() => {
@@ -1155,19 +1121,7 @@ const Customize = () => {
                           type="checkbox"
                           id="defaultCheck1"
                           checked={isPCChecked}
-                          onClick={(e) => {
-                            const checkbox = document.getElementById('defaultCheck1')
-                            setIsPCChecked(!isPCChecked)
-                            if (checkbox) {
-                              if (isPCChecked) {
-                                checkbox.style.backgroundColor = '';
-                                checkbox.style.borderColor = ''
-                              } else {
-                                checkbox.style.backgroundColor = '#1bc9f5';
-                                checkbox.style.borderColor = '#1bc9f5'
-                              }
-                            }
-                          }}
+                          onClick={(e) => setIsPCChecked(!isPCChecked)}
                         />
                         <label
                           className="form-check-label"
@@ -1185,19 +1139,7 @@ const Customize = () => {
                           id="defaultCheck2"
                           value=""
                           checked={isTabletChecked}
-                          onClick={(e) => {
-                            const checkbox = document.getElementById('defaultCheck2')
-                            setIsTabletChecked(!isTabletChecked)
-                            if (checkbox) {
-                              if (isTabletChecked) {
-                                checkbox.style.backgroundColor = '';
-                                checkbox.style.borderColor = ''
-                              } else {
-                                checkbox.style.backgroundColor = '#1bc9f5';
-                                checkbox.style.borderColor = '#1bc9f5'
-                              }
-                            }
-                          }}
+                          onClick={(e) => setIsTabletChecked(!isTabletChecked)}
                         />
                         <label
                           className="form-check-label"
@@ -1215,19 +1157,7 @@ const Customize = () => {
                           id="defaultCheck3"
                           value=""
                           checked={isMobileChecked}
-                          onClick={(e) => {
-                            const checkbox = document.getElementById('defaultCheck3')
-                            setIsMobileChecked(!isMobileChecked)
-                            if (checkbox) {
-                              if (isMobileChecked) {
-                                checkbox.style.backgroundColor = '';
-                                checkbox.style.borderColor = ''
-                              } else {
-                                checkbox.style.backgroundColor = '#1bc9f5';
-                                checkbox.style.borderColor = '#1bc9f5'
-                              }
-                            }
-                          }}
+                          onClick={(e) => setIsMobileChecked(!isMobileChecked)}
                         />
                         <label
                           className="form-check-label"

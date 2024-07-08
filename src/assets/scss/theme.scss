@@ -175,6 +175,11 @@ a {
   border-color: #043AC0;
 }
 
+.form-check-input:checked {
+  background-color: #1bc9f5;
+  border-color: #1bc9f5;
+}
+
 //cursor-pointer
 .cursor-pointer {
   cursor: pointer;
