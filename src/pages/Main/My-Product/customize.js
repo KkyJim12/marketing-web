@@ -18,6 +18,21 @@ import ColorPicker from "@vtaits/react-color-picker";
 import "@vtaits/react-color-picker/dist/index.css";
 import toast, { Toaster } from "react-hot-toast";
 import Select, { components } from "react-select";
+import styled from 'styled-components';
+
+const ButtonStyle = styled.button`
+  background-color: #1bc9f5;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #17a2b8;
+  }
+`;
 
 const Customize = () => {
   const { Option } = components;
@@ -380,41 +395,22 @@ const Customize = () => {
                 <span>Button Styles</span>
               </CardTitle>
               <Row>
-                {/* {buttonStyles.map((buttonStyle) => {
-                  return (buttonStyle === 'Long Rounded Button#2' ? (
-                    <div>true</div>
-                  ) : (
-                  <div>false</div>
-                  ))
-                })} */}
                 {buttonStyles.map((buttonStyle) => {
                   return (
                     <Col md={2}>
                       <div className="d-flex flex-column gap-2">
                         <Label>{buttonStyle}</Label>
-                        <Button
+                        <ButtonStyle
                           onClick={() => selectButtonStyle(buttonStyle)}
                           type="button"
                           style={{
-                            backgroundColor:
-                              buttonStyle === "Long Rounded Button#2"
-                                ? "#FFD700"
-                                : null,
-                            borderColor:
-                              buttonStyle === "Long Rounded Button#2"
-                                ? "#FFD700"
-                                : null,
+                            backgroundColor: buttonStyle === selectedButtonStyle ? "#0746E4" : null 
                           }}
-                          className={
-                            buttonStyle === selectedButtonStyle
-                              ? "btn btn-primary"
-                              : "btn btn-info"
-                          }
                         >
                           {buttonStyle === selectedButtonStyle
                             ? "Selected"
                             : "Choose this style"}
-                        </Button>
+                        </ButtonStyle>
                       </div>
                     </Col>
                   );

@@ -29,7 +29,6 @@ import { utils, writeFile } from "xlsx";
 
 import { Page, Text, View, Document, Image } from "@react-pdf/renderer";
 
-
 const Stats = () => {
   const periods = [
     { title: "Today", range: 0 },
@@ -284,7 +283,13 @@ const Stats = () => {
     legend: {
       orient: "vertical",
       x: "left",
-      data: ["Direct", "Organic Search", "Paid Search", "Social Media", "Others"],
+      data: [
+        "Direct",
+        "Organic Search",
+        "Paid Search",
+        "Social Media",
+        "Others",
+      ],
       textStyle: {
         color: ["#74788d"],
       },
@@ -739,8 +744,8 @@ const Stats = () => {
                   <button
                     onClick={exportPDF}
                     style={{
-                      color: '#ffffff',
-                      backgroundColor: '#778497'
+                      color: "#ffffff",
+                      backgroundColor: "#778497",
                     }}
                     className="btn"
                     type="button"
@@ -750,8 +755,8 @@ const Stats = () => {
                   <button
                     onClick={exportExcel}
                     style={{
-                      color: '#ffffff',
-                      backgroundColor: '#778497'
+                      color: "#ffffff",
+                      backgroundColor: "#778497",
                     }}
                     className="btn"
                     type="button"
