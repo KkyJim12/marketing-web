@@ -15,7 +15,6 @@ import Breadcrumbs from "../../../components/Common/Breadcrumb";
 const MyProduct = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  document.title = " My Product | Marketing tool platform";
 
   const [setting, setSetting] = useState([]);
 
@@ -44,7 +43,7 @@ const MyProduct = () => {
     return (
       <button
         onClick={() => reNewProduct(props.product)}
-        className="btn btn-success waves-effect waves-light btn-sm"
+        className="btn btn-primary waves-effect waves-light btn-sm"
         type="button"
       >
         {t("Extend")}
@@ -231,7 +230,7 @@ const MyProduct = () => {
               <Card>
                 <CardBody>
                   <CardSubtitle className="mb-3">
-                    List of purchased products.
+                    List of purchased items.
                   </CardSubtitle>
                   {isLoading === false && (
                     <MDBDataTable

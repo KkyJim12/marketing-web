@@ -283,12 +283,18 @@ const Stats = () => {
     legend: {
       orient: "vertical",
       x: "left",
-      data: ["Direct", "Organic Search", "Paid Search", "Social Media", "Others"],
+      data: [
+        "Direct",
+        "Organic Search",
+        "Paid Search",
+        "Social Media",
+        "Others",
+      ],
       textStyle: {
         color: ["#74788d"],
       },
     },
-    color: ["#02a499", "#f8b425", "#ec4561", "#38a4f8", "#3c4ccf"],
+    color: ["#009CFF", "#00D6AB", "#FFC349", "#0A50FF", "#4C5F7B"],
     series: [
       {
         name: "Sessions",
@@ -647,7 +653,7 @@ const Stats = () => {
             <div className="d-flex flex-column justify-content-center">
               <h5>Websites</h5>
               <div className="d-flex align-items-center gap-3">
-                <button
+                <btn
                   onClick={() => setActiveWebsite("All")}
                   className={
                     activeWebsite === "All"
@@ -656,7 +662,7 @@ const Stats = () => {
                   }
                 >
                   All
-                </button>
+                </btn>
                 {websites &&
                   websites.map((website) => {
                     return (
@@ -737,14 +743,22 @@ const Stats = () => {
                 <div className="d-flex gap-2">
                   <button
                     onClick={exportPDF}
-                    className="btn btn-danger"
+                    style={{
+                      color: "#ffffff",
+                      backgroundColor: "#778497",
+                    }}
+                    className="btn"
                     type="button"
                   >
                     PDF
                   </button>
                   <button
                     onClick={exportExcel}
-                    className="btn btn-success"
+                    style={{
+                      color: "#ffffff",
+                      backgroundColor: "#778497",
+                    }}
+                    className="btn"
                     type="button"
                   >
                     Excel

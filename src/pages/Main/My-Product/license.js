@@ -74,7 +74,7 @@ const License = () => {
               <div className="d-flex gap-2 align-items-center">
                 <button
                   onClick={() => reNewProduct()}
-                  className="btn btn-success text-white rounded"
+                  className="btn btn-primary text-white rounded"
                   type="button"
                 >
                   Extends

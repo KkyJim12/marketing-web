@@ -18,7 +18,6 @@ import { useNavigate } from "react-router-dom";
 
 const ECommerce = () => {
   const { t } = useTranslation();
-  document.title = " E-Commerce | Marketing tool platform";
   const navigate = useNavigate();
   const [products, setProducts] = useState([]);
   const [setting, setSetting] = useState([]);
@@ -109,7 +108,7 @@ const ECommerce = () => {
                       <CardTitle className="h4 mt-0">{product.title}</CardTitle>
                       <CardText>
                         <h5 style={{ fontWeight: 600 }}>{product.name}</h5>
-                        <span>Price: {product.price} thb/month</span>
+                        <span>Price: {product.price} THB</span>
                         <br />
                         <span>Domains: {product.domains} sites</span>
                         <br />
@@ -160,7 +159,7 @@ const ECommerce = () => {
                             <button
                               onClick={confirmPurchase}
                               type="button"
-                              className="btn btn-success waves-effect waves-light"
+                              className="btn btn-primary waves-effect waves-light"
                             >
                               Confirm
                             </button>

@@ -22,11 +22,9 @@ import { useNavigate } from "react-router-dom";
 import withRouter from "../../components/Common/withRouter";
 
 // import images
-import logo from "../../assets/images/logo-full.png";
-import logolight from "../../assets/images/logo-full.png";
+import logo from "../../assets/images/pacy-pilot-main-logo.png";
 
 const Login = () => {
-  document.title = " Login | Marketing tool platform";
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -93,13 +91,7 @@ const Login = () => {
           <Row>
             <Col lg={12}>
               <div className="d-flex justify-content-center mb-4">
-                <img src={logo} alt="" height="22" className="logo logo-dark" />
-                <img
-                  src={logolight}
-                  alt=""
-                  height="22"
-                  className="logo logo-light"
-                />
+                <img src={logo} alt="" height="40" className="logo logo-dark" />
               </div>
             </Col>
           </Row>
@@ -108,9 +100,9 @@ const Login = () => {
               <Card>
                 <CardBody className="p-4">
                   <div className="text-center mt-2">
-                    <h5 className="text-primary">Marketing tool platform.</h5>
+                    <h5 style={{ color: "#0D1727" }}>Sign In</h5>
                     <p className="text-muted">
-                      Sign in to continue to Marketing.
+                      Start boosting your campaign performance!
                     </p>
                   </div>
                   <div className="p-2 mt-4">
@@ -150,16 +142,29 @@ const Login = () => {
 
                       <div className="mt-3">
                         <Button
-                          className="btn btn-success w-100 waves-effect waves-light"
+                          className="btn btn-primary w-100 waves-effect waves-light"
                           type="submit"
                         >
-                          Log In
+                          Sign In
                         </Button>
                       </div>
 
                       <div className="mt-4 text-center">
                         <p className="mb-0">
-                          Contact admin to create an account.{" "}
+                          Contact our team to create a new account{" "}
+                        </p>
+                      </div>
+
+                      <div className="mt-2 text-center">
+                        <p className="mb-0">
+                          By signing in, you agree to our{" "}
+                          <a
+                            href="https://pacymedia.com/terms-pacy-pilot"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            Term & Conditions.
+                          </a>
                         </p>
                       </div>
                     </Form>
@@ -168,9 +173,15 @@ const Login = () => {
               </Card>
               <div className="mt-5 text-center">
                 <p>
-                  © {new Date().getFullYear()} Marketing Tool. Crafted with{" "}
-                  <i className="mdi mdi-heart text-danger"></i> by
-                  Jimmytechnology
+                  © {new Date().getFullYear()} pacypilot.com by{" "}
+                  <a
+                    href="https://pacymedia.com" 
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Pacy Media.
+                  </a>{" "}
+                  All rights reserved
                 </p>
               </div>
             </Col>

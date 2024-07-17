@@ -16,7 +16,6 @@ import axios from "axios";
 import Parser from "html-react-parser";
 
 const OrderHistory = () => {
-  document.title = " Order History | Marketing tool platform";
   const { t } = useTranslation();
   const [setting, setSetting] = useState([]);
 
@@ -30,7 +29,7 @@ const OrderHistory = () => {
           onClick={() => {
             toggleMakePaymentModal(props.order);
           }}
-          className="btn btn-success waves-effect waves-light btn-sm "
+          className="btn btn-primary waves-effect waves-light btn-sm "
           type="button"
         >
           {t("Pay")}
@@ -364,7 +363,7 @@ const OrderHistory = () => {
               <Card>
                 <CardBody>
                   <CardSubtitle className="mb-3">
-                    List of ordered products.
+                    Manage payments and purchase history.
                   </CardSubtitle>
 
                   {isLoading === false && (
@@ -401,9 +400,9 @@ const OrderHistory = () => {
                 </button>
               </div>
               <div className="modal-body">
-                <p>Bank: Kasikorn Bank</p>
-                <p>Account Number: 0561768552</p>
-                <p>Account Name: Piyakarn Nimmakulvirut</p>
+                <p>Bank: Siam Commercial Bank (SCB)</p>
+                <p>Account Number: 406-792838-2</p>
+                <p>Account Name: Pacy Media Co., Ltd.</p>
                 <p>Amount: {toggleOrder.price}</p>
                 <div className="d-grid gap-2">
                   {preview ? (
@@ -459,7 +458,7 @@ const OrderHistory = () => {
                 <button
                   onClick={confirmMakePayment}
                   type="button"
-                  className="btn btn-success waves-effect waves-light"
+                  className="btn btn-primary waves-effect waves-light"
                 >
                   Confirm
                 </button>

@@ -8,8 +8,8 @@ import withRouter from "../Common/withRouter"
 import { withTranslation } from "react-i18next"
 import SidebarContent from "./SidebarContent"
 
-import logoSm from "../../assets/images/logo-sm.png"
-import logoDark from "../../assets/images/logo-dark.png"
+import logoSm from "../../assets/images/pacy-logo-square.png"
+import logoDark from "../../assets/images/pacy-pilot-main-logo.png"
 import logoLight from "../../assets/images/logo-light.png"
 
 const Sidebar = props => {
@@ -33,10 +33,10 @@ const Sidebar = props => {
         <div className="navbar-brand-box">
           <Link to="/e-commerce" className="logo logo-dark">
             <span className="logo-sm">
-              <img src={logoSm} alt="" height="22" />
+              <img src={logoSm} alt="" height="28" />
             </span>
             <span className="logo-lg">
-              <img src={logoDark} alt="" height="20" />
+              <img src={logoDark} alt="" height="25" />
             </span>
           </Link>
 

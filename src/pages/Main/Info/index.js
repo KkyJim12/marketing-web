@@ -7,7 +7,6 @@ import axios from "axios";
 import Parser from "html-react-parser";
 
 const Info = () => {
-  document.title = " Info | Marketing tool platform";
   const { t } = useTranslation();
   const { id } = useParams();
 

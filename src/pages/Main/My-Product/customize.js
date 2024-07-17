@@ -18,10 +18,23 @@ import ColorPicker from "@vtaits/react-color-picker";
 import "@vtaits/react-color-picker/dist/index.css";
 import toast, { Toaster } from "react-hot-toast";
 import Select, { components } from "react-select";
+import styled from 'styled-components';
+
+const ButtonStyle = styled.button`
+  background-color: #1bc9f5;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #17a2b8;
+  }
+`;
 
 const Customize = () => {
-  document.title = " My Product | Marketing tool platform";
-
   const { Option } = components;
   const { id, productId } = useParams();
 
@@ -387,19 +400,17 @@ const Customize = () => {
                     <Col md={2}>
                       <div className="d-flex flex-column gap-2">
                         <Label>{buttonStyle}</Label>
-                        <Button
+                        <ButtonStyle
                           onClick={() => selectButtonStyle(buttonStyle)}
                           type="button"
-                          className={
-                            buttonStyle === selectedButtonStyle
-                              ? "btn btn-success"
-                              : "btn btn-info"
-                          }
+                          style={{
+                            backgroundColor: buttonStyle === selectedButtonStyle ? "#0746E4" : null 
+                          }}
                         >
                           {buttonStyle === selectedButtonStyle
                             ? "Selected"
                             : "Choose this style"}
-                        </Button>
+                        </ButtonStyle>
                       </div>
                     </Col>
                   );
@@ -644,7 +655,7 @@ const Customize = () => {
                         <Button
                           onClick={() => selectPrebuiltButton(button)}
                           type="button"
-                          className="btn btn-success"
+                          className="btn btn-primary"
                         >
                           Select
                         </Button>
@@ -1139,14 +1150,14 @@ const Customize = () => {
                         <Input
                           className="form-check-input"
                           type="checkbox"
-                          id="defaultCheck2"
+                          id="defaultCheck3"
                           value=""
                           checked={isMobileChecked}
                           onClick={(e) => setIsMobileChecked(!isMobileChecked)}
                         />
                         <label
                           className="form-check-label"
-                          htmlFor="defaultCheck2"
+                          htmlFor="defaultCheck3"
                         >
                           Mobile
                         </label>
@@ -1164,7 +1175,7 @@ const Customize = () => {
                 <Button
                   onClick={saveButtonStyle}
                   type="button"
-                  className="btn btn-success"
+                  className="btn btn-primary"
                 >
                   Save Button Style
                 </Button>
