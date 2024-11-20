@@ -71,8 +71,8 @@ const MyProduct = () => {
   const initData = {
     columns: [
       {
-        label: "ID",
-        field: "id",
+        label: "Domain",
+        field: "whitelist_domains",
         sort: "asc",
         width: 150,
       },
@@ -182,6 +182,7 @@ const MyProduct = () => {
               status={fetchData[i].status}
             />
           ),
+          whitelist_domains: fetchData[i].whitelist_domains
         };
 
         clonedData.rows.push(newData);
