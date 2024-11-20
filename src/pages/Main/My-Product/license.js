@@ -90,6 +90,7 @@ const License = () => {
           </CardTitle>
           <Row className="gap-2 mt-2">
             <Col md={12}>
+              <p>Id: {id}</p>
               <p>Domain: {domains}</p>
               <p>Type: {type}</p>
               <p>Duration: {duration} days</p>
