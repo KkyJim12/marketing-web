@@ -20,7 +20,7 @@ import Select, { components } from "react-select";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Parser from "html-react-parser";
 
-const floatingBtnFooterHeight = 31
+const floatingBtnFooterHeight = 28
 const floatingBtnSpaceBottom = 75
 const floatingBtnHeightPerCustomMenu = 75
 
@@ -1588,7 +1588,6 @@ const SubMenu = () => {
                                   </div>
                                 </div>
                               </div>
-                              
                             </div>
                           </>
                         );
@@ -1599,6 +1598,7 @@ const SubMenu = () => {
                         style={{
                           borderTop: "1px solid rgb(229 231 235)",
                           height: floatingBtnFooterHeight,
+                          paddingTop: "2px"
                         }}
                         className=" px-4"
                       >

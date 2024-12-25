@@ -20,6 +20,10 @@ import toast, { Toaster } from "react-hot-toast";
 import Select, { components } from "react-select";
 import styled from 'styled-components';
 
+const floatingBtnFooterHeight = 28
+const floatingBtnSpaceBottom = 75
+const floatingBtnHeightPerCustomMenu = 75
+
 const ButtonStyle = styled.button`
   background-color: #1bc9f5;
   color: white;
@@ -67,6 +71,7 @@ const Customize = () => {
   const [isTabletChecked, setIsTabletChecked] = useState(true);
   const [isMobileChecked, setIsMobileChecked] = useState(true);
   const [floatingActionButton, setFloatingActionButton] = useState(false);
+  const [floatingActionButtonFooter, setFloatingActionButtonFooter] = useState("");
 
   const [selectedIconPrefix, setSelectedIconPrefix] = useState("fab");
   const [selectedIconValue, setSelectedIconValue] = useState("fa-facebook");
@@ -164,6 +169,7 @@ const Customize = () => {
         setIsPCChecked(style.visibleOnPC);
         setIsTabletChecked(style.visibleOnTablet);
         setIsMobileChecked(style.visibleOnMobile);
+        setFloatingActionButtonFooter(style.footerHtml);
 
         setIconInput(style.iconType);
 
@@ -1519,7 +1525,7 @@ const Customize = () => {
                     : 90
                   : null,
                 left: buttonPositionLeft ? 0 : null,
-                bottom: buttonPositionBottom ? 75 + contents.length * 75 : null,
+                bottom: buttonPositionBottom ? 28 + 75 + contents.length * 75 : null,
                 right: buttonPositionRight
                   ? buttonSize === 60
                     ? 310
@@ -1562,7 +1568,7 @@ const Customize = () => {
                       : null,
                     background: bodyColor,
                     cursor: "pointer",
-                    height: contents.length * 75,
+                    // height: contents.length * 75,
                     width: "100%",
                     borderBottomLeftRadius: 15,
                     borderBottomRightRadius: 15,
@@ -1574,66 +1580,83 @@ const Customize = () => {
                 >
                   {contents.map((content) => {
                     return (
-                      <div
-                        key={content.id}
-                        style={{
-                          borderTop: "1px solid rgb(229 231 235)",
-                          height: 75,
-                        }}
-                        className="py-3 px-4"
-                      >
-                        <div className="row h-100">
-                          <div className="col-md-2">
-                            <div className="d-flex justify-content-center align-items-center h-100">
-                              {content.icon && (
-                                <FontAwesomeIcon
-                                  style={{
-                                    fontSize: 24,
-                                    color: content.textColor,
-                                  }}
-                                  icon={[
-                                    content.icon.split(" ")[0],
-                                    content.icon.split(" ")[1],
-                                  ]}
-                                />
-                              )}
+                      <>
+                        <div
+                          key={content.id}
+                          style={{
+                            borderTop: "1px solid rgb(229 231 235)",
+                            height: 75,
+                          }}
+                          className="py-3 px-4"
+                        >
+                          <div className="row h-100">
+                            <div className="col-md-2">
+                              <div className="d-flex justify-content-center align-items-center h-100">
+                                {content.icon && (
+                                  <FontAwesomeIcon
+                                    style={{
+                                      fontSize: 24,
+                                      color: content.textColor,
+                                    }}
+                                    icon={[
+                                      content.icon.split(" ")[0],
+                                      content.icon.split(" ")[1],
+                                    ]}
+                                  />
+                                )}
+                              </div>
                             </div>
-                          </div>
-                          <div className="col-md-8">
-                            <div
-                              style={{
-                                width: 200,
-                                whiteSpace: "nowrap",
-                                overflow: "hidden",
-                                textOverflow: "ellipsis",
-                              }}
-                              className="d-flex flex-column mt-auto h-100 justify-content-center"
-                            >
-                              <p
+                            <div className="col-md-8">
+                              <div
                                 style={{
-                                  fontSize: 16,
-                                  marginBottom: 0,
+                                  width: 200,
+                                  whiteSpace: "nowrap",
+                                  overflow: "hidden",
+                                  textOverflow: "ellipsis",
                                 }}
+                                className="d-flex flex-column mt-auto h-100 justify-content-center"
                               >
-                                {content.textContent}
-                              </p>
-                              <p style={{ fontSize: 12, marginBottom: 0 }}>
-                                {content.description}
-                              </p>
+                                <p
+                                  style={{
+                                    fontSize: 16,
+                                    marginBottom: 0,
+                                  }}
+                                >
+                                  {content.textContent}
+                                </p>
+                                <p style={{ fontSize: 12, marginBottom: 0 }}>
+                                  {content.description}
+                                </p>
+                              </div>
                             </div>
-                          </div>
-                          <div className="col-md-2">
-                            <div className="d-flex justify-content-center align-items-center h-100">
-                              <FontAwesomeIcon
-                                style={{ fontSize: 24 }}
-                                icon={["fas", "angle-right"]}
-                              />
+                            <div className="col-md-2">
+                              <div className="d-flex justify-content-center align-items-center h-100">
+                                <FontAwesomeIcon
+                                  style={{ fontSize: 24 }}
+                                  icon={["fas", "angle-right"]}
+                                />
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    );
-                  })}
+                      </>
+                    );})
+                  }
+                  {floatingActionButtonFooter && (
+                    <div
+                      style={{
+                        borderTop: "1px solid rgb(229 231 235)",
+                        height: 28,
+                        paddingTop: "2px"
+                      }}
+                      className=" px-4"
+                    >
+                      <div
+                        className="row"
+                        dangerouslySetInnerHTML={{ __html: floatingActionButtonFooter }}
+                      />
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

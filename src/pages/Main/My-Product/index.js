@@ -182,12 +182,11 @@ const MyProduct = () => {
               status={fetchData[i].status}
             />
           ),
-          whitelist_domains: fetchData[i].whitelist_domains
+          whitelist_domains: fetchData[i].whitelist_domains ? fetchData[i].whitelist_domains : '*** Add your website domain ***'
         };
-
         clonedData.rows.push(newData);
       }
-
+      console.log(clonedData)
       setData(clonedData);
       setIsLoading(false);
     } catch (error) {
