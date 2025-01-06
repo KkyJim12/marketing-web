@@ -1647,7 +1647,7 @@ const Customize = () => {
                       style={{
                         borderTop: "1px solid rgb(229 231 235)",
                         height: 28,
-                        paddingTop: "2px"
+                        paddingTop: "4px"
                       }}
                       className=" px-4"
                     >

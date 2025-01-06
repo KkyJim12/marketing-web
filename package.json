@@ -13,6 +13,7 @@
     "@fullcalendar/daygrid": "^6.1.5",
     "@fullcalendar/interaction": "^6.1.5",
     "@fullcalendar/react": "^6.1.5",
+    "@icons/material": "^0.4.1",
     "@material-ui/core": "^4.12.4",
     "@react-pdf/renderer": "^3.1.12",
     "@testing-library/jest-dom": "^5.16.5",
@@ -45,7 +46,6 @@
     "mdbreact": "^5.2.0",
     "metismenujs": "^1.4.0",
     "moment": "^2.29.4",
-    "node-sass": "^8.0.0",
     "nouislider-react": "^3.4.1",
     "react": "^18.2.0",
     "react-apexcharts": "1.4.0",
@@ -128,6 +128,7 @@
     ]
   },
   "devDependencies": {
-    "redux-devtools": "^3.7.0"
+    "redux-devtools": "^3.7.0",
+    "sass": "^1.83.0"
   }
 }
