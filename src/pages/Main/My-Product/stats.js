@@ -53,6 +53,7 @@ const Stats = () => {
   const [activePeriod, setActivePeriod] = useState("Today");
   const [websites, setWebsites] = useState([]);
   const [activeWebsite, setActiveWebsite] = useState("All");
+  const [skipNextGetStats, setSkipNextGetStats] = useState(false);
 
   const selectActivePeriod = (period) => {
     setActivePeriod(period.title);
@@ -61,6 +62,8 @@ const Stats = () => {
       moment().subtract(parseInt(period.range), "days").format("YYYY-MM-DD")
     );
     setIsLoading(true);
+    setSkipNextGetStats(true);
+    getStatsByDate();
   };
 
   const getStatsByDate = async () => {
@@ -68,6 +71,7 @@ const Stats = () => {
       const headers = {
         Authorization: localStorage.getItem("accessToken"),
       };
+
       const response = await axios.get(
         `${process.env.REACT_APP_API_URL}/api/v1/user/my-products/${id}/stats/${productId}?startDate=${startDate}&endDate=${endDate}&period=${activePeriod}&activeWebsite=${activeWebsite}`,
         { headers }
@@ -137,8 +141,12 @@ const Stats = () => {
   }, [startDate, endDate]);
 
   useEffect(() => {
+    if (skipNextGetStats) {
+      setSkipNextGetStats(false); // reset กลับให้รอบถัดไปทำงานปกติ
+      return; // ข้ามการ getStatsByDate ในรอบนี้
+    }
     getStatsByDate();
-  }, [isLoading, startDate, endDate, activeWebsite]);
+  }, [startDate, endDate, activeWebsite]);
 
   const series1 = [
     {
