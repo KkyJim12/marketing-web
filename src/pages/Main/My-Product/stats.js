@@ -18,7 +18,7 @@ import "./datatables.scss";
 import moment from "moment";
 import "moment/locale/th";
 import ReactEcharts from "echarts-for-react";
-
+import logoDark from "../../../assets/images/pacy-pilot-main-logo.png";
 import CountUp from "react-countup";
 import ReactApexChart from "react-apexcharts";
 import { MDBDataTable } from "mdbreact";
@@ -98,10 +98,6 @@ const Stats = () => {
           }
         }
       }
-
-      console.log(JSON.stringify(data.tableHeaders))
-      console.log(JSON.stringify(data.tableContents))
-      
 
       setStats(data);
       setIsLoading(false);
@@ -569,29 +565,6 @@ const Stats = () => {
     },
   };
 
-  let sessionChart;
-  let sourceTypesChart;
-  let ReportConversionsBarChart;
-  const exportPDF = async () => {
-    try {
-      sessionChart = await saveChartToImage("ReportSessionAndUserChart");
-      sourceTypesChart = await saveChartToImage("sourceTypeChart");
-      ReportConversionsBarChart = await saveChartToImage("ReportConversionsBarChart");
-  
-      const blob = await pdf(<MyDocument />).toBlob();
-  
-      const blobUrl = URL.createObjectURL(blob);
-  
-      const newTab = window.open(blobUrl, "_blank");
-  
-      if (!newTab) {
-        console.error("ไม่สามารถเปิดแท็บใหม่ได้ (popup blocker?)");
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   const exportExcel = () => {
     //creates an empty workbook with no worksheet
     let wb = utils.book_new(), //creates a new workbook
@@ -634,6 +607,29 @@ const Stats = () => {
     );
   };
 
+  let sessionChart;
+  let sourceTypesChart;
+  let ReportConversionsBarChart;
+  const exportPDF = async () => {
+    try {
+      sessionChart = await saveChartToImage("ReportSessionAndUserChart");
+      sourceTypesChart = await saveChartToImage("sourceTypeChart");
+      ReportConversionsBarChart = await saveChartToImage("ReportConversionsBarChart");
+  
+      const blob = await pdf(<MyDocument />).toBlob();
+  
+      const blobUrl = URL.createObjectURL(blob);
+  
+      const newTab = window.open(blobUrl, "_blank");
+  
+      if (!newTab) {
+        console.error("ไม่สามารถเปิดแท็บใหม่ได้ (popup blocker?)");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   Font.register({
     family: 'Iconic',
     src: 'https://api.pacypilot.com/font/Iconic.ttf',
@@ -643,6 +639,7 @@ const Stats = () => {
     return (
       <>
         <Document>
+          {/* หน้า 1 */}
           <Page
             size="A4"
             style={{
@@ -651,35 +648,38 @@ const Stats = () => {
               paddingLeft: 30,  // ขอบซ้าย
               paddingRight: 30, // ขอบขวา
               paddingTop: 30,   // ขอบบน
-              paddingBottom: 30, // ขอบล่าง
+              paddingBottom: 10, // ขอบล่าง
               fontFamily: 'Iconic',
             }}
           >
-            {/* ส่วนหัวบนสุด */}
+            {/* ส่วนหัว */}
             <View style={{ display: "flex", flexDirection: "row", alignItems: "center", marginBottom: 10 }}>
               {/* ส่วนหัวฝั่งซ้าย */}
-              <View style={{ flex: 3, flexDirection: "row", justifyContent: 'center', alignItems: 'center' }}>
+              <View style={{ flex: 2, flexDirection: "row", justifyContent: 'center', alignItems: 'center' }}>
                 <View style={{
                     width: 5,
-                    backgroundColor: "#3498db",
+                    backgroundColor: "#072da8",
                     marginRight: 8,
                     minHeight: 40,
                   }}
                 />
                 <View style={{ flex: 1 }}>
-                  <Text style={{ fontSize: 14 }}>
+                  <Text style={{ fontSize: 18, fontWeight: "bold" }}>
                     Website Traffic & CTA Conversion Report
                   </Text>
-                  <Text style={{ fontSize: 12 }}>
-                    Domain: {activeWebsite}
+                  <Text style={{ fontSize: 10 }}>
+                    Domain: {websites.join(", ")}
                   </Text>
                 </View>
               </View>
 
               {/* ส่วนหัวฝั่งขวาวันที่ */}
               <View style={{ flex: 1, alignItems: "flex-end" }}>
+                <View style={{ alignItems: "flex-end" }}>
+                  <Image src={logoDark} style={{ height: 26, marginBottom: 5 }} />
+                </View>
                 <Text style={{ fontSize: 10, marginBottom: 5 }}>
-                  Date: {moment(startDate).format("DD/MM/YYYY")} - {moment(endDate).format("DD/MM/YYYY")}
+                  {moment(startDate).locale('en').format("D MMM YYYY")} - {moment(endDate).locale('en').format("D MMM YYYY")}
                 </Text>
               </View>
 
@@ -708,10 +708,10 @@ const Stats = () => {
               <View style={{ flex: 1, padding: 10, flexDirection: "column", justifyContent: "space-between", height: "100%" }}>
                 {/* ข้อความที่ด้านบน */}
                 <Text style={{ fontSize: 10, }}>
-                  ในช่วงวันที่ [Date RANGE] มี Traffice เข้าเว็บไซต์ทั้งหมด
-                  [SESSION] sessions และ [USERS] Users โดยเกิด Conversion
-                  จาก PacyPilot ทั้งหมด [CONVERSIONS] Conversions คิดเป็น
-                  [CONVERSION RATE]
+                  ในช่วงวันที่ {moment(startDate).locale('en').format("D MMM YYYY")} - {moment(endDate).locale('en').format("D MMM YYYY")}  
+                  มี Traffic เข้าเว็บไซต์ทั้งหมด {stats.sessionCount} sessions และ {stats.totalUserCount} Users โดยเกิด Conversion
+                  จาก PacyPilot ทั้งหมด {stats.conversionCount}&nbsp;
+                  Conversions คิดเป็น {(stats.conversionRate).toFixed(1)}%
                 </Text>
                 
                 {/* แถวที่ 1 */}
@@ -803,21 +803,73 @@ const Stats = () => {
 
             </View>
 
-            <Text style={{ fontSize: 14, marginBottom: 5 }}>Conversions by Source</Text>
-            <Text style={{ fontSize: 10, marginBottom: 5 }}>นับเฉพาะ Conversions ที่เกิดจากการคลิกปุ่ม CTA ที่สร้างจาก PacyPilot</Text>
-            
-            {/* หัวตาราง */}
+            {/* ส่วนท้าย */}
             <View style={{
-              flexDirection: "row",
-              backgroundColor: "#f5f5f5",
-              borderBottom: "1px solid #ccc",
-              justifyContent: "space-between",
-              alignItems: "center",
-              width: "100%",
-              marginBottom: 5
-            }}>
+                position: "absolute",
+                bottom: 20,
+                left: 30,
+                right: 30,
+                height: 30,
+                justifyContent: "center",
+                alignItems: "center",
+                flexDirection: "row",
+              }}
+            >
+              
+              <View style={{ flex: 1, alignItems: "flex-start" }}>
+                <Text style={{fontSize: 10}}>Pacy Media. All right reserved</Text>
+              </View>
+
+              <View style={{ flex: 1, alignItems: "flex-end" }}>
+                <Text style={{fontSize: 10}}>pacymedia.com | support@pacymedia.com</Text>
+              </View>
+
+            </View>
+
+          </Page>
+
+          {/* หน้า 2 */}
+          <Page
+            size="A4"
+            style={{
+              flexDirection: "column",
+              backgroundColor: "#ffffff",
+              paddingLeft: 30,
+              paddingRight: 30,
+              paddingTop: 30,
+              paddingBottom: 10,
+              fontFamily: "Iconic",
+            }}
+          >
+
+            <Text style={{ fontSize: 14, marginBottom: 5 }}>Conversions by Source</Text>
+            <Text style={{ fontSize: 10, marginBottom: 5 }}>
+              นับเฉพาะ Conversions ที่เกิดจากการคลิกปุ่ม CTA ที่สร้างจาก PacyPilot
+            </Text>
+
+            {/* หัวตาราง */}
+            <View
+              style={{
+                flexDirection: "row",
+                backgroundColor: "#f5f5f5",
+                borderBottom: "1px solid #ccc",
+                justifyContent: "space-between",
+                alignItems: "center",
+                width: "100%",
+                marginBottom: 5,
+              }}
+            >
               {stats.tableHeaders.map((header, index) => (
-                <Text key={index} style={{ flex: 1, padding: 5, fontSize: 10, fontWeight: "bold", textAlign: "center" }}>
+                <Text
+                  key={index}
+                  style={{
+                    flex: 1,
+                    padding: 5,
+                    fontSize: 10,
+                    fontWeight: "bold",
+                    textAlign: "center",
+                  }}
+                >
                   {header.label}
                 </Text>
               ))}
@@ -825,14 +877,44 @@ const Stats = () => {
 
             {/* ข้อมูลในแถว (rows) */}
             {stats.tableContents.map((row, rowIndex) => (
-              <View key={rowIndex} style={{ flexDirection: "row", borderBottom: "1px solid #ccc", width: "100%" }}>
+              <View
+                key={rowIndex}
+                style={{ flexDirection: "row", borderBottom: "1px solid #ccc", width: "100%" }}
+              >
                 {stats.tableHeaders.map((header, headerIndex) => (
-                  <Text key={header.id || headerIndex} style={{ flex: 1, padding: 5, fontSize: 10, textAlign: "center" }}>
-                    {row[header.field]}  {/* ข้อมูลที่ตรงกับ field ของ header */}
+                  <Text
+                    key={header.id || headerIndex}
+                    style={{ flex: 1, padding: 5, fontSize: 10, textAlign: "center" }}
+                  >
+                    {row[header.field]} {}
                   </Text>
                 ))}
               </View>
             ))}
+
+            {/* ส่วนท้าย */}
+            <View
+              style={{
+                position: "absolute",
+                bottom: 20,
+                left: 30,
+                right: 30,
+                height: 30,
+                justifyContent: "center",
+                alignItems: "center",
+                flexDirection: "row",
+              }}
+            >
+              
+              <View style={{ flex: 1, alignItems: "flex-start" }}>
+                <Text style={{fontSize: 10}}>Pacy Media. All right reserved</Text>
+              </View>
+
+              <View style={{ flex: 1, alignItems: "flex-end" }}>
+                <Text style={{fontSize: 10}}>pacymedia.com | support@pacymedia.com</Text>
+              </View>
+
+            </View>
 
           </Page>
         </Document>
