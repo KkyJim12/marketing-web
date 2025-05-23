@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { PDFViewer, pdf, Image, View, Text, Page, Document, Font } from "@react-pdf/renderer";
+import { PDFViewer, pdf, StyleSheet, Image, View, Text, Page, Document, Font, } from "@react-pdf/renderer";
 import html2canvas from "html2canvas";
+import faLineChar from "../../../assets/images/fa_line_chart.png";
 import {
   Row,
   Col,
@@ -105,6 +106,7 @@ const Stats = () => {
       console.log(error);
     }
   };
+
 
   const getWebsites = async (customStartDate, customEndDate, customActiveWebsite) => {
     try {
@@ -258,7 +260,7 @@ const Stats = () => {
     },
   ];
 
-  const data = {
+  const dataStaticBySources = {
     columns: !isLoading
       ? [
           {
@@ -267,7 +269,9 @@ const Stats = () => {
             sort: "asc",
             width: 150,
           },
-          ...stats.tableHeaders,
+        ...stats.tableHeaders.map((col) => ({
+          ...col,
+        })),
         ]
       : [],
     rows: !isLoading ? stats.tableContents : [],
@@ -607,13 +611,14 @@ const Stats = () => {
     );
   };
 
-  let sessionChart;
-  let sourceTypesChart;
-  let ReportConversionsBarChart;
+  let sessionChart = null;
+  let ReportTrafficSourceDonutChart = null;
+  let ReportConversionsBarChart = null;
   const exportPDF = async () => {
     try {
+
       sessionChart = await saveChartToImage("ReportSessionAndUserChart");
-      sourceTypesChart = await saveChartToImage("sourceTypeChart");
+      ReportTrafficSourceDonutChart = await saveChartToImage("ReportTrafficSourceDonutChart");
       ReportConversionsBarChart = await saveChartToImage("ReportConversionsBarChart");
   
       const blob = await pdf(<MyDocument />).toBlob();
@@ -621,6 +626,9 @@ const Stats = () => {
       const blobUrl = URL.createObjectURL(blob);
   
       const newTab = window.open(blobUrl, "_blank");
+
+      console.log(JSON.stringify(stats.tableHeaders))
+      console.log(JSON.stringify(stats.tableContents))
   
       if (!newTab) {
         console.error("ไม่สามารถเปิดแท็บใหม่ได้ (popup blocker?)");
@@ -629,6 +637,40 @@ const Stats = () => {
       console.error(error);
     }
   };
+
+  const tableReportStyles = StyleSheet.create({
+    table: {
+      display: 'table',
+      width: '100%',
+      borderStyle: 'solid',
+      borderColor: '#ddd',
+      borderWidth: 1,
+    },
+    tableRow: {
+      display: 'flex',
+      flexDirection: 'row',
+      width: '100%',
+      borderBottom: '1px solid #ddd',
+    },
+    tableCell: {
+      padding: 5,
+      textAlign: 'left',
+      borderRight: '1px solid #ddd',
+      flex: 1,
+      fontSize: 8,
+      wordBreak: 'break-word',
+      overflow: 'hidden',
+      maxWidth: '150px',
+    },
+    tableHeader: {
+      fontSize: 10,
+      fontWeight: 'bold',
+      backgroundColor: '#f2f2f2',
+    },
+    page: {
+      padding: 20,
+    },
+  });
 
   Font.register({
     family: 'Iconic',
@@ -685,27 +727,28 @@ const Stats = () => {
 
             </View>
 
-            <View style={{ display: "flex", flexDirection: "row", alignItems: "center", marginBottom: 20 }}>
+            {/* แถวของกล่อง 1 */}
+            <View style={{ display: "flex", flexDirection: "row", alignItems: "stretch", marginBottom: 20, }}>
 
               {/* กล่องซ้าย */}
-              <View style={{ flex: 1, padding: 10, border: "1px solid #ccc", marginRight: 20, marginLeft: 0 }}>
+              <View style={{ flex: 1, padding: 10, border: "1px solid #ccc", marginRight: 10, marginLeft: 0 }}>
                 <Text style={{ fontSize: 12, marginBottom: 10 }}>
-                  Traffice Source (Sessions)
+                  Traffic Source (Sessions)
                 </Text>
                 <View
                   style={{
                     marginLeft: 0,
                     width: "100%",
-                    height: 200,
+                    height: 160,
                     overflow: "hidden",
                   }}
                 >
-                  <Image src={sourceTypesChart} style={{ width: 250, height: 250, objectFit: "contain"}} />
+                  <Image src={ReportTrafficSourceDonutChart} style={{ marginLeft:0 , paddingLeft: 0 , marginTop: 20, width: 270, height: 100 , resizeMode: "stretch",}} />
                 </View>
               </View>
 
               {/* กล่องขวา */}
-              <View style={{ flex: 1, padding: 10, flexDirection: "column", justifyContent: "space-between", height: "100%" }}>
+              <View style={{ flex: 1, padding: 10, flexDirection: "column", justifyContent: "space-between", height: "100%", margin: 0 }}>
                 {/* ข้อความที่ด้านบน */}
                 <Text style={{ fontSize: 10, }}>
                   ในช่วงวันที่ {moment(startDate).locale('en').format("D MMM YYYY")} - {moment(endDate).locale('en').format("D MMM YYYY")}  
@@ -713,49 +756,91 @@ const Stats = () => {
                   จาก PacyPilot ทั้งหมด {stats.conversionCount}&nbsp;
                   Conversions คิดเป็น {(stats.conversionRate).toFixed(1)}%
                 </Text>
-                
+
                 {/* แถวที่ 1 */}
-                <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                  <View style={{ flex: 1, border: "1px solid #ccc", padding: 10, marginRight: 10  }}>
-                    <View style={{ display: "flex", alignItems: "flex-start", justifyContent: "center", }}>
-                      <Text style={{ fontSize: 16, marginBottom: 3 }}>
-                        {stats.sessionCount}
+                <View style={{ flex: 1, flexDirection: "row",  }}>
+                  <View style={{ position: "relative", flex: 1, border: "1px solid #ccc", padding: 7, marginRight: 6, marginTop: 7 }}>
+                    <Image
+                      src={faLineChar}
+                      style={{
+                        width: 27,
+                        height: 27,
+                        position: "absolute",
+                        top: 3,
+                        right: 5
+                      }}
+                    />
+                    <View style={{ flex: 1, justifyContent: "flex-end", alignItems: "flex-start" }}>
+                      <Text style={{ fontSize: 16, marginBottom: 0 }}>
+                        {stats.sessionCount.toLocaleString()}
                       </Text>
-                      <Text style={{ fontSize: 10 }}>
+                      <Text style={{ fontSize: 8 }}>
                         Sessions
                       </Text>
                     </View>
                   </View>
-                  <View style={{ flex: 1, border: "1px solid #ccc", padding: 10, }}>
-                    <View style={{ display: "flex", alignItems: "flex-start", justifyContent: "center", }}>
-                      <Text style={{ fontSize: 16, marginBottom: 3 }}>
-                        {stats.totalUserCount}
+
+                  <View style={{ position: "relative", flex: 1, border: "1px solid #ccc", padding: 7, marginRight: 6, marginTop: 7 }}>
+                    <Image
+                      src={faLineChar}
+                      style={{
+                        width: 27,
+                        height: 27,
+                        position: "absolute",
+                        top: 3,
+                        right: 5
+                      }}
+                    />
+                    <View style={{ flex: 1, justifyContent: "flex-end", alignItems: "flex-start" }}>
+                      <Text style={{ fontSize: 16, marginBottom: 0 }}>
+                        {stats.totalUserCount.toLocaleString()}
                       </Text>
-                      <Text style={{ fontSize: 10 }}>
+                      <Text style={{ fontSize: 8 }}>
                         Total Users
                       </Text>
                     </View>
                   </View>
                 </View>
-                
+
                 {/* แถวที่ 2 */}
-                <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                  <View style={{ flex: 1, border: "1px solid #ccc", padding: 10, marginRight: 10 }}>
-                    <View style={{ display: "flex", alignItems: "flex-start", justifyContent: "center", }}>
-                      <Text style={{ fontSize: 16, marginBottom: 3 }}>
-                        {stats.conversionCount}
+                <View style={{ flex: 1, flexDirection: "row", }}>
+                  <View style={{ position: "relative", flex: 1, border: "1px solid #ccc", padding: 7, marginRight: 6, marginTop: 7 }}>
+                    <Image
+                      src={faLineChar}
+                      style={{
+                        width: 27,
+                        height: 27,
+                        position: "absolute",
+                        top: 3,
+                        right: 5
+                      }}
+                    />
+                    <View style={{ flex: 1, justifyContent: "flex-end", alignItems: "flex-start" }}>
+                      <Text style={{ fontSize: 16, marginBottom: 0 }}>
+                        {stats.conversionCount.toLocaleString()}
                       </Text>
-                      <Text style={{ fontSize: 10 }}>
+                      <Text style={{ fontSize: 8 }}>
                         Conversions
                       </Text>
                     </View>
                   </View>
-                  <View style={{ flex: 1, border: "1px solid #ccc", padding: 10, }}>
-                    <View style={{ display: "flex", alignItems: "flex-start", justifyContent: "center", }}>
-                      <Text style={{ fontSize: 16, marginBottom: 3 }}>
+
+                  <View style={{ position: "relative", flex: 1, border: "1px solid #ccc", padding: 7, marginRight: 6, marginTop: 7 }}>
+                    <Image
+                      src={faLineChar}
+                      style={{
+                        width: 27,
+                        height: 27,
+                        position: "absolute",
+                        top: 3,
+                        right: 5
+                      }}
+                    />
+                    <View style={{ flex: 1, justifyContent: "flex-end", alignItems: "flex-start" }}>
+                      <Text style={{ fontSize: 16, marginBottom: 0 }}>
                         <Text>{(stats.conversionRate).toFixed(1)}%</Text>
                       </Text>
-                      <Text style={{ fontSize: 10 }}>
+                      <Text style={{ fontSize: 8 }}>
                         Conversion Rate
                       </Text>
                     </View>
@@ -765,22 +850,21 @@ const Stats = () => {
 
             </View>
 
-            <View style={{ display: "flex", flexDirection: "row", alignItems: "center", marginBottom: 20 }}>
+            {/* แถวของกล่อง 2 */}
+            <View style={{ display: "flex", flexDirection: "row", alignItems: "stretch", marginBottom: 20 }}>
 
               {/* กล่องฝั่งซ้าย */}
-              <View style={{ flex: 1, padding: 10, border: "1px solid #ccc", marginRight: 20, }}>
+              <View style={{ flex: 1, padding: 10, border: "1px solid #ccc", marginRight: 10, }}>
                 <Text style={{ fontSize: 12, marginBottom: 10 }}>
                   Sessions and Total Users
                 </Text>
                 <View
                   style={{
-                    marginLeft: "auto",
-                    marginRight: "auto",
                     width: 200,
-                    height: 200,
+                    height: 120,
                   }}
                 >
-                  <Image src={sessionChart} style={{ width: "100%", height: "100%"}} />
+                  <Image src={sessionChart} style={{ marginLeft:0 , paddingLeft: 0 ,width: 230, height: "100%" , resizeMode: "stretch",}} />
                 </View>
               </View>
 
@@ -791,13 +875,11 @@ const Stats = () => {
                 </Text>
                 <View
                   style={{
-                    marginLeft: "auto",
-                    marginRight: "auto",
                     width: 200,
-                    height: 200,
+                    height: 120,
                   }}
                 >
-                  <Image src={ReportConversionsBarChart} style={{ width: "100%", height: "100%"}} />
+                  <Image src={ReportConversionsBarChart} style={{ marginLeft:0 , paddingLeft: 0 ,width: 230, height: "100%" , resizeMode: "stretch",}} />
                 </View>
               </View>
 
@@ -847,51 +929,29 @@ const Stats = () => {
               นับเฉพาะ Conversions ที่เกิดจากการคลิกปุ่ม CTA ที่สร้างจาก PacyPilot
             </Text>
 
-            {/* หัวตาราง */}
-            <View
-              style={{
-                flexDirection: "row",
-                backgroundColor: "#f5f5f5",
-                borderBottom: "1px solid #ccc",
-                justifyContent: "space-between",
-                alignItems: "center",
-                width: "100%",
-                marginBottom: 5,
-              }}
-            >
-              {stats.tableHeaders.map((header, index) => (
-                <Text
-                  key={index}
-                  style={{
-                    flex: 1,
-                    padding: 5,
-                    fontSize: 10,
-                    fontWeight: "bold",
-                    textAlign: "center",
-                  }}
-                >
-                  {header.label}
-                </Text>
-              ))}
-            </View>
-
-            {/* ข้อมูลในแถว (rows) */}
-            {stats.tableContents.map((row, rowIndex) => (
-              <View
-                key={rowIndex}
-                style={{ flexDirection: "row", borderBottom: "1px solid #ccc", width: "100%" }}
-              >
-                {stats.tableHeaders.map((header, headerIndex) => (
-                  <Text
-                    key={header.id || headerIndex}
-                    style={{ flex: 1, padding: 5, fontSize: 10, textAlign: "center" }}
-                  >
-                    {row[header.field]} {}
-                  </Text>
+            {/* ตาราง Source type */}
+            <View style={tableReportStyles.table}>
+              {/* Header Row */}
+              <View style={[tableReportStyles.tableRow, tableReportStyles.tableHeader]}>
+                <Text style={{...tableReportStyles.tableCell, fontSize: 14,}}>Source</Text>
+                {stats.tableHeaders.map((header, idx) => (
+                  <Text key={idx} style={tableReportStyles.tableCell}>{header.label}</Text>
                 ))}
               </View>
-            ))}
 
+              {/* Data Rows */}
+              {stats.tableContents.map((row, rowIndex) => (
+                <View key={rowIndex} style={tableReportStyles.tableRow}>
+                  <Text style={tableReportStyles.tableCell}>{row.source}</Text>
+                  {stats.tableHeaders.map((header, colIndex) => (
+                    <Text key={colIndex} style={tableReportStyles.tableCell}>
+                      {row[header.field] ?? 0}
+                    </Text>
+                  ))}
+                </View>
+              ))}
+            </View>
+            
             {/* ส่วนท้าย */}
             <View
               style={{
@@ -920,6 +980,35 @@ const Stats = () => {
         </Document>
       </>
     );
+  };
+  const donutSeries = [
+    stats?.conversionCount ?? 0,
+    stats?.sessionCount ?? 0,
+    stats?.totalUserCount ?? 0
+  ];
+  const donutOptions = {
+    chart: { type: 'donut', },
+    labels: ['Conversion', 'Session', 'Total User'],
+    colors: ["#5b73e8", "#ec4561", "#f1b44c"],
+    legend: {
+      position: 'right', // ให้ label ไปอยู่ด้านขวา
+      offsetX: 80,       // ขยับ legend มาทางซ้าย (เข้าใกล้วงกลม)
+      offsetY: 0
+    },
+    plotOptions: {
+      pie: {
+        donut: {
+          size: '60%' // ขนาดของวงกลม (ลดขนาดวงในให้แคบลง)
+        }
+      }
+    },
+    responsive: [{
+      breakpoint: 480,
+      options: {
+        chart: { width: 200 },
+        legend: { position: 'bottom' }
+      }
+    }]
   };
 
   const App = () => (
@@ -1161,6 +1250,26 @@ const Stats = () => {
         <Col className="pb-4" md={6} style={{ position: "absolute", opacity: 0, pointerEvents: "none" }}>
           <Card className="h-100">
             <CardBody>
+              <CardTitle className="mb-4 h4">Traffice Source (Sessions) #### For Title</CardTitle>
+              <div id="">
+                {!isLoading && (
+                    <ReactApexChart
+                      id="ReportTrafficSourceDonutChart"
+                      options={donutOptions}
+                      series={donutSeries}
+                      height="300"
+                      type="donut"
+                    />
+                )}
+              </div>
+            </CardBody>
+          </Card>
+        </Col>
+
+        {/* ใช้เพื่อสำหรับออก Report เท่านั้น แต่จะ hidden ไว้ */}
+        <Col className="pb-4" md={6} style={{ position: "absolute", opacity: 0, pointerEvents: "none" }}>
+          <Card className="h-100">
+            <CardBody>
               <CardTitle className="mb-4 h4">Session For Report</CardTitle>
               <div id="ReportSessionAndUserChart">
                 {!isLoading && (
@@ -1207,8 +1316,13 @@ const Stats = () => {
               <CardSubtitle className="mb-3">
                 List of session statistic by sources.
               </CardSubtitle>
-
-              <MDBDataTable responsive bordered data={data} noBottomColumns />
+              <MDBDataTable 
+                responsive 
+                searching={true} 
+                bordered 
+                data={dataStaticBySources} 
+                noBottomColumns 
+              />
             </CardBody>
           </Card>
         </Col>
