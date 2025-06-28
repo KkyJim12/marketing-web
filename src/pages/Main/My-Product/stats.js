@@ -59,10 +59,24 @@ const Stats = () => {
     setStartDate(newStartDate);
     setActivePeriod(period.title);
 
-    setIsLoading(true);
-    await getWebsites(newStartDate, newEndDate, activeWebsite);
-    await getStatsByDate(newStartDate, newEndDate, activeWebsite, period.title);
+    await loadData(newStartDate, newEndDate)
   };
+
+  const selectStartDate = async (e) => {
+    setStartDate(e.target.value)
+    await loadData(e.target.value, endDate)
+  }
+
+  const selectEndDate = async (e) => {
+    setEndDate(e.target.value)
+    await loadData(startDate, e.target.value)
+  }
+
+  const loadData = async (startDate, endDate) => {
+    setIsLoading(true);
+    await getWebsites(startDate, endDate, activeWebsite);
+    await getStatsByDate(startDate, endDate, activeWebsite, activePeriod);
+  }
 
   const getStatsByDate = async (customStartDate, customEndDate, customActiveWebsite, customPeriod) => {
     try {
@@ -1065,8 +1079,8 @@ const Stats = () => {
                   className="form-control"
                   type="date"
                   value={startDate}
-                  onChange={(e) => setStartDate(e.target.value)}
-                  id="example-date-input"
+                  onChange={(e) => selectStartDate(e)}
+                  id="start-date-input"
                   max={moment().format("YYYY-MM-DD")}
                 />
               </div>
@@ -1079,8 +1093,8 @@ const Stats = () => {
                   className="form-control"
                   type="date"
                   value={endDate}
-                  onChange={(e) => setEndDate(e.target.value)}
-                  id="example-date-input"
+                  onChange={(e) => selectEndDate(e)}
+                  id="end-date-input"
                   max={moment().format("YYYY-MM-DD")}
                 />
               </div>
